@@ -7,14 +7,14 @@ return [
     ],
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'admins',
-        ],
-
         'api' => [
             'driver' => 'jwt',
             'provider' => 'customers',
+        ],
+
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'admins',
         ],
 
         'customer' => [

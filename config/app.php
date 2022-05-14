@@ -224,6 +224,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        ACME\UserSurvey\Providers\CategoryServiceProvider::class, #SKP
         /*
          * Package Service Providers...
          */
