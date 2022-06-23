@@ -288,5 +288,35 @@ Route::group(['prefix' => 'api'], function ($router) {
 
             Route::post('save-order', 'CheckoutController@saveOrder');
         });
+//SKP Start
+        Route::group(['prefix' => 'usersurvey'], function ($router) {
+
+            Route::get('get-list', 'UserSurveyController@getList');
+            Route::get('get', 'UserSurveyController@get');
+            Route::post('create', 'UserSurveyController@create');
+            Route::put('update', 'UserSurveyController@update');
+            Route::delete('delete', 'UserSurveyController@delete');
+
+            Route::get('surveyset/get-list', 'UserSurveyController@getSurveySetList');
+            Route::get('surveyset/get', 'UserSurveyController@getSurveySet');
+            Route::post('surveyset/create', 'UserSurveyController@createSurveySet');
+            Route::put('surveyset/update', 'UserSurveyController@updateSurveySet');
+            Route::delete('surveyset/delete', 'UserSurveyController@deleteSurveySet');
+
+            Route::get('category/get-list', 'UserSurveyController@getCategoryList');
+            Route::get('category/get', 'UserSurveyController@getCategory');
+            Route::post('category/create', 'UserSurveyController@createCategory');
+            Route::put('category/update', 'UserSurveyController@updateCategory');
+            Route::delete('category/delete', 'UserSurveyController@deleteCategory');
+
+            Route::get('question/get-list', 'UserSurveyController@getQuestionList');
+            Route::get('question/get', 'UserSurveyController@getQuestion');
+            Route::post('question/create', 'UserSurveyController@createQuestion');
+            Route::put('question/update', 'UserSurveyController@updateQuestion');
+            Route::delete('question/delete', 'UserSurveyController@deleteQuestion');
+
+
+        });
+    //SKP End
     });
 });

@@ -2,6 +2,6 @@
 
 namespace ACME\UserSurvey\Contracts;
 
-interface Category
+interface UserSurvey
 {
 }
