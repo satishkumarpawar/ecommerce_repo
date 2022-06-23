@@ -282,6 +282,7 @@ return [
         Webkul\DebugBar\Providers\DebugBarServiceProvider::class,
         Webkul\Marketing\Providers\MarketingServiceProvider::class,
         ACME\UserSurvey\Providers\UserSurveyServiceProvider::class, 
+        Webkul\UserSurvey\Providers\UserSurveyServiceProvider::class, #SKP
         
     ],
 

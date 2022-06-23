@@ -1,5 +1,6 @@
 <?php
 
+
 Route::group(['prefix' => 'api'], function ($router) {
 
     Route::group(['namespace' => 'Webkul\API\Http\Controllers\Shop', 'middleware' => ['locale', 'theme', 'currency']], function ($router) {

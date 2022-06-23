@@ -142,7 +142,7 @@ class CustomerController extends Controller
                   return response()->json([
                     'token'   =>  $refreshed,
                     'message' => 'Refreshed successfully.'
-                ],400);
+                ],200);
             } catch (\Exception $e) {
                 // Access token has expired
                 try {
@@ -151,7 +151,7 @@ class CustomerController extends Controller
                     return response()->json([
                       'token'   =>  $refreshed,
                       'message' => 'Refreshed successfully.'
-                  ],400);
+                  ],200);
                 } catch (\Exception $e) {
                     return response()->json(["message" => $e->getMessage()], 401);
                 }

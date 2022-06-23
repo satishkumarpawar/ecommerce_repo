@@ -43,6 +43,48 @@ return [
     ],
 
     /*
+    |--------------------------------------------------------------------------
+    | Editor
+    |--------------------------------------------------------------------------
+    |
+    | Choose your preferred editor to use when clicking file name.
+    |
+    | Supported: "phpstorm", "vscode", "vscode-insiders", "vscode-remote",
+    |            "vscode-insiders-remote", "vscodium", "textmate", "emacs",
+    |            "sublime", "atom", "nova", "macvim", "idea", "netbeans",
+    |            "xdebug", "espresso"
+    |
+    */
+
+    'editor' => env('DEBUGBAR_EDITOR', 'phpstorm'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Remote Path Mapping
+    |--------------------------------------------------------------------------
+    |
+    | If you are using a remote dev server, like Laravel Homestead, Docker, or
+    | even a remote VPS, it will be necessary to specify your path mapping.
+    |
+    | Leaving one, or both of these, empty or null will not trigger the remote
+    | URL changes and Debugbar will treat your editor links as local files.
+    |
+    | "remote_sites_path" is an absolute base path for your sites or projects
+    | in Homestead, Vagrant, Docker, or another remote development server.
+    |
+    | Example value: "/home/vagrant/Code"
+    |
+    | "local_sites_path" is an absolute base path for your sites or projects
+    | on your local computer where your IDE or code editor is running on.
+    |
+    | Example values: "/Users/<name>/Code", "C:\Users\<name>\Documents\Code"
+    |
+    */
+
+    'remote_sites_path' => env('DEBUGBAR_REMOTE_SITES_PATH', ''),
+    'local_sites_path' => env('DEBUGBAR_LOCAL_SITES_PATH', ''),
+
+    /*
      |--------------------------------------------------------------------------
      | Vendors
      |--------------------------------------------------------------------------
@@ -150,6 +192,7 @@ return [
             'backtrace'         => true,   // Use a backtrace to find the origin of the query in your files.
             'backtrace_exclude_paths' => [],   // Paths to exclude from backtrace. (in addition to defaults)
             'timeline'          => false,  // Add the queries to the timeline
+            'duration_background'  => true,   // Show shaded background on each query relative to how long it took to execute.
             'explain' => [                 // Show EXPLAIN output on queries
                 'enabled' => false,
                 'types' => ['SELECT'],     // Deprecated setting, is always only SELECT
@@ -161,6 +204,7 @@ return [
             'full_log' => false,
         ],
         'views' => [
+            'timeline' => false,  // Add the views to the timeline (Experimental)
             'data' => false,    //Note: Can slow down the application, because the data can be quite large..
         ],
         'route' => [
