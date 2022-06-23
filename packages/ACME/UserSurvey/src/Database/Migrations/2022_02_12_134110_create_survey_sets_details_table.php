@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSurveySetsDetailsTable extends Migration
+class CreateUserSurveySetDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSurveySetsDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('survey_sets_details', function (Blueprint $table) {
+        Schema::create('user_survey_set_details', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('question_id')->unsigned();
             $table->integer('survey_set_id')->unsigned();
@@ -28,6 +28,6 @@ class CreateSurveySetsDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('survey_sets_details');
+        Schema::dropIfExists('user_survey_set_details');
     }
 }

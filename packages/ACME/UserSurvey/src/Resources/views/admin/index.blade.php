@@ -9,7 +9,7 @@
     <div class="content full-page dashboard">
         <div class="page-header">
             <div class="page-title">
-                <h1>Package UserSurvey</h1>
+                <h1>UserSurvey List</h1>
             </div>
 
             <div class="page-action">
