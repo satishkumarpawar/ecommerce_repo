@@ -170,11 +170,12 @@ class UserSurveyController extends Controller
     {
         
         if (!is_null(request()->input('id'))) {
-            return UserSurveySetResource::collection($this->UserSurveySetRepository->get(request()->input('id')));
+            $data= UserSurveySetResource::collection($this->UserSurveySetRepository->get(request()->input('id')));
         } else {
-           return UserSurveySetResource::collection($this->UserSurveySetRepository->get());
+            $data= UserSurveySetResource::collection($this->UserSurveySetRepository->get());
         }
-        
+        $data = (count($data)>0?$data[0]:$data);
+        return $data;
     }
 
     public function createSurveySet()

@@ -176,4 +176,38 @@ class SliderRepository extends Repository
             ->get()
             ->toArray();
     }
+
+    //SKP Start
+    public function getActiveSlider($id=null)
+    {
+        $currentChannel = core()->getCurrentChannel();
+
+        $currentLocale = core()->getCurrentLocale();
+        if($id)
+        {
+            return $this->where('channel_id', $currentChannel->id)
+            ->whereRaw("find_in_set(?, locale)", [$currentLocale->code])
+            ->where(function ($query) {
+                $query->where('expired_at', '>=', Carbon::now()->format('Y-m-d'))
+                    ->where('id', '=', $id)
+                    ->orWhereNull('expired_at');
+            })
+            ->get()
+            ->toArray();
+
+        } else {
+            return $this->where('channel_id', $currentChannel->id)
+            ->whereRaw("find_in_set(?, locale)", [$currentLocale->code])
+            ->where(function ($query) {
+                $query->where('expired_at', '>=', Carbon::now()->format('Y-m-d'))
+                    ->orWhereNull('expired_at');
+            })
+            ->inRandomOrder()
+            ->limit(1)
+            ->get()
+            ->toArray();
+
+        }
+
+    }
 }

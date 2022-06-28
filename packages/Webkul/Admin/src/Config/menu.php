@@ -104,7 +104,7 @@ return [
         'route'      => 'admin.configuration.index',
         'sort'       => 7,
         'icon-class' => 'configuration-icon',
-    ]/*, [
+    ], [
         'key'        => 'settings',
         'name'       => 'admin::app.layouts.settings',
         'route'      => 'admin.locales.index',
@@ -248,5 +248,5 @@ return [
         'route'      => 'admin.cms.index',
         'sort'       => 1,
         'icon-class' => '',
-    ]*/
+    ]
 ];
