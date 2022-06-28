@@ -11,12 +11,19 @@ return [
             'driver' => 'jwt',
             'provider' => 'customers',
         ],
+<<<<<<< HEAD
+       'web' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+=======
 
         'web' => [
             'driver' => 'session',
             'provider' => 'admins',
         ],
 
+>>>>>>> d2f74c718fe74381d0449b0694d814df8732a47a
         'customer' => [
             'driver' => 'session',
             'provider' => 'customers'

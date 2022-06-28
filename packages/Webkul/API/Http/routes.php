@@ -1,6 +1,6 @@
 <?php
 
-    
+
 Route::group(['prefix' => 'api'], function ($router) {
     Route::group(['namespace' => 'Webkul\API\Http\Controllers\Shop', 'middleware' => ['locale', 'theme', 'currency']], function ($router) {
         //Currency and Locale switcher
@@ -291,7 +291,7 @@ Route::group(['prefix' => 'api'], function ($router) {
 //SKP Start
 Route::get('usersurvey', 'UserSurveyController@index');
         Route::group(['prefix' => 'usersurvey'], function ($router) {
-           // Route::get('/', 'UserSurveyController@index');
+            Route::get('/', 'UserSurveyController@index');
             Route::get('get-list', 'UserSurveyController@getList');
             Route::get('get', 'UserSurveyController@get');
             Route::post('create', 'UserSurveyController@create');
