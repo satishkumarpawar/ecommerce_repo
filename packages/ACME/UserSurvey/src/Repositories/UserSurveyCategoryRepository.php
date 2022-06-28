@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use ACME\UserSurvey\Models\UserSurveyCategory;
 use ACME\UserSurvey\Models\UserSurveyQuestion;
-use ACME\UserSurvey\Repositories\UserSurveyCategoryRepository;
+use ACME\UserSurvey\Repositories\UserSurveyCategorySearchRepository;
 use ACME\UserSurvey\Repositories\UserSurveyQuestionRepository;
 use Illuminate\Pagination\Paginator;
 use Webkul\Core\Eloquent\Repository;
@@ -20,14 +20,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class UserSurveyCategoryRepository extends Repository
 {
 
-    protected $UserSurveyCategoryRepository;
+    protected $UserSurveyCategorySearchRepository;
    
     public function __construct(
-        UserSurveyCategoryRepository $UserSurveyCategoryRepository,
+        UserSurveyCategorySearchRepository $UserSurveyCategorySearchRepository,
         App $app
     )
     {
-        $this->UserSurveyCategoryRepository = $UserSurveyCategoryRepository;
+        $this->UserSurveyCategorySearchRepository = $UserSurveyCategorySearchRepository;
 
         parent::__construct($app);
        
@@ -54,7 +54,7 @@ class UserSurveyCategoryRepository extends Repository
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $repository = app(UserSurveyCategoryRepository::class)->scopeQuery(function ($query) use ($params) {
+        $repository = app(UserSurveyCategorySearchRepository::class)->scopeQuery(function ($query) use ($params) {
             
             $qb = $query->distinct()
                 ->select('user_survey_categories.*');
@@ -129,7 +129,7 @@ class UserSurveyCategoryRepository extends Repository
     {
         
     
-        $SurveyCategory = $this->UserSurveyCategoryRepository->create([
+        $SurveyCategory = $this->UserSurveyCategorySearchRepository->create([
             'cate_name'        =>  $request->cate_name,
             'cate_desc'      => $request->cate_desc,
             'cate_order'  =>  $request->cate_order,
@@ -143,7 +143,7 @@ class UserSurveyCategoryRepository extends Repository
 
     public function update($request,$id=null)
     {
-       return  $SurveyCategory = $this->UserSurveyCategoryRepository->update([
+       return  $SurveyCategory = $this->UserSurveyCategorySearchRepository->update([
             'cate_name'        =>  $request->cate_name,
             'cate_desc'      => $request->cate_desc,
             'cate_order'  =>  $request->cate_order,
@@ -156,7 +156,7 @@ class UserSurveyCategoryRepository extends Repository
 
    /* public function delete($id)
     {
-        $this->UserSurveyCategoryRepository->delete($id);
+        $this->UserSurveyCategorySearchRepository->delete($id);
         
     }*/
 

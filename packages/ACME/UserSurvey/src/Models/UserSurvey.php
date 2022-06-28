@@ -7,5 +7,8 @@ use ACME\UserSurvey\Contracts\UserSurvey as UserSurveyContract;
 
 class UserSurvey extends Model implements UserSurveyContract
 {
-    protected $fillable = [];
+    protected $fillable = [
+        'user_id',
+        'survey_set_id'
+    ];
 }

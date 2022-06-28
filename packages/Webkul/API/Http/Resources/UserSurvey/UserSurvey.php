@@ -14,16 +14,15 @@ class UserSurvey extends JsonResource
      */
     public function toArray($request)
     {
+        $survey = $this->survey ? $this->survey : $this;
+        if(!isset($survey->answer_set))$survey->answer_set=Array();
         return [
             'id'            => $this->id,
-            'question_id'         => $this->question_id,
-            'answer_text'    => $this->answer_text,
-            'answer_order'     => $this->answer_order,
-            'default_ans_flag'          => $this->default_ans_flag,
-            'user_id'          => $this->user_id,
-            'survey_set_id'          => $this->survey_set_id,
+            'user_id'         => $this->user_id,
+            'survey_set_id'    => $this->survey_set_id,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
+            'answer_set'  => UserSurveyDetail::collection($survey->answer_set),
         ];
     }
 }

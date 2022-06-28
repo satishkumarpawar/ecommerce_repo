@@ -33,5 +33,19 @@ class UserSurveyAnswerRepository extends Repository
         return $qb->get();
     }
 
+    public  function getSurveyAnswer($id = null)
+    {
+        $qb = $this->model
+        ->distinct()
+        ->addSelect('user_survey_answers.*');
+           
+        if ($id) {
+            $qb->where('user_survey_answers.id', $id);
+           
+        }
+
+        return $qb->get();
+    }
+
     
 }

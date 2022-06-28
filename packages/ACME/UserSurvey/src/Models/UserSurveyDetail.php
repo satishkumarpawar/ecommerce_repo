@@ -7,5 +7,11 @@ use ACME\UserSurvey\Contracts\UserSurveyDetail as UserSurveyDetailContract;
 
 class UserSurveyDetail extends Model implements UserSurveyDetailContract
 {
-    protected $fillable = [];
+    protected $fillable = [
+        'survey_id',
+        'question_id',
+        'answer_id',
+        'answer_text'
+        
+    ];
 }
