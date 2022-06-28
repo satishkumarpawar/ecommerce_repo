@@ -72,31 +72,54 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(CustomerRegistrationRequest $request)
-    {
-        $request->validated();
+    public function create()
+{
+     $request=request();
+    //$request->validated();
+    $this->validate(request(), [
+        'email' => 'required',
+        'password' => 'required'
+    ]);
+    $data = [
+        'first_name'  => $request->get('first_name'),
+        'last_name'   => $request->get('last_name'),
+        'email'       => $request->get('email'),
+        'password'    => $request->get('password'),
+        'password'    => bcrypt($request->get('password')),
+        'channel_id'  => core()->getCurrentChannel()->id,
+        'is_verified' => 1,
+        'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
+    ];
 
-        $data = [
-            'first_name'  => $request->get('first_name'),
-            'last_name'   => $request->get('last_name'),
-            'email'       => $request->get('email'),
-            'password'    => $request->get('password'),
-            'password'    => bcrypt($request->get('password')),
-            'channel_id'  => core()->getCurrentChannel()->id,
-            'is_verified' => 1,
-            'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
-        ];
+    Event::dispatch('customer.registration.before');
 
-        Event::dispatch('customer.registration.before');
+    $customer = $this->customerRepository->create($data);
 
-        $customer = $this->customerRepository->create($data);
+    Event::dispatch('customer.registration.after', $customer);
 
-        Event::dispatch('customer.registration.after', $customer);
+    $jwtToken = null;
 
+        if (! $jwtToken = auth()->guard($this->guard)->attempt($request->only(['email', 'password']))) {
+            return response()->json([
+                'error' => 'Invalid Email or Password',
+            ], 401);
+        }
+
+        Event::dispatch('customer.after.login', $request->get('email'));
+
+       
         return response()->json([
-            'message' => 'Your account has been created successfully.',
+            'token'   => $jwtToken,
+            'message' => 'Logged in successfully.',
+            'data'    => $customer,
         ]);
-    }
+    
+
+   
+    return response()->json([
+        'message' => 'Your account has been created successfully.',
+    ]);
+}
 
     /**
      * Returns a current user data.
