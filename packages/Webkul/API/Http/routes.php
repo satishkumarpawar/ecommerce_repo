@@ -289,7 +289,10 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::post('save-order', 'CheckoutController@saveOrder');
         });
 //SKP Start
-Route::get('usersurvey', 'UserSurveyController@index');
+
+        Route::get('slider/get-list', 'SliderController@getList');
+        Route::get('slider/get', 'SliderController@get');
+        
         Route::group(['prefix' => 'usersurvey'], function ($router) {
             Route::get('/', 'UserSurveyController@index');
             Route::get('get-list', 'UserSurveyController@getList');
@@ -316,7 +319,6 @@ Route::get('usersurvey', 'UserSurveyController@index');
             Route::post('question/create', 'UserSurveyController@createQuestion');
             Route::put('question/update', 'UserSurveyController@updateQuestion');
             Route::delete('question/delete', 'UserSurveyController@deleteQuestion');
-
 
         });
     //SKP End
