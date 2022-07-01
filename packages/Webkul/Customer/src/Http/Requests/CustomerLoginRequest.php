@@ -13,7 +13,8 @@ class CustomerLoginRequest extends FormRequest
      * @var array
      */
     private $rules = [
-        'email'    => 'required|email',
+       // 'email'    => 'required|email',
+       'email'    => 'required', //SKP
         'password' => 'required',
     ];
 

@@ -180,6 +180,50 @@ class CartController extends Controller
         ]);
     }
 
+
+    public function update_qty(Request $request)
+    {
+        $this->validate($request, [
+            'cart_item_id' => 'required',
+            'quantity' => 'required',
+        ]);
+
+        $data = $request->all();
+
+            if ($data["quantity"] <= 0) {
+                return response()->json([
+                    'message' => trans('shop::app.checkout.cart.quantity.illegal'),
+                ], Response::HTTP_UNAUTHORIZED);
+            }
+       
+        if ($data["quantity"]> 0) {
+        
+            $item = $this->cartItemRepository->findOneByField('id', $data["cart_item_id"]);
+
+            Event::dispatch('checkout.cart.item.update.before', $data["cart_item_id"]);
+
+            Cart::updateItems(['qty' => Array($data["cart_item_id"]=>$data["quantity"])]);
+
+            Event::dispatch('checkout.cart.item.update.after', $item);
+        }
+
+        Cart::collectTotals();
+       // $cart = Cart::getCart();
+
+       $item = $this->cartItemRepository->findOneByField('id', $data["cart_item_id"]);
+        $data = Array(
+            "id"=>$item->id,
+            "quantity"=>$item->quantity,
+            "price"=>$item->price,
+            "total"=>$item->total
+        );
+        return response()->json([
+            'message' => __('shop::app.checkout.cart.quantity.success'),
+            'data'    => is_array($data) ? $data  : null,
+        ]);
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *

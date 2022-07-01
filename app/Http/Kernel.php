@@ -58,5 +58,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'cart.merger' => \Webkul\Checkout\Http\Middleware\CartMerger::class,
+        'checkSession' => \App\Http\Middleware\checkSession::class, #SKP
     ];
 }

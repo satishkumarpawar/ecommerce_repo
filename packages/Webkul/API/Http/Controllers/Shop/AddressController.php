@@ -91,7 +91,7 @@ class AddressController extends Controller
             'state' => 'string|nullable',
             'city' => 'string|required',
             'postcode' => 'required',
-            'phone' => 'required',
+            //'phone' => 'required',
         ]);
 
         $customerAddress = $this->customerAddressRepository->create(request()->all());
@@ -127,7 +127,7 @@ class AddressController extends Controller
             'state' => 'string|nullable',
             'city' => 'string|required',
             'postcode' => 'required',
-            'phone' => 'required',
+            //'phone' => 'required',
         ]);
 
         $customerAddress = $this->customerAddressRepository->update(request()->all(), $id);
