@@ -82,11 +82,15 @@ public function sendOtp(Request $request){
     */
 
     $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
-
-    if ( isset($users['phone']) && $users['phone'] =="" ) {
+    
+    if(!isset($users['phone'])){
+        $response['error'] = 1;
+        $response['message'] = 'Mobile number does not match.';
+        $response['loggedIn'] = 1;
+    }elseif (isset($users['phone']) && $users['phone'] =="") {
         $response['error'] = 1;
         $response['message'] = 'Invalid mobile number';
-        $response['loggedIn'] = 0;
+        $response['loggedIn'] = 1;
     } else {
 
         $otp = rand(100000, 999999);
@@ -124,10 +128,11 @@ public function verifyOtp(Request $request){
     //$userId = Auth::user()->id;  //Getting UserID.
     $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
 
-    $userId=$users->id;
+    $userId='';
+    if(isset($users->id))$userId=$users->id;
     if($userId == "" || $userId == null){
         $response['error'] = 1;
-        $response['message'] = 'You are logged out, Login again.';
+        $response['message'] = 'Mobile number does not match.';
         $response['loggedIn'] = 1;
     }else{
         $OTP = $request->session()->get('OTP');
@@ -135,7 +140,8 @@ public function verifyOtp(Request $request){
         $email = $users->email;
         $users->password=$request->session()->get('password');
         $password = $request->session()->get('password');
-        if($OTP === $request->otp){// && $phone===$request->phone
+        //return response()->json($request);
+        if($OTP == $request->otp){// $OTP === $request->otp && $phone===$request->phone
 
             // Updating user's status "is_verified" as 1.
 
