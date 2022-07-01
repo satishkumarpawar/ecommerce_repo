@@ -210,7 +210,7 @@ class CartController extends Controller
         Cart::collectTotals();
        // $cart = Cart::getCart();
 
-       // $item = $this->cartItemRepository->findOneByField('id', $data["cart_item_id"]);
+       $item = $this->cartItemRepository->findOneByField('id', $data["cart_item_id"]);
         $data = Array(
             "id"=>$item->id,
             "quantity"=>$item->quantity,

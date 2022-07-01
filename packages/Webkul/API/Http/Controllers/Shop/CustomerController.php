@@ -1,7 +1,8 @@
 <?php
 
 namespace Webkul\API\Http\Controllers\Shop;
-
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Webkul\Customer\Http\Requests\CustomerRegistrationRequest;
@@ -9,6 +10,8 @@ use Webkul\Customer\Repositories\CustomerGroupRepository;
 use Webkul\Customer\Repositories\CustomerRepository;
 use JWTAuth; #SKP
 
+use Illuminate\Support\Facades\Session;
+//use \App\MSG91;
 
 class CustomerController extends Controller
 {
@@ -59,7 +62,7 @@ class CustomerController extends Controller
 
             auth()->setDefaultDriver($this->guard);
             // $this->middleware('auth:' . $this->guard)
-            $this->middleware('auth:' . $this->guard)->except('refresh'); #SKP
+            $this->middleware('auth:' . $this->guard)->except('refresh','create','sendOtp','verifyOtp'); #SKP
         }
 
         $this->customerRepository = $customerRepository;
@@ -67,37 +70,159 @@ class CustomerController extends Controller
         $this->customerGroupRepository = $customerGroupRepository;
     }
 
+
+#SKP
+public function sendOtp(Request $request){
+
+    $response = array();
+   
+    /*$userId = Auth::user()->id;
+
+    $users = User::where('id', $userId)->first();
+    */
+
+    $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
+
+    if ( isset($users['phone']) && $users['phone'] =="" ) {
+        $response['error'] = 1;
+        $response['message'] = 'Invalid mobile number';
+        $response['loggedIn'] = 0;
+    } else {
+
+        $otp = rand(100000, 999999);
+       /*$MSG91 = new MSG91();
+
+        $msg91Response = $MSG91->sendSMS($otp,$users['phone']);
+
+        if($msg91Response['error']){
+            $response['error'] = 1;
+            $response['message'] = $msg91Response['message'];
+            $response['loggedIn'] = 1;
+        }else{*/
+
+            Session::put('OTP', $otp);
+            Session::put('phone',$request->phone);
+            Session::put('password','');
+
+            $response['error'] = 0;
+            $response['message'] = 'Your OTP is created.';
+            $response['OTP'] = $otp;
+            $response['phone'] = $request->phone;
+            $response['loggedIn'] = 1;
+        //}
+       
+    }
+    
+    return response()->json($response);
+    //echo json_encode($response);
+}
+
+public function verifyOtp(Request $request){
+
+    $response = array();
+
+    //$userId = Auth::user()->id;  //Getting UserID.
+    $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
+
+    $userId=$users->id;
+    if($userId == "" || $userId == null){
+        $response['error'] = 1;
+        $response['message'] = 'You are logged out, Login again.';
+        $response['loggedIn'] = 1;
+    }else{
+        $OTP = $request->session()->get('OTP');
+        $phone = $request->session()->get('phone');
+        $email = $users->email;
+        $users->password=$request->session()->get('password');
+        $password = $request->session()->get('password');
+        if($OTP === $request->otp){// && $phone===$request->phone
+
+            // Updating user's status "is_verified" as 1.
+
+            $this->customerRepository->where('id', $userId)->update(['is_verified' => 1]);
+
+            //Removing Session variable
+            Session::forget('OTP');
+            Session::forget('phone');
+            Session::forget('password');
+
+            /*$response['error'] = 0;
+            $response['is_verified'] = 1;
+            $response['loggedIn'] = 1;
+            $response['message'] = "Your Number is Verified.";*/
+
+            return response()->json([
+                'error'   => 0,
+                'is_verified'   => 1,
+                'loggedIn'   => 1,
+                'message' => 'Your Number is Verified.',      
+            ]);
+            
+            $jwtToken = null;
+            
+            if (! $jwtToken = auth()->guard($this->guard)->attempt(['email'=>$email, 'password'=>$password])) {
+           // if (! $jwtToken = auth()->guard($this->guard)->attempt($users->only(['email', 'password']))) {
+                return response()->json([
+                    'error'   => 0,
+                    'is_verified'   => 1,
+                    'loggedIn'   => 1,
+                    'message' => 'Your Number is Verified.',      
+                ]);
+            }
+
+            Event::dispatch('customer.after.login', $email);
+
+        
+            return response()->json([
+                'token'   => $jwtToken,
+                'message' => 'Logged in successfully.',
+                'data'    => $users,
+            ]);
+
+        }else{
+            $response['error'] = 1;
+            $response['is_verified'] = 0;
+            $response['loggedIn'] = 1;
+            $response['message'] = "OTP does not match.";
+        }
+    }
+    return response()->json($response);
+    //echo json_encode($response);
+}
+
+
     /**
      * Method to store user's sign up form data to DB.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-{
+public function create(){
      $request=request();
     //$request->validated();
     $this->validate(request(), [
         'email' => 'required',
+        //'phone' => 'required',
         'password' => 'required'
     ]);
     $data = [
         'first_name'  => $request->get('first_name'),
         'last_name'   => $request->get('last_name'),
         'email'       => $request->get('email'),
+        'phone'       => $request->get('phone'),
         'password'    => $request->get('password'),
         'password'    => bcrypt($request->get('password')),
         'channel_id'  => core()->getCurrentChannel()->id,
-        'is_verified' => 1,
+        'is_verified' => 0,
         'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
     ];
 
-    Event::dispatch('customer.registration.before');
+    //Event::dispatch('customer.registration.before');
 
     $customer = $this->customerRepository->create($data);
 
-    Event::dispatch('customer.registration.after', $customer);
+   // Event::dispatch('customer.registration.after', $customer);
 
-    $jwtToken = null;
+  /*  $jwtToken = null;
 
         if (! $jwtToken = auth()->guard($this->guard)->attempt($request->only(['email', 'password']))) {
             return response()->json([
@@ -114,10 +239,22 @@ class CustomerController extends Controller
             'data'    => $customer,
         ]);
     
+    */
 
+    $otp = rand(100000, 999999);
+    Session::put('OTP', $otp);
+    Session::put('phone',$customer->phone);
+    Session::put('password',$request->get('password'));
+
+    $response['error'] = 0;
+    $response['message'] = 'Your OTP is created.';
+    $response['OTP'] = $otp;
+    $response['phone'] = $customer->phone;
    
+
     return response()->json([
         'message' => 'Your account has been created successfully.',
+        'data'    => $response,
     ]);
 }
 

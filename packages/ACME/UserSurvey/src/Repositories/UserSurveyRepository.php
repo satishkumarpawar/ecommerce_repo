@@ -77,6 +77,8 @@ class UserSurveyRepository extends Repository
             
             $qb = $query->distinct()
                 ->select('user_surveys.*');
+                //->addSelect('customers.first_name,customers.last_name')
+               // ->leftJoin('customers', 'user_surveys.user_id', '=', 'customers.id');
                 
                
 

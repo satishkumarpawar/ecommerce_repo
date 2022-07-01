@@ -14,6 +14,8 @@ class CustomerAddress extends JsonResource
      */
     public function toArray($request)
     {
+        $address1=explode('-', $this->address1);
+        if(isset($address1[1]))$address2=explode(',', $address1[1]);
         return [
             'id'           => $this->id,
             'first_name'   => $this->first_name,
@@ -21,6 +23,9 @@ class CustomerAddress extends JsonResource
             'company_name' => $this->company_name,
             'vat_id'       => $this->vat_id,
             'address1'     => explode(PHP_EOL, $this->address1),
+            "tower"        => (isset($address1[0])?$address1[0]:''),
+            "flat"         => (isset($address2[0])?$address2[0]:''),
+            "socity"         => (isset($address2[1])?$address2[1]:''),
             'country'      => $this->country,
             'country_name' => core()->country_name($this->country),
             'state'        => $this->state,
