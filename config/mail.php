@@ -28,8 +28,9 @@ return [
     | the Mailgun mail service which will provide reliable deliveries.
     |
     */
-
-    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+#SKP
+    //'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+    'host' => env('MAIL_HOST', 'smtp.gmail.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,9 +56,14 @@ return [
     |
     */
 
-    'from' => [
+   /* 'from' => [
         'address' => env('SHOP_MAIL_FROM'),
         'name' => env('MAIL_FROM_NAME')
+    ],*/
+
+    'from' => [
+        'address' => env('SHOP_MAIL_FROM','info@triangulor.com'),
+        'name' => env('MAIL_FROM_NAME',APP_NAME)
     ],
 
     /*
@@ -106,9 +112,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME'),
+    'username' => env('MAIL_USERNAME','info.triangulor@gmail.com'),
 
-    'password' => env('MAIL_PASSWORD'),
+    'password' => env('MAIL_PASSWORD','abtclfdtxdvhdefn'),
 
     /*
     |--------------------------------------------------------------------------
