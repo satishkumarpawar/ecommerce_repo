@@ -154,7 +154,7 @@ public function create(){
     $request=request();
     //$request->validated();
     $this->validate(request(), [
-        'email' => 'required',
+       // 'email' => 'required',
         'phone' => 'required',
         'password' => 'required'
     ]);
@@ -162,7 +162,7 @@ public function create(){
     $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
     if(isset($users->id)){
         return response()->json([
-            'message' => 'Phone or email already exist.',
+            'message' => 'Phone  already exist.',
             'error'    => 1,
         ]);  
     }
@@ -170,7 +170,7 @@ public function create(){
     $data = [
         'first_name'  => $request->get('first_name'),
         'last_name'   => $request->get('last_name'),
-        'email'       => $request->get('email'),
+        //'email'       => $request->get('email'),
         'phone'       => $request->get('phone'),
         'password'    => $request->get('password'),
         'password'    => bcrypt($request->get('password')),
@@ -187,13 +187,13 @@ public function create(){
 
    $jwtToken = null;
 
-        if (! $jwtToken = auth()->guard($this->guard)->attempt($request->only(['email', 'password']))) {
+        if (! $jwtToken = auth()->guard($this->guard)->attempt($request->only(['phone', 'password']))) {
             return response()->json([
-                'error' => 'Invalid Email or Password',
+                'error' => 'Invalid Phone or Password',
             ], 401);
         }
 
-        Event::dispatch('customer.after.login', $request->get('email'));
+        Event::dispatch('customer.after.login', $request->get('phone'));
 
        
         return response()->json([
