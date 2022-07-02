@@ -209,14 +209,21 @@ class CartController extends Controller
 
         Cart::collectTotals();
        // $cart = Cart::getCart();
-
+       
        $item = $this->cartItemRepository->findOneByField('id', $data["cart_item_id"]);
+       if(isset($item->id)){ 
         $data = Array(
-            "id"=>$item->id,
-            "quantity"=>$item->quantity,
-            "price"=>$item->price,
-            "total"=>$item->total
-        );
+                "id"=>$item->id,
+                "quantity"=>$item->quantity,
+                "price"=>$item->price,
+                "total"=>$item->total
+            );
+        } else {
+            return response()->json([
+                'message' => "Item Not Found",
+               // 'data'    => is_array($data) ? $data  : null,
+            ]);
+        }
         return response()->json([
             'message' => __('shop::app.checkout.cart.quantity.success'),
             'data'    => is_array($data) ? $data  : null,

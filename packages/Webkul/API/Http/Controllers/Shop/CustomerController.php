@@ -222,13 +222,13 @@ public function create(){
         'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
     ];
 
-    //Event::dispatch('customer.registration.before');
+    Event::dispatch('customer.registration.before');
 
     $customer = $this->customerRepository->create($data);
 
-   // Event::dispatch('customer.registration.after', $customer);
+   Event::dispatch('customer.registration.after', $customer);
 
-  /*  $jwtToken = null;
+   $jwtToken = null;
 
         if (! $jwtToken = auth()->guard($this->guard)->attempt($request->only(['email', 'password']))) {
             return response()->json([
@@ -245,22 +245,11 @@ public function create(){
             'data'    => $customer,
         ]);
     
-    */
-
-    $otp = rand(100000, 999999);
-    Session::put('OTP', $otp);
-    Session::put('phone',$customer->phone);
-    Session::put('password',$request->get('password'));
-
-    $response['error'] = 0;
-    $response['message'] = 'Your OTP is created.';
-    $response['OTP'] = $otp;
-    $response['phone'] = $customer->phone;
-   
+    
 
     return response()->json([
         'message' => 'Your account has been created successfully.',
-        'data'    => $response,
+        'data'    => $customer,
     ]);
 }
 
