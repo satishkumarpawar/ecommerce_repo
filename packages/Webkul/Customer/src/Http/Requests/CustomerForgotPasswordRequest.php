@@ -13,7 +13,8 @@ class CustomerForgotPasswordRequest extends FormRequest
      * @var array
      */
     private $rules = [
-        'email'    => 'required|email',
+        //'email'    => 'required|email',
+        'phone'    => 'required',
     ];
 
     /**

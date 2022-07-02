@@ -13,10 +13,10 @@ class CustomerLoginRequest extends FormRequest
      * @var array
      */
     private $rules = [
-       //'email'    => 'required|email',
-       'phone'    => 'required|digits:10|unique:customers', #SKP
-       'password' => 'required|string|min:6|confirmed',
-    ];
+        //'email'    => 'required|email',
+        'phone'      => 'required|unique:customers,phone',
+        'password'   => 'confirmed|min:6|required',
+     ];
 
     /**
      * Determine if the user is authorized to make this request.

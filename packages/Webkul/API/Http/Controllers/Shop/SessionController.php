@@ -58,7 +58,7 @@ class SessionController extends Controller
        $this->validate($request, [
           // 'email' => 'required',
            'phone' => 'required',
-           'password' => 'required'
+           'password' => 'required',
        ]);
  
         $jwtToken = null;

@@ -154,9 +154,9 @@ public function create(){
     $request=request();
     //$request->validated();
     $this->validate(request(), [
-       //'email'    => 'required|email',
-       'phone'    => 'required|digits:10|unique:customers', 
-       'password' => 'required|string|min:6|confirmed',
+       // 'email' => 'required',
+        'phone' => 'required',
+        'password' => 'required',
     ]);
    
     $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
@@ -178,7 +178,7 @@ public function create(){
         'is_verified' => 1,
         'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
     ];
-
+    
 
     Event::dispatch('customer.registration.before');
 
