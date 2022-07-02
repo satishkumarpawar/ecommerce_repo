@@ -76,7 +76,7 @@ return [
     */
 
     'admin' => [
-        'address' => env('ADMIN_MAIL_TO'),
+        'address' => env('ADMIN_MAIL_TO','satishkumarpawar@gmail.com'),
         'name' => env('ADMIN_MAIL_NAME', 'Admin')
     ],
 
@@ -144,7 +144,7 @@ return [
         'theme' => 'default',
 
         'paths' => [
-            resource_path('views/vendor/mail'),
+            resource_path('views/vendor/mail'), 
         ],
     ],
 
