@@ -303,9 +303,9 @@ Route::group(['prefix' => 'api'], function ($router) {
             'middleware' => 'checkSession',
             'uses'=>'customerController@verifyOtp'
         ]);*/
-        Route::post('/sendOtp', 'customerController@sendOtp'); 
+        Route::post('sendOtp', 'customerController@sendOtp'); 
 
-        Route::post('/verifyOtp','customerController@verifyOtp');
+        Route::post('verifyOtp','customerController@verifyOtp');
 
         Route::get('slider/get-list', 'SliderController@getList');
         
