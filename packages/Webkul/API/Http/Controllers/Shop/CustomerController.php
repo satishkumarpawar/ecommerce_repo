@@ -210,6 +210,15 @@ public function create(){
         //'phone' => 'required',
         'password' => 'required'
     ]);
+
+    $users = $this->customerRepository->get()->where('phone', $request->get('phone'))->first();
+
+    if(isset($users->id)){
+        $response['error'] = 1;
+        $response['message'] = 'Mobile number or email already exist.';
+        return response()->json($response);
+    }
+
     $data = [
         'first_name'  => $request->get('first_name'),
         'last_name'   => $request->get('last_name'),
@@ -218,7 +227,7 @@ public function create(){
         'password'    => $request->get('password'),
         'password'    => bcrypt($request->get('password')),
         'channel_id'  => core()->getCurrentChannel()->id,
-        'is_verified' => 0,
+        'is_verified' => 1,
         'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
     ];
 
