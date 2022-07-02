@@ -178,6 +178,7 @@ public function create(){
         'is_verified' => 1,
         'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
     ];
+    
 
     Event::dispatch('customer.registration.before');
 
