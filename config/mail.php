@@ -63,7 +63,7 @@ return [
 
     'from' => [
         'address' => env('SHOP_MAIL_FROM','info@triangulor.com'),
-        'name' => env('MAIL_FROM_NAME',APP_NAME)
+        'name' => env('MAIL_FROM_NAME','eCommerce')
     ],
 
     /*
