@@ -82,7 +82,14 @@ public function sendOtp(Request $request){
     */
 
     $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
+    if(isset($users->id))$userId=$users->id;
 
+    if($userId == "" || $userId == null){
+        $response['error'] = 1;
+        $response['message'] = 'You are logged out, Login again.';
+        $response['loggedIn'] = 1;
+    }
+    
     if ( isset($users['phone']) && $users['phone'] =="" ) {
         $response['error'] = 1;
         $response['message'] = 'Invalid mobile number';
@@ -122,9 +129,11 @@ public function verifyOtp(Request $request){
     $response = array();
 
     //$userId = Auth::user()->id;  //Getting UserID.
+   
+    $userId="";
     $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
+    if(isset($users->id))$userId=$users->id;
 
-    $userId=$users->id;
     if($userId == "" || $userId == null){
         $response['error'] = 1;
         $response['message'] = 'You are logged out, Login again.';
@@ -133,8 +142,8 @@ public function verifyOtp(Request $request){
         $OTP = $request->session()->get('OTP');
         $phone = $request->session()->get('phone');
         $email = $users->email;
-        $users->password=$request->session()->get('password');
         $password = $request->session()->get('password');
+        //$password = $users->password;
         if($OTP === $request->otp){// && $phone===$request->phone
 
             // Updating user's status "is_verified" as 1.
@@ -142,21 +151,17 @@ public function verifyOtp(Request $request){
             $this->customerRepository->where('id', $userId)->update(['is_verified' => 1]);
 
             //Removing Session variable
-            Session::forget('OTP');
+            /*Session::forget('OTP');
             Session::forget('phone');
             Session::forget('password');
+*/
 
-            /*$response['error'] = 0;
-            $response['is_verified'] = 1;
-            $response['loggedIn'] = 1;
-            $response['message'] = "Your Number is Verified.";*/
-
-            return response()->json([
+            /*return response()->json([
                 'error'   => 0,
                 'is_verified'   => 1,
                 'loggedIn'   => 1,
                 'message' => 'Your Number is Verified.',      
-            ]);
+            ]);*/
             
             $jwtToken = null;
             
@@ -197,13 +202,14 @@ public function verifyOtp(Request $request){
      * @return \Illuminate\Http\Response
      */
 public function create(){
-     $request=request();
+    $request=request();
     //$request->validated();
     $this->validate(request(), [
         'email' => 'required',
-        //'phone' => 'required',
+        'phone' => 'required',
         'password' => 'required'
     ]);
+   
     $data = [
         'first_name'  => $request->get('first_name'),
         'last_name'   => $request->get('last_name'),
@@ -216,11 +222,11 @@ public function create(){
         'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
     ];
 
-    //Event::dispatch('customer.registration.before');
+    Event::dispatch('customer.registration.before');
 
     $customer = $this->customerRepository->create($data);
 
-   // Event::dispatch('customer.registration.after', $customer);
+    Event::dispatch('customer.registration.after', $customer);
 
   /*  $jwtToken = null;
 
