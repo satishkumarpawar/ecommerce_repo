@@ -82,6 +82,7 @@ public function sendOtp(Request $request){
     */
 
     $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
+<<<<<<< HEAD
     if(isset($users->id))$userId=$users->id;
 
     if($userId == "" || $userId == null){
@@ -91,9 +92,17 @@ public function sendOtp(Request $request){
     }
     
     if ( isset($users['phone']) && $users['phone'] =="" ) {
+=======
+    
+    if(!isset($users['phone'])){
+        $response['error'] = 1;
+        $response['message'] = 'Mobile number does not match.';
+        $response['loggedIn'] = 1;
+    }elseif (isset($users['phone']) && $users['phone'] =="") {
+>>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
         $response['error'] = 1;
         $response['message'] = 'Invalid mobile number';
-        $response['loggedIn'] = 0;
+        $response['loggedIn'] = 1;
     } else {
 
         $otp = rand(100000, 999999);
@@ -134,17 +143,27 @@ public function verifyOtp(Request $request){
     $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
     if(isset($users->id))$userId=$users->id;
 
+<<<<<<< HEAD
+=======
+    $userId='';
+    if(isset($users->id))$userId=$users->id;
+>>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
     if($userId == "" || $userId == null){
         $response['error'] = 1;
-        $response['message'] = 'You are logged out, Login again.';
+        $response['message'] = 'Mobile number does not match.';
         $response['loggedIn'] = 1;
     }else{
         $OTP = $request->session()->get('OTP');
         $phone = $request->session()->get('phone');
         $email = $users->email;
         $password = $request->session()->get('password');
+<<<<<<< HEAD
         //$password = $users->password;
         if($OTP === $request->otp){// && $phone===$request->phone
+=======
+        //return response()->json($request);
+        if($OTP == $request->otp){// $OTP === $request->otp && $phone===$request->phone
+>>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
 
             // Updating user's status "is_verified" as 1.
 
@@ -209,7 +228,19 @@ public function create(){
         'phone' => 'required',
         'password' => 'required'
     ]);
+<<<<<<< HEAD
    
+=======
+
+    $users = $this->customerRepository->get()->where('phone', $request->get('phone'))->first();
+
+    if(isset($users->id)){
+        $response['error'] = 1;
+        $response['message'] = 'Mobile number or email already exist.';
+        return response()->json($response);
+    }
+
+>>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
     $data = [
         'first_name'  => $request->get('first_name'),
         'last_name'   => $request->get('last_name'),
@@ -218,7 +249,7 @@ public function create(){
         'password'    => $request->get('password'),
         'password'    => bcrypt($request->get('password')),
         'channel_id'  => core()->getCurrentChannel()->id,
-        'is_verified' => 0,
+        'is_verified' => 1,
         'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id
     ];
 
@@ -226,9 +257,13 @@ public function create(){
 
     $customer = $this->customerRepository->create($data);
 
+<<<<<<< HEAD
     Event::dispatch('customer.registration.after', $customer);
+=======
+   Event::dispatch('customer.registration.after', $customer);
+>>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
 
-  /*  $jwtToken = null;
+   $jwtToken = null;
 
         if (! $jwtToken = auth()->guard($this->guard)->attempt($request->only(['email', 'password']))) {
             return response()->json([
@@ -245,22 +280,11 @@ public function create(){
             'data'    => $customer,
         ]);
     
-    */
-
-    $otp = rand(100000, 999999);
-    Session::put('OTP', $otp);
-    Session::put('phone',$customer->phone);
-    Session::put('password',$request->get('password'));
-
-    $response['error'] = 0;
-    $response['message'] = 'Your OTP is created.';
-    $response['OTP'] = $otp;
-    $response['phone'] = $customer->phone;
-   
+    
 
     return response()->json([
         'message' => 'Your account has been created successfully.',
-        'data'    => $response,
+        'data'    => $customer,
     ]);
 }
 

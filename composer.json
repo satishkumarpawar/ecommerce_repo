@@ -105,8 +105,7 @@
             "Webkul\\SocialLogin\\": "packages/Webkul/SocialLogin/src",
             "Webkul\\DebugBar\\": "packages/Webkul/DebugBar/src",
             "Webkul\\Marketing\\": "packages/Webkul/Marketing/src",
-            "ACME\\UserSurvey\\": "packages/ACME/UserSurvey/src",
-            "Webkul\\UserSurvey\\": "packages/Webkul/UserSurvey/src"
+            "ACME\\UserSurvey\\": "packages/ACME/UserSurvey/src"
         }
     },
     "autoload-dev": {

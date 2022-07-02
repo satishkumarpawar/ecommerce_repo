@@ -188,6 +188,9 @@ Route::group(['prefix' => 'api'], function ($router) {
             'authorization_required' => true
         ]);
 
+        Route::post('addresses/update', 'AddressController@update')->defaults('_config', [
+            'authorization_required' => true
+        ]);
 
         //Order routes
         Route::get('orders', 'ResourceController@index')->defaults('_config', [
@@ -271,6 +274,8 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::put('cart/update', 'CartController@update');
             Route::put('cart/update_qty', 'CartController@update_qty');
 
+            Route::put('cart/update_qty', 'CartController@update_qty');
+
             Route::get('cart/remove-item/{id}', 'CartController@destroyItem');
 
             Route::post('cart/coupon', 'CartController@applyCoupon');
@@ -289,17 +294,23 @@ Route::group(['prefix' => 'api'], function ($router) {
 
             Route::post('save-order', 'CheckoutController@saveOrder');
         });
-//SKP Start
-Route::post('/sendOtp', [
-    //'middleware' => 'checkSession',
-    'uses'=>'customerController@sendOtp'
-]);
+        //SKP Start
+       /* Route::post('/sendOtp', [
+            'middleware' => 'checkSession',
+            'uses'=>'customerController@sendOtp'
+        ]);
 
-Route::post('/verifyOtp', [
-    //'middleware' => 'checkSession',
-    'uses'=>'customerController@verifyOtp'
-]);
+        Route::post('/verifyOtp', [
+            'middleware' => 'checkSession',
+            'uses'=>'customerController@verifyOtp'
+        ]);*/
+
+        Route::post('/sendOtp', 'customerController@sendOtp');
+
+        Route::post('/verifyOtp','customerController@verifyOtp');
+
         Route::get('slider/get-list', 'SliderController@getList');
+        
         Route::get('slider/get', 'SliderController@get');
         
         Route::group(['prefix' => 'usersurvey'], function ($router) {
