@@ -296,16 +296,16 @@ Route::group(['prefix' => 'api'], function ($router) {
         //SKP Start
        /* Route::post('/sendOtp', [
             'middleware' => 'checkSession',
-            'uses'=>'customerController@sendOtp'
+            'uses'=>'CustomerController@sendOtp'
         ]);
 
         Route::post('/verifyOtp', [
             'middleware' => 'checkSession',
-            'uses'=>'customerController@verifyOtp'
+            'uses'=>'CustomerController@verifyOtp'
         ]);*/
-        Route::post('sendOtp', 'customerController@sendOtp'); 
+        Route::post('sendOtp', 'CustomerController@sendOtp'); 
 
-        Route::post('verifyOtp','customerController@verifyOtp');
+        Route::post('verifyOtp','CustomerController@verifyOtp');
 
         Route::get('slider/get-list', 'SliderController@getList');
         
