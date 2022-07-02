@@ -188,6 +188,9 @@ Route::group(['prefix' => 'api'], function ($router) {
             'authorization_required' => true
         ]);
 
+        Route::post('addresses/update', 'AddressController@update')->defaults('_config', [
+            'authorization_required' => true
+        ]);
 
         //Order routes
         Route::get('orders', 'ResourceController@index')->defaults('_config', [
@@ -269,6 +272,8 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::get('cart/empty', 'CartController@destroy');
 
             Route::put('cart/update', 'CartController@update');
+
+            Route::put('cart/update_qty', 'CartController@update_qty');
 
             Route::get('cart/remove-item/{id}', 'CartController@destroyItem');
 
