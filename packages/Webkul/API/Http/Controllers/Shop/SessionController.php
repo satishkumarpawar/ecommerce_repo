@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Event;
 use Webkul\API\Http\Resources\Customer\Customer as CustomerResource;
 use Webkul\Customer\Http\Requests\CustomerLoginRequest;
 use Webkul\Customer\Repositories\CustomerRepository;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SessionController extends Controller
 {
@@ -46,11 +48,18 @@ class SessionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(CustomerLoginRequest $request)
+   /* public function create(CustomerLoginRequest $request)
     {
         
-        $request->validated();
-     
+        $request->validated();*/
+    public function create(Request $request)
+   {
+      $request=request();
+       $this->validate($request, [
+          // 'email' => 'required',
+           'phone' => 'required',
+           'password' => 'required'
+       ]);
  
         $jwtToken = null;
 
