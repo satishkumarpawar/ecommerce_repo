@@ -9,6 +9,8 @@ use Webkul\Customer\Http\Requests\CustomerRegistrationRequest;
 use Webkul\Customer\Repositories\CustomerGroupRepository;
 use Webkul\Customer\Repositories\CustomerRepository;
 use JWTAuth; #SKP
+use Illuminate\Support\Facades\Mail;
+use Webkul\Customer\Mail\VerificationMobile;
 
 use Illuminate\Support\Facades\Session;
 //use \App\MSG91;
@@ -75,37 +77,14 @@ class CustomerController extends Controller
 public function sendOtp(Request $request){
 
     $response = array();
-   
-    /*$userId = Auth::user()->id;
 
-    $users = User::where('id', $userId)->first();
-    */
-
-    $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
-<<<<<<< HEAD
-    if(isset($users->id))$userId=$users->id;
-
-    if($userId == "" || $userId == null){
-        $response['error'] = 1;
-        $response['message'] = 'You are logged out, Login again.';
-        $response['loggedIn'] = 1;
-    }
-    
-    if ( isset($users['phone']) && $users['phone'] =="" ) {
-=======
-    
-    if(!isset($users['phone'])){
-        $response['error'] = 1;
-        $response['message'] = 'Mobile number does not match.';
-        $response['loggedIn'] = 1;
-    }elseif (isset($users['phone']) && $users['phone'] =="") {
->>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
+    if ( isset($request->phone) && $request->phone =="" ) {
         $response['error'] = 1;
         $response['message'] = 'Invalid mobile number';
-        $response['loggedIn'] = 1;
     } else {
 
         $otp = rand(100000, 999999);
+
        /*$MSG91 = new MSG91();
 
         $msg91Response = $MSG91->sendSMS($otp,$users['phone']);
@@ -117,14 +96,13 @@ public function sendOtp(Request $request){
         }else{*/
 
             Session::put('OTP', $otp);
-            Session::put('phone',$request->phone);
-            Session::put('password','');
+            //sendemail
+            Mail::queue(new VerificationMobile(['email' =>$request->phone.'@yopmail.com' ,'otp' => $otp]));
 
             $response['error'] = 0;
             $response['message'] = 'Your OTP is created.';
             $response['OTP'] = $otp;
-            $response['phone'] = $request->phone;
-            $response['loggedIn'] = 1;
+            
         //}
        
     }
@@ -139,78 +117,30 @@ public function verifyOtp(Request $request){
 
     //$userId = Auth::user()->id;  //Getting UserID.
    
-    $userId="";
-    $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
-    if(isset($users->id))$userId=$users->id;
-
-<<<<<<< HEAD
-=======
-    $userId='';
-    if(isset($users->id))$userId=$users->id;
->>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
-    if($userId == "" || $userId == null){
-        $response['error'] = 1;
-        $response['message'] = 'Mobile number does not match.';
-        $response['loggedIn'] = 1;
-    }else{
+    
         $OTP = $request->session()->get('OTP');
-        $phone = $request->session()->get('phone');
-        $email = $users->email;
-        $password = $request->session()->get('password');
-<<<<<<< HEAD
-        //$password = $users->password;
-        if($OTP === $request->otp){// && $phone===$request->phone
-=======
-        //return response()->json($request);
-        if($OTP == $request->otp){// $OTP === $request->otp && $phone===$request->phone
->>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
-
-            // Updating user's status "is_verified" as 1.
-
-            $this->customerRepository->where('id', $userId)->update(['is_verified' => 1]);
-
-            //Removing Session variable
+        
+        if($OTP === $request->otp){
             /*Session::forget('OTP');
             Session::forget('phone');
-            Session::forget('password');
-*/
+         
+        */
 
-            /*return response()->json([
+            return response()->json([
                 'error'   => 0,
                 'is_verified'   => 1,
-                'loggedIn'   => 1,
                 'message' => 'Your Number is Verified.',      
-            ]);*/
+            ]);
             
-            $jwtToken = null;
             
-            if (! $jwtToken = auth()->guard($this->guard)->attempt(['email'=>$email, 'password'=>$password])) {
-           // if (! $jwtToken = auth()->guard($this->guard)->attempt($users->only(['email', 'password']))) {
-                return response()->json([
-                    'error'   => 0,
-                    'is_verified'   => 1,
-                    'loggedIn'   => 1,
-                    'message' => 'Your Number is Verified.',      
-                ]);
-            }
-
-            Event::dispatch('customer.after.login', $email);
-
-        
+        }else{
             return response()->json([
-                'token'   => $jwtToken,
-                'message' => 'Logged in successfully.',
-                'data'    => $users,
+                'error'   => 1,
+                'is_verified'   => 0,
+                'message' => 'OTP does not match.',      
             ]);
 
-        }else{
-            $response['error'] = 1;
-            $response['is_verified'] = 0;
-            $response['loggedIn'] = 1;
-            $response['message'] = "OTP does not match.";
         }
-    }
-    return response()->json($response);
     //echo json_encode($response);
 }
 
@@ -228,19 +158,15 @@ public function create(){
         'phone' => 'required',
         'password' => 'required'
     ]);
-<<<<<<< HEAD
    
-=======
-
-    $users = $this->customerRepository->get()->where('phone', $request->get('phone'))->first();
-
+    $users = $this->customerRepository->get()->where('phone', $request->phone)->first();
     if(isset($users->id)){
-        $response['error'] = 1;
-        $response['message'] = 'Mobile number or email already exist.';
-        return response()->json($response);
+        return response()->json([
+            'message' => 'Phone or email already exist.',
+            'error'    => 1,
+        ]);  
     }
 
->>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
     $data = [
         'first_name'  => $request->get('first_name'),
         'last_name'   => $request->get('last_name'),
@@ -257,11 +183,7 @@ public function create(){
 
     $customer = $this->customerRepository->create($data);
 
-<<<<<<< HEAD
     Event::dispatch('customer.registration.after', $customer);
-=======
-   Event::dispatch('customer.registration.after', $customer);
->>>>>>> b2da23ba1cf01001b9c675f7bb9632c39aefc1e3
 
    $jwtToken = null;
 

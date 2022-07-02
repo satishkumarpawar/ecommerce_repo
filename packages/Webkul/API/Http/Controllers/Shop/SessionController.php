@@ -49,16 +49,8 @@ class SessionController extends Controller
     public function create(CustomerLoginRequest $request)
     {
         
-       /* $users = $this->customerRepository->get()->where('phone', $request->email)->first();
-        if(isset($users))$request->email=$users->email;
-        $request->password=$request->password;
-      */
-  $request->validated();
-  /*$this->validate(request(), [
-    //'email' => 'required',
-    //'phone' => 'required',
-    'password' => 'required'
-]);*/
+        $request->validated();
+ 
         $jwtToken = null;
 
         if (! $jwtToken = auth()->guard($this->guard)->attempt($request->only(['email', 'password']))) {
