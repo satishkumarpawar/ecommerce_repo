@@ -20,7 +20,7 @@ return [
         'route'      => 'admin.sales.orders.index',
         'sort'       => 1,
         'icon-class' => '',
-    ]/*, [
+    ], [
         'key'        => 'sales.shipments',
         'name'       => 'admin::app.layouts.shipments',
         'route'      => 'admin.sales.shipments.index',
@@ -32,7 +32,7 @@ return [
         'route'      => 'admin.sales.invoices.index',
         'sort'       => 3,
         'icon-class' => '',
-    ]*/, [
+    ], [
         'key'        => 'sales.refunds',
         'name'       => 'admin::app.layouts.refunds',
         'route'      => 'admin.sales.refunds.index',
