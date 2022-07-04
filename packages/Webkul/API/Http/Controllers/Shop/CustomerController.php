@@ -138,7 +138,7 @@ public function verifyOtp(Request $request){
                 'error'   => 1,
                 'is_verified'   => 0,
                 'message' => 'OTP does not match.',  
-                "request" => $request,
+                "request" => $request->otp,
                 "OTP" =>    $OTP
             ]);
 
