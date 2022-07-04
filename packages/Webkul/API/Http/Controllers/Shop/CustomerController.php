@@ -120,7 +120,7 @@ public function verifyOtp(Request $request){
     
         $OTP = $request->session()->get('OTP');
         
-        if($OTP === $request->otp){
+        if($OTP == $request->otp){
             /*Session::forget('OTP');
             Session::forget('phone');
          
