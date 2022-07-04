@@ -127,7 +127,7 @@ public function verifyOtp(Request $request){
         $otpdata=Otp::select('otps.*')
         ->distinct()
         ->where('otp',$request->otp)
-        ->where('created_at', '>=', 'DATE_SUB(NOW(), INTERVAL 10 MINUTE)')
+        //->where('created_at', '>=', 'DATE_SUB(NOW(), INTERVAL 10 MINUTE)')
         ->orderby("id","desc")
         ->limit(1)
        ->get()
@@ -140,7 +140,7 @@ public function verifyOtp(Request $request){
         if($OTP == $request->otp){
             /*Session::forget('OTP');
             Session::forget('phone');
-         
+          
         */
 
             return response()->json([
