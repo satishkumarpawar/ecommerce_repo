@@ -106,7 +106,7 @@ public function sendOtp(Request $request){
 
             $response['error'] = 0;
             $response['message'] = 'Your OTP is created.';
-           $response['OTP'] = date("Y-m-d H:i:s");
+           // $response['OTP'] = $otp;
             
         //}
        
@@ -122,13 +122,13 @@ public function verifyOtp(Request $request){
 
     //$userId = Auth::user()->id;  //Getting UserID.
    
-    
+    $expire_time = date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s")." -10 minutes"));
         //$OTP = $request->session()->get('OTP');
         $otpdata=Otp::select('otps.*')
         ->distinct()
         ->where('otp',$request->otp)
         //->where('created_at', '>=', 'DATE_SUB(NOW(), INTERVAL 10 MINUTE)')
-        ->where('created_at', '>=', 'DATE_SUB('. date("Y-m-d H:i:s").', INTERVAL 10 MINUTE)')
+        ->where('created_at', '>=', $expire_time)
         ->orderby("id","desc")
         ->limit(1)
        ->get()
