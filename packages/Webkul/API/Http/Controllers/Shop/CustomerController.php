@@ -127,7 +127,7 @@ public function verifyOtp(Request $request){
         $otpdata=Otp::select('otps.*')
         ->distinct()
         ->where('otp',$request->otp)
-        //->where('DATE_ADD(created_at, INTERVAL 10 MINUTE)', '>=', 'NOW()')
+        ->where('created_at', '>=', 'DATE_SUB(NOW(), INTERVAL 10 MINUTE)')
         ->orderby("id","desc")
         ->limit(1)
        ->get()
