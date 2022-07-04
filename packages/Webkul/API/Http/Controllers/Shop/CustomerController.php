@@ -102,6 +102,7 @@ public function sendOtp(Request $request){
             $response['error'] = 0;
             $response['message'] = 'Your OTP is created.';
             $response['OTP'] = $otp;
+            $response['cookies'] = $_COOKIE;
             
         //}
        
