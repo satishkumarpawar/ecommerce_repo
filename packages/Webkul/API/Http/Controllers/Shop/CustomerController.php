@@ -128,7 +128,7 @@ public function verifyOtp(Request $request){
         ->distinct()
         ->where('otp',$request->otp)
         //->where('created_at', '>=', 'DATE_SUB(NOW(), INTERVAL 10 MINUTE)')
-       // ->where('created_at', '>=', 'DATE_SUB('. date("Y-m-d H:i:s").', INTERVAL 10 MINUTE)')
+        //->where('created_at', '>=', 'DATE_SUB('. date("Y-m-d H:i:s").', INTERVAL 10 MINUTE)')
         ->orderby("id","desc")
         ->limit(1)
        ->get()
@@ -137,20 +137,20 @@ public function verifyOtp(Request $request){
        
         $OTP=null;
         if(isset($otpdata['otp']))$OTP=$otpdata['otp'];
-        $otpdata["date"]=date("Y-m-d H:i:s");
+
         if($OTP == $request->otp){
             /*Session::forget('OTP');
             Session::forget('phone');
           
         */
-        // Otp::where("otp",$request->otp)->delete();
-        
+         Otp::where("otp",$request->otp)->delete();
+
 
             return response()->json([
                 'error'   => 0,
                 'is_verified'   => 1,
                 'message' => 'Your Number is Verified.',  
-                "data"=>$otpdata    
+                //"data"=>$otpdata    
             ]);
             
             
@@ -159,7 +159,7 @@ public function verifyOtp(Request $request){
                 'error'   => 1,
                 'is_verified'   => 0,
                 'message' => 'OTP does not match.',
-                "data"=>$otpdata 
+                //"data"=>$otpdata 
             ]);
 
         }
