@@ -69,8 +69,8 @@ class ResourceController extends Controller
             if ($sort = request()->input('sort')) {
                 $query = $query->orderBy($sort, request()->input('order') ?? 'desc');
             } else {
-                $query = $query->orderBy('position', 'asc'); #SKP
-                //$query = $query->orderBy('id', 'desc');
+                //$query = $query->orderBy('position', 'asc'); #SKP
+                $query = $query->orderBy('id', 'desc');
             }
 
             return $query;

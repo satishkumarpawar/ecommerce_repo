@@ -325,7 +325,9 @@ class ProductRepository extends Repository
         } else {
             $items = [];
         }
-
+       /* foreach($items as $k=>$v){
+            $items[$k]["product_attributes"]= app('Webkul\Product\Helpers\View')->getAdditionalData($this->productRepository->findOrFail($v["id"]));
+        }*/
         $results = new LengthAwarePaginator($items, $count, $perPage, $page, [
             'path'  => request()->url(),
             'query' => request()->query(),
