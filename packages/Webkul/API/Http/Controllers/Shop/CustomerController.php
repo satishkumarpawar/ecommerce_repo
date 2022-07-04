@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Mail;
 use Webkul\Customer\Mail\VerificationMobile;
 
 use Illuminate\Support\Facades\Session;
+
+use \App\Otp;
 //use \App\MSG91;
 
 class CustomerController extends Controller
@@ -85,6 +87,9 @@ public function sendOtp(Request $request){
 
         $otp = rand(100000, 999999);
 
+        Otp::where("phone",$request->phone)->delete();
+        Otp::create(["otp"=>$otp,"phone"=>$request->phone]);
+
        /*$MSG91 = new MSG91();
 
         $msg91Response = $MSG91->sendSMS($otp,$users['phone']);
@@ -95,14 +100,13 @@ public function sendOtp(Request $request){
             $response['loggedIn'] = 1;
         }else{*/
 
-            Session::put('OTP', $otp);
+           // Session::put('OTP', $otp);
             //sendemail
             Mail::queue(new VerificationMobile(['email' =>$request->phone.'@yopmail.com' ,'otp' => $otp]));
 
             $response['error'] = 0;
             $response['message'] = 'Your OTP is created.';
-            $response['OTP'] = $otp;
-            $response['bagisto_session'] = $_COOKIE["bagisto_session"];
+           // $response['OTP'] = $otp;
             
         //}
        
@@ -119,8 +123,20 @@ public function verifyOtp(Request $request){
     //$userId = Auth::user()->id;  //Getting UserID.
    
     
-        $OTP = $request->session()->get('OTP');
+        //$OTP = $request->session()->get('OTP');
+        $otpdata=Otp::select('otps.*')
+        ->distinct()
+        ->where('otp',$request->otp)
+        //->where('DATE_ADD(created_at, INTERVAL 10 MINUTE)', '>=', 'NOW()')
+        ->orderby("id","desc")
+        ->limit(1)
+       ->get()
+       ->first()
+        ;
         
+        $OTP=null;
+        if(isset($otpdata['otp']))$OTP=$otpdata['otp'];
+
         if($OTP == $request->otp){
             /*Session::forget('OTP');
             Session::forget('phone');
@@ -138,9 +154,7 @@ public function verifyOtp(Request $request){
             return response()->json([
                 'error'   => 1,
                 'is_verified'   => 0,
-                'message' => 'OTP does not match.',  
-                "request" => $request->otp,
-                "OTP" =>    $OTP
+                'message' => 'OTP does not match.'
             ]);
 
         }
