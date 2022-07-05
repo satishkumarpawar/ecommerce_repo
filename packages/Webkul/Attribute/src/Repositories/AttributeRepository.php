@@ -186,6 +186,7 @@ class AttributeRepository extends Repository
                 'special_price_from',
                 'special_price_to',
                 'status',
+                'weight', #SKP
             ], $attributeColumns);
 
         if (in_array('*', $codes)) {

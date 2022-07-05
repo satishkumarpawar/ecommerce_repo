@@ -52,6 +52,7 @@ class Product extends JsonResource
             'base_image'             => ProductImageFacade::getProductBaseImage($product),
             'created_at'             => $product->created_at,
             'updated_at'             => $product->updated_at,
+            'weight'                 => $product->weight,
 
             /* product's reviews */
             'reviews'                => [
@@ -166,9 +167,23 @@ class Product extends JsonResource
                     ? $this->getBookingProductInfo($product)
                     : null
             ),
+             /* booking product */
+            /* $this->mergeWhen(
+                $product->type == 'simple',
+                $product->type == 'simple'
+                    ? $this->getSimpleProductInfo($product)
+                    : []
+            ),*/
         ];
     }
 
+
+    private function getSimpleProductInfo($product)
+    {
+        return [
+            'product_attributes' => $product->product_attributes
+        ];
+    }
     /**
      * Get grouped product's extra information.
      *
