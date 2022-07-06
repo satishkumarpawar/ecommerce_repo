@@ -168,12 +168,13 @@ class Product extends JsonResource
                     : null
             ),
              /* simple product */ #SKP
-            $this->mergeWhen(
+          /*  $this->mergeWhen(
                 $product->type == 'simple',
                 $product->type == 'simple'
                     ? $this->getSimpleProductInfo($product)
                     : []
-            ),
+            ),*/
+            $this->merge($this->getSimpleProductInfo($product)),
         ];
     }
 
