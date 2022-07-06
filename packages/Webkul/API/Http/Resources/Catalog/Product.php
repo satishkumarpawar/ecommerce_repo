@@ -167,13 +167,13 @@ class Product extends JsonResource
                     ? $this->getBookingProductInfo($product)
                     : null
             ),
-             /* booking product */
-            /* $this->mergeWhen(
+             /* simple product */ #SKP
+            $this->mergeWhen(
                 $product->type == 'simple',
                 $product->type == 'simple'
                     ? $this->getSimpleProductInfo($product)
                     : []
-            ),*/
+            ),
         ];
     }
 
@@ -181,7 +181,7 @@ class Product extends JsonResource
     private function getSimpleProductInfo($product)
     {
         return [
-            'product_attributes' => $product->product_attributes
+            'additional_info' => app('Webkul\Product\Helpers\View')->getAdditionalData($product)
         ];
     }
     /**
