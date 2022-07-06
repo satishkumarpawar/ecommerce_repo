@@ -76,9 +76,12 @@ class UserSurveyRepository extends Repository
         $repository = app(UserSurveySearchRepository::class)->scopeQuery(function ($query) use ($params, $categoryId) {
             
             $qb = $query->distinct()
-                ->select('user_surveys.*');
-                //->addSelect('customers.first_name,customers.last_name')
-               // ->leftJoin('customers', 'user_surveys.user_id', '=', 'customers.id');
+                ->select('user_surveys.*')
+                ->addSelect('customers.first_name')
+                ->addSelect('customers.last_name')
+                ->addSelect('user_survey_sets.survey_name')
+                ->leftJoin('customers', 'user_surveys.user_id', '=', 'customers.id')
+                ->leftJoin('user_survey_sets', 'user_surveys.survey_set_id', '=', 'user_survey_sets.id');
                 
                
 

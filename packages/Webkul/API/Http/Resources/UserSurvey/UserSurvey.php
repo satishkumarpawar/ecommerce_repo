@@ -22,7 +22,9 @@ class UserSurvey extends JsonResource
             'survey_set_id'    => $this->survey_set_id,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
-            //'answer_set'  => UserSurveyDetail::collection($survey->answer_set)
+            'user_info'    => ['first_name'=>$this->first_name, 'last_name'=>$this->last_name],
+            'survey_set_info'    => ['survey_name'=>$this->survey_name],
+           // 'answer_set'  => UserSurveyDetail::collection($survey->answer_set)
         ];
     }
 }

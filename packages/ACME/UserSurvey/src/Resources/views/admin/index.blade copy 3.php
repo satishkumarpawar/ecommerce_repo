@@ -18,7 +18,10 @@
                 <h1>UserSurvey List</h1>
             </div>
 
-            
+            <div class="page-action">
+                <a href="http://localhost:8000/admin/customers/create" class="btn btn-lg btn-primary">
+                    Create
+                </a></div>
         </div>
 
         <div class="page-content">
@@ -40,7 +43,12 @@
         </thead>
         <tbody id="table_body">
             <tr>
-                <td colspan="5">Loading...</td>
+                <td>ID</td>
+                <td>User</td>
+                <td>Survey Set</td>
+                <td>Date Created</td>
+                <td>Date Modified</td>
+                <td>Action</td>
             </tr>
         </tbody>
     </table>
@@ -78,7 +86,7 @@ function getData(requestURL){
                              
                             table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
                             table_content +='<td data-value="Name">'+data_row.user_info["first_name"]+' '+data_row.user_info["last_name"]+'</td>'; 
-                            table_content +='<td data-value="group">'+data_row.survey_set_info["survey_name"]+'</td>';
+                            table_content +='<td data-value="group">'+data_row["survey_set_id"]+'</td>';
                             table_content +='<td data-value="datec">'+new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>';
                             table_content +='<td data-value="datem">'+new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>'; 
                     
