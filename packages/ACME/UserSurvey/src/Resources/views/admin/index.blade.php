@@ -74,7 +74,7 @@ function getData(requestURL){
                     if(textStatus == 'success') {
                         for(let i=0;i<data.data.length;i++){
                             var data_row=data.data[i];
-                            table_content +='<tr>';
+                            table_content +='<tr id="row'+data_row["id"]+'">';
                              
                             table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
                             table_content +='<td data-value="Name">'+data_row.user_info["first_name"]+' '+data_row.user_info["last_name"]+'</td>'; 
@@ -84,11 +84,11 @@ function getData(requestURL){
                     
                             table_content +='<td data-value="Actions" class="actions" style="white-space: nowrap; width: 100px;">';
                             table_content +='<div class="action">';
-                            table_content +='<a id="11" href="http://localhost:8000/admin/usersurvey/view/'+data_row["id"]+'" data-method="GET" data-action="http://localhost:8000/admin/usersurvey/view/'+data_row["id"]+'" data-token="{{ csrf_token() }}" title="View Survey">';
+                            table_content +='<a  href="http://localhost:8000/admin/usersurvey/view/'+data_row["id"]+'" data-method="GET" data-action="http://localhost:8000/admin/usersurvey/view/'+data_row["id"]+'" data-token="{{ csrf_token() }}" title="View Survey">';
                             table_content +='<span class="icon eye-icon"></span>';
                             table_content +='</a>'; 
                             
-                            table_content +='<a id="'+data_row["id"]+'1" data-method="POST" data-action="http://localhost:8000/admin/usersurvey/delete/'+data_row["id"]+'" data-token="{{ csrf_token() }}" title="Delete Survey">';
+                            table_content +='<a  href="javascript:deleteData('+data_row["id"]+');" title="Delete Survey">';
                             table_content +='<span class="icon trash-icon"></span>';
                             table_content +='</a>';
                             table_content +='</div>';
@@ -125,7 +125,50 @@ function getData(requestURL){
     
 $(document).ready(function() {
     getData('');
+    
 } );
+
+
+function deleteData(id){
+    if(!confirm("Are you sure to delete this survey?"))return;
+
+   requestURL = "../api/usersurvey/delete?token=true&id="+id;
+   
+   var dt = $('#table_content').DataTable();
+        console.log("delete_survey : "+requestURL);
+
+        var checkCall = $.ajax({
+            url: requestURL,
+            dataType: 'json',
+            type: 'delete',
+            contentType: 'application/json',
+            headers: {
+                'Accept':'application/json',
+                //'Authorization':'Bearer ' + '***...',
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            data: null,
+            processData: false,
+            beforeSend: function() { },
+            success: function( data, textStatus, jQxhr ){
+                    console.log("delete_survey() data  : " + JSON.stringify(data));
+                    if(data.message == true) {
+                        dt.row("#row"+id).remove().draw();
+                        alert("Survey record deleted successfully.");
+                    
+                    } else {
+                         alert(data.message);
+                    }
+                     
+                   
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( "Error Thrown delete_survey : "+errorThrown );
+            }
+        });
+
+	 }
+	 	
 	</script>			
                 </div>
             </div>
