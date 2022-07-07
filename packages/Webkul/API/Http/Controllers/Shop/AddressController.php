@@ -55,6 +55,14 @@ class AddressController extends Controller
     {
         $customer = auth($this->guard)->user();
 
+        if(!isset($customer->id)){
+            return response()->json([
+                'message' => 'Session Expired',
+                'is_login'    => false,
+            ]);
+         }
+          
+
         $addresses = $customer->addresses()->get();
 
         return CustomerAddressResource::collection($addresses);

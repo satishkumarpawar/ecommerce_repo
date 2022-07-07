@@ -135,7 +135,13 @@ class UserSurveyRepository extends Repository
         if ($id) {
             $qb = $this->model
             ->distinct()
-            ->addSelect('user_surveys.*');
+            ->addSelect('user_surveys.*')
+            ->addSelect('customers.first_name')
+            ->addSelect('customers.last_name')
+            ->addSelect('user_survey_sets.survey_name')
+            ->leftJoin('customers', 'user_surveys.user_id', '=', 'customers.id')
+            ->leftJoin('user_survey_sets', 'user_surveys.survey_set_id', '=', 'user_survey_sets.id');
+            
             $qb->where('user_surveys.id', $id);
         } else {
             $qb = $this->model
