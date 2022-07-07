@@ -66,7 +66,7 @@ class SessionController extends Controller
         if (! $jwtToken = auth()->guard($this->guard)->attempt($request->only(['phone', 'password']))) {
             return response()->json([
                 'error' => 'Invalid phone or Password',
-            ], 401);
+            ], 200);
         }
 
         Event::dispatch('customer.after.login', $request->get('phone'));

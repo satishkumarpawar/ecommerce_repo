@@ -268,7 +268,7 @@ public function create(){
 
             try {
                 if (!JWTAuth::parseToken()->authenticate()) {
-                    return response()->json(["message" => "Token is still valid"], 400);
+                    return response()->json(["message" => "Token is still valid"], 200);
                 }
                 //refresh token
                 $refreshed = JWTAuth::refresh(JWTAuth::getToken());
@@ -288,7 +288,7 @@ public function create(){
                       'message' => 'Refreshed successfully.'
                   ],200);
                 } catch (\Exception $e) {
-                    return response()->json(["message" => $e->getMessage()], 401);
+                    return response()->json(["message" => $e->getMessage()], 200);
                 }
             }
     }
