@@ -47,7 +47,7 @@
         </thead>
         <tbody id="table_body">
             <tr>
-                <td colspan="5" style="text-align:center;">Loading...</td>
+                <td colspan="6" style="text-align:center;">Loading...</td>
             </tr>
         </tbody>
     </table>
@@ -94,7 +94,7 @@ var totalpages = [];
 var loadedpages = [];
 function getData(requestURL){
    var table_content='';
-   if(requestURL=='')requestURL = "../api/usersurvey/get-list?token=true&limit=1000";
+   if(requestURL=='')requestURL = "{{env('APP_URL')}}/api/usersurvey/get-list?token=true&limit=1000";
    
     
 
@@ -155,7 +155,14 @@ function getData(requestURL){
                 null,
                 null,
                 null
-            ]
+            ],
+            drawCallback: function(){
+                    $('.paginate_button.last:not(.disabled)', this.api().table().container())          
+                        .on('click', function(){
+                            alert('last');
+                        });       
+                }   
+                            
                         });
                         
                     } else {
@@ -182,7 +189,7 @@ $(document).ready(function() {
 function deleteData(id){
     if(!confirm("Are you sure to delete this survey?"))return;
 
-   requestURL = "../api/usersurvey/delete?token=true&id="+id;
+   requestURL = "{{env('APP_URL')}}/api/usersurvey/delete?token=true&id="+id;
    
    var dt = $('#table_content').DataTable();
         console.log("delete_survey : "+requestURL);
@@ -210,7 +217,7 @@ function deleteData(id){
                     console.log("delete_survey() data  : " + JSON.stringify(data));
                     if(data.message == true) {
                         dt.row("#row"+id).remove().draw();
-                        alert("Survey record deleted successfully.");
+                        alert("This survey record has deleted successfully.");
                     
                     } else {
                          alert(data.message);
@@ -230,7 +237,7 @@ function deleteData(id){
         //$("#"+obj).show();
    
 
-        requestURL = "../api/usersurvey/get?token=true&id="+id;
+        requestURL = "{{env('APP_URL')}}/api/usersurvey/get?token=true&id="+id;
    
         console.log("get_survey : "+requestURL);
 
@@ -310,35 +317,37 @@ function deleteData(id){
                    // if(data.length>0) {
                         var table_content='';
                             table_content +='<tr>';
-                            table_content +='<td>Survey Name</td>';
-                            table_content +='<td  style="font-weight:bold;">'+data.survey_set_info["survey_name"]+'</td>';
+                            table_content +='<td>Survey Name:</td>';
+                            table_content +='<td colspan="2"  style="font-weight:bold;">'+data.survey_set_info["survey_name"]+'</td>';
                             table_content +='</tr>';
                             table_content +='<tr>';
-                            table_content +='<td>Survey User</td>';
-                            table_content +='<td  style="font-weight:bold;">'+data.user_info["first_name"]+' '+data.user_info["last_name"]+'</td>';
+                            table_content +='<td>Survey User:</td>';
+                            table_content +='<td colspan="2" style="font-weight:bold;">'+data.user_info["first_name"]+' '+data.user_info["last_name"]+'</td>';
                             table_content +='</tr>';
                             table_content +='<tr>';
-                            table_content +='<td valign="top">Survey Detail</td>';
-                            table_content +='<td><table style="width:100%">';
+                            table_content +='<td>Survey Date:</td>';
+                            table_content +='<td colspan="2" style="font-weight:bold;">'+new Date(data["updated_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>';
+                            table_content +='</tr>';
+                            table_content +='<tr>';
+                            table_content +='<td colspan="3" style="font-weight:bold;">Survey Detail:</td>';
+                            table_content +='</tr>';
                             for(i=0;i<data.answer_set.length;i++){
                                 var ansrow = data.answer_set[i];
                                 table_content +='<tr>';
+                                table_content +='<td>&nbsp;</td>';
                                 table_content +='<td>Question</td>';
                                 table_content +='<td style="font-weight:bold;">'+ansrow['question_text']+'</td>';
                                 table_content +='</tr>';
                                 table_content +='<tr>';
+                                table_content +='<td>&nbsp</td>';
                                 table_content +='<td>Answer</td>';
                                 table_content +='<td>'+ansrow['answer_text']+'</td>';
                                 table_content +='</tr>';
                                 table_content +='<tr>';
-                                table_content +='<td>&nbsp;</td>';
-                                table_content +='<td>&nbsp;</td>';
+                                table_content +='<td colspan="3">&nbsp</td>'
                                 table_content +='</tr>';
                             }
-                            
-                            table_content +='</table></td>';
-                            table_content +='</tr>';
-                      
+                           
                         document.getElementById("viewTable").innerHTML=table_content;
 
                         $("#viewData").click();

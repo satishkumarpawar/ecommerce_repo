@@ -292,6 +292,8 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::post('check-minimum-order', 'CheckoutController@checkMinimumOrder');
 
             Route::post('save-order', 'CheckoutController@saveOrder');
+
+            Route::get('delivery-instruction', 'CheckoutController@deliveryInstruction'); #SKP
         });
         //SKP Start
        /* Route::post('/sendOtp', [

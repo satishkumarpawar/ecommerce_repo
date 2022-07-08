@@ -224,4 +224,14 @@ class CheckoutController extends Controller
     {
         app(OnepageController::class)->validateOrder();
     }
+
+    public function deliveryInstruction()
+    {
+        return response()->json([
+            'data' => [
+                'delivery_instructions' => [["instruction"=>"Leave on door"],["instruction"=>"Delivery on door"],["instruction"=>"Leave on security"]],
+                'prefered_delivery_time'  => [["timing"=>"6:00 - 9:00 AM"],["timing"=>"9:00 - 12:00 AM"],["timing"=>"12:00 - 03:00 PM"],["timing"=>"03:00 - 06:00 PM"],["timing"=>"06:00 - 09:00 PM"]],
+            ]
+        ]);
+    }
 }
