@@ -159,7 +159,7 @@ function getData(requestURL){
             drawCallback: function(){
                     $('.paginate_button.last:not(.disabled)', this.api().table().container())          
                         .on('click', function(){
-                            alert('last');
+                            //alert('last');
                         });       
                 }   
                             

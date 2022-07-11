@@ -57,7 +57,8 @@ class UserSurveyCategoryRepository extends Repository
         $repository = app(UserSurveyCategorySearchRepository::class)->scopeQuery(function ($query) use ($params) {
             
             $qb = $query->distinct()
-                ->select('user_survey_categories.*');
+                ->select('user_survey_categories.*')
+                ->orderby('id','desc');
                 
            
               return $qb->groupBy('id');

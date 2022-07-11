@@ -16,9 +16,9 @@ return [
       'icon-class' => 'dashboard-icon',
     ],
     [
-      'key'        => 'usersurvey.category',
+      'key'        => 'usersurvey.categories',
       'name'       => 'Survey Category',
-      'route'      => 'usersurvey.admin.categories.index',
+      'route'      => 'usersurvey.admin.categories',
       'sort'       => 2,
       'icon-class' => 'dashboard-icon',
     ],

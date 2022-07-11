@@ -26,6 +26,7 @@ class UserSurveySetDetail extends JsonResource
         if(!isset($surveysetdetail->answer_options))$surveysetdetail->answer_options=Array();
         
         return [
+            "id" => $this->id,
             "question_id" => $this->question_id,
             "survey_set_id" => $this->survey_set_id,
             "cate_id" => $this->cate_id,

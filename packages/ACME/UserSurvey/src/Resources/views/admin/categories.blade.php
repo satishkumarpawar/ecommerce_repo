@@ -125,7 +125,7 @@ function getData(requestURL){
 
 	        
    
-        console.log("get_survey_ategories : "+requestURL);
+        console.log("get_survey_categories : "+requestURL);
 
         var checkCall = $.ajax({
             url: requestURL,
@@ -142,7 +142,7 @@ function getData(requestURL){
             beforeSend: function() { },
             success: function( data, textStatus, jQxhr ){
                 alldata=data;
-                    console.log("get_survey_ategories() data  : " + JSON.stringify(data));
+                    console.log("get_survey_categories() data  : " + JSON.stringify(data));
                     if(textStatus == 'success') {
                         for(let i=0;i<data.data.length;i++){
                             var data_row=data.data[i];
@@ -186,7 +186,7 @@ function getData(requestURL){
             drawCallback: function(){
                     $('.paginate_button.last:not(.disabled)', this.api().table().container())          
                         .on('click', function(){
-                            alert('last');
+                            //alert('last');
                         });       
                 }   
                             
@@ -217,7 +217,6 @@ function deleteData(id){
     if(!confirm("Are you sure to delete this category?"))return;
 
    requestURL = "{{env('APP_URL')}}/api/usersurvey/category/delete?token=true&id="+id;
-   
    var dt = $('#table_content').DataTable();
         console.log("delete_category : "+requestURL);
 
@@ -288,7 +287,7 @@ function deleteData(id){
             console.log("get_category() data  : " + JSON.stringify(data));
             // if(data.length>0) {
             
-            $("#heading_text").val("Edit Surve Category");
+            $("#heading_text").val("Edit Survey Category");
             $("#id").val(data["id"]);
             $("#cate_name").val(data["cate_name"]);
             $("#cate_order").val(data["cate_order"]);
@@ -319,10 +318,10 @@ function saveData() {
         var data={"cate_name":$("#cate_name").val(),"cate_desc":$("textarea#cate_desc").val(),"cate_order":$("#cate_order").val(),"status":$("#status").val()};
         requestURL = "{{env('APP_URL')}}/api/usersurvey/category/create?token=true";   
     }
-   var dt = $('#table_content').DataTable();
-        console.log(act+"_category : "+requestURL);
+          console.log(act+"_category : "+requestURL);
         //console.log(act+"_category() data  : " + JSON.stringify(data));
                     
+        var dt = $('#table_content').DataTable();
 
         var checkCall = $.ajax({
             url: requestURL,
@@ -338,12 +337,12 @@ function saveData() {
             processData: false,
             beforeSend: function() { },
             success: function( data, textStatus, jQxhr ){
-               
+                
                    console.log(act+"_category() data  : " + JSON.stringify(data));
                     if(data.data!="undefined") {
+                          
                         var data_row=data.data;
-                        if(act=="add"){
-                            var action_content ="";
+                            /*var action_content ="";
                             action_content +='<div class="action">';
                             action_content +='<a href="javascript:editData('+data_row["id"]+',\'myModalTable\')" title="Edit Cateogory">';
                             action_content +='<span class="icon pencil-lg-icon"></span>';
@@ -353,14 +352,46 @@ function saveData() {
                             action_content +='<span class="icon trash-icon"></span>';
                             action_content +='</a>';
                             action_content +='</div>';
-                            dt.row("#row"+data_row["id"]).add([data_row["id"], data_row["cate_name"],data_row["cate_order"],data_row["status"],new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," "),new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," "),action_content]).draw(false);
+                            */
+                            table_content="";
+                            //table_content +='<tr id="row'+data_row["id"]+'">';
+                           
+                             table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
+                             table_content +='<td data-value="Name">'+data_row["cate_name"]+'</td>'; 
+                             table_content +='<td data-value="group">'+data_row["cate_order"]+'</td>';
+                             table_content +='<td data-value="group">'+(data_row["status"]?"Active":"Inactive")+'</td>';
+                             table_content +='<td data-value="datec">'+new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>';
+                             table_content +='<td data-value="datem">'+new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>'; 
+                     
+                             table_content +='<td data-value="Actions" class="actions" style="white-space: nowrap; width: 100px;">';
+                             table_content +='<div class="action">';
+                             table_content +='<a href="javascript:editData('+data_row["id"]+',\'myModalTable\')" title="Edit Cateogory">';
+                             table_content +='<span class="icon pencil-lg-icon"></span>';
+                             table_content +='</a>'; 
+                             
+                             table_content +='<a  href="javascript:deleteData('+data_row["id"]+');" title="Delete Category">';
+                             table_content +='<span class="icon trash-icon"></span>';
+                             table_content +='</a>';
+                             table_content +='</div>';
+                             table_content +='</td>';
+                             //table_content +='</tr>';
+
+                        if(act=="add"){
+                           // dt.row("#row"+data_row["id"]).add([data_row["id"], data_row["cate_name"],data_row["cate_order"],data_row["status"],new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," "),new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," "),action_content]).draw(false);
+                           // $("#table_content").append(table_content);
+                           $("#table_content").prepend('<tr id="row'+data_row["id"]+'">'+table_content+'</tr>');
+                           alldata.data[alldata.data.length]=data_row;
                         }else {
                             var d= alldata.data;
                             var index = d.findIndex(function(d) {
                               return d.id == $("#id").val();
                             });
                             d=null;
-                            dt.row("#row"+id).update().draw();
+                            //dt.row("#row"+data_row["id"]).update([data_row["id"], data_row["cate_name"],data_row["cate_order"],data_row["status"],new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," "),new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," "),action_content]).draw(false);
+                            $("#row"+data_row["id"]).html(table_content);
+                           
+                            alldata.data[index]=data_row;
+                            
                         }
                         
                         alert(data.message);
@@ -369,7 +400,7 @@ function saveData() {
                          alert(data.message);
                     }
                      
-                    $("#myModalTable").hide();
+                    $(".close").click();
             },
             error: function( jqXhr, textStatus, errorThrown ){
                     console.log( "Error Thrown "+act+"_category : "+errorThrown );

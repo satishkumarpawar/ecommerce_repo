@@ -19,6 +19,7 @@ class UserSurveyQuestion extends JsonResource
         return [
             'id'            => $surveyquestion->id,
             'cate_id'         => $surveyquestion->cate_id,
+            'cate_name'    => $surveyquestion->cate_name,
             'question_text'    => $surveyquestion->question_text,
             'question_order'     => $surveyquestion->question_order,
             'question_lock'          => $surveyquestion->question_lock,

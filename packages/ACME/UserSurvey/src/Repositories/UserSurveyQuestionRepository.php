@@ -60,8 +60,10 @@ class UserSurveyQuestionRepository extends Repository
         $repository = app(UserSurveyQuestionSearchRepository::class)->scopeQuery(function ($query) use ($params, $categoryId) {
             
             $qb = $query->distinct()
-                ->select('user_survey_questions.*');
-                
+                ->select('user_survey_questions.*')
+                ->addSelect('user_survey_categories.cate_name')
+                ->leftJoin('user_survey_categories', 'user_survey_questions.cate_id', '=', 'user_survey_categories.id')
+                ->orderby('id','desc');
                
 
             if ($categoryId) {
@@ -116,7 +118,10 @@ class UserSurveyQuestionRepository extends Repository
         if ($id) {
             $qb = $this->model
             ->distinct()
-            ->addSelect('user_survey_questions.*');
+            ->addSelect('user_survey_questions.*')
+            ->addSelect('user_survey_categories.cate_name')
+                ->leftJoin('user_survey_categories', 'user_survey_questions.cate_id', '=', 'user_survey_categories.id')
+                ;
             $qb->where('user_survey_questions.id', $id);
         } else {
             $qb = $this->model

@@ -82,7 +82,10 @@ class UserSurveyController extends Controller
         
     }
     
-   
+    public function categories()
+    {
+        return view($this->_config['view']);
+    }
     public function questions()
     {
         return view($this->_config['view']);

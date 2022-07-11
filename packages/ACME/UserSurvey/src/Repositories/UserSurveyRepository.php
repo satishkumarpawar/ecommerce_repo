@@ -81,7 +81,8 @@ class UserSurveyRepository extends Repository
                 ->addSelect('customers.last_name')
                 ->addSelect('user_survey_sets.survey_name')
                 ->leftJoin('customers', 'user_surveys.user_id', '=', 'customers.id')
-                ->leftJoin('user_survey_sets', 'user_surveys.survey_set_id', '=', 'user_survey_sets.id');
+                ->leftJoin('user_survey_sets', 'user_surveys.survey_set_id', '=', 'user_survey_sets.id')
+                ->orderby('id','desc');
                 
                
 
