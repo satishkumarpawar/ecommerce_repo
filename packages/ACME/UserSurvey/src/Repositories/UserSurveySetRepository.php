@@ -261,28 +261,83 @@ class UserSurveySetRepository extends Repository
             if(is_array($request->question_set) && count($request->question_set)>0){
                 $SurveySetDetail=Array();
                 foreach($request->question_set as $k=>$detail){
-                    if(isset($detail["id"])){
-                        $SurveySetDetail[] = $this->UserSurveySetDetailRepository->update([
-                            'question_id'        =>  $detail["question_id"],
-                            'survey_set_id'      => $detail["survey_set_id"]
-                        ],$detail["id"]);
+                    $SurveySetD= $this->UserSurveySetDetailRepository
+                        ->where('survey_set_id',$request->id)
+                        ->where('question_id',$detail["question_id"])
+                        ->get();
+                    if(isset($SurveySetD["id"])){
+                        $SurveySetDetail[] = $SurveySetD;
                     } else {
-                        $SurveySetDetail[] = $this->UserSurveySetDetailRepository->create([
+                        $SurveySetD = $this->UserSurveySetDetailRepository->create([
                             'question_id'        =>  $detail["question_id"],
                             'survey_set_id'      => $detail["survey_set_id"]
                         ]);
-
+                        $SurveySetD= $this->UserSurveySetDetailRepository
+                        ->where('survey_set_id',$request->id)
+                        ->where('question_id',$detail["question_id"])
+                        ->get();
+                        if(isset($SurveySetD["id"])){
+                            $SurveySetDetail[] = $SurveySetD;
+                        }
                     }
                    
                 }
                
                 $SurveySet->question_set= $SurveySetDetail;
             }
+            
+            if(count((array)$request->delete_questions)>0){
+                foreach($request->delete_questions as $k=>$detail){
+                    if(isset($detail["question_id"])){
+                        $this->UserSurveySetDetailRepository
+                        ->where('survey_set_id',$request->id)
+                        ->where('question_id',$detail["question_id"])
+                        ->delete();
+                       
+                    }
+                }
+            }
            
         }
-        
-        
+
+        /*$SurveySet->question_set=$this->UserSurveySetDetailRepository
+        ->where('survey_set_id',$request->id)
+        ->get();
+        */
         return $SurveySet;
+        
+    }
+
+    public function addQuestion($request,$id=null)
+    {
+       
+            if(is_array($request->question_set) && count($request->question_set)>0){
+                $SurveySetDetail=Array();
+                foreach($request->question_set as $k=>$detail){
+                    $SurveySetD= $this->UserSurveySetDetailRepository
+                        ->where('survey_set_id',$request->id)
+                        ->where('question_id',$detail["question_id"])
+                        ->get();
+                    if(isset($SurveySetD["id"])){
+                        $SurveySetDetail[] = $SurveySetD;
+                    } else {
+                        $SurveySetD = $this->UserSurveySetDetailRepository->create([
+                            'question_id'        =>  $detail["question_id"],
+                            'survey_set_id'      => $detail["survey_set_id"]
+                        ]);
+                        $SurveySetD= $this->UserSurveySetDetailRepository
+                        ->where('survey_set_id',$request->id)
+                        ->where('question_id',$detail["question_id"])
+                        ->get();
+                        if(isset($SurveySetD["id"])){
+                            $SurveySetDetail[] = $SurveySetD;
+                        }
+                    }
+                }
+            }
+            
+       
+        return $SurveySetDetail;
         
     }
 

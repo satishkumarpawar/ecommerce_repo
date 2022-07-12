@@ -204,10 +204,10 @@ class UserSurveyController extends Controller
         ]);
 
         $SurveySet=$this->UserSurveySetRepository->update(request());
-
+        $SurveySet= UserSurveySetResource::collection($this->UserSurveySetRepository->get(request()->input('id')));
         return response()->json([
             'message' => 'Survey set updated successfully.',
-            'data'    => new UserSurveySetResource($SurveySet),
+            'data'    => $SurveySet->first() //new UserSurveySetResource($SurveySet),
         ]);
         
     }

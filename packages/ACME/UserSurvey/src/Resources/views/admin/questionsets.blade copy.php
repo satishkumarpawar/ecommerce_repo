@@ -402,26 +402,28 @@ function deleteData(id){
             var question_content='<table width="100%">';
             for(i=0;i<data.question_set.length;i++){
                 var qrow = data.question_set[i];
-                question_content +='<tr>';
+                question_content +='<tr class="survey_question_id'+qrow['question_id']+'">';
+                question_content +='<input type="hidden" class="question_id" value="'+qrow['question_id']+'">';
                 question_content +='<td>&nbsp;</td>';
                 question_content +='<td>Question</td>';
                 question_content +='<td style="font-weight:bold;">'+qrow['question_text']+'</td>';
                 question_content +='<td>';
-                question_content +='<input type="checkbox" class="_id" value="'+qrow['question_id']+'">';
+                question_content +='<a href="javascript:deleteQuestion('+qrow["question_id"]+');" title="Delete Survey Question">';
                 question_content +='<span class="icon trash-icon"></span>';
+                question_content +='</a>';
                 question_content +='</td>';
                 
                 question_content +='</tr>';
                 for(j=0;j<qrow.answer_options.length;j++){
                 var ansrow = qrow.answer_options[j];
-                question_content +='<tr>';
+                question_content +='<tr class="survey_question_id'+qrow['question_id']+'">';
                 question_content +='<td>&nbsp</td>';
                 question_content +='<td>Option '+(j+1)+'</td>';
                 question_content +='<td>'+ansrow['answer_text']+'</td>';
                 question_content +='<td>&nbsp;</td>';
                 question_content +='</tr>';
                 }
-                question_content +='<tr>';
+                question_content +='<tr class="survey_question_id'+qrow['question_id']+'">';
                 question_content +='<td colspan="4">&nbsp</td>'
                 question_content +='</tr>';
                
@@ -442,24 +444,21 @@ function saveData() {
     }
     var act="save";
     var method="post";
-    if($("#start_date").val()=='')$("#start_date").val('0000-00-00 00:00:00');
-    if($("#end_date").val()=='')$("#end_date").val('0000-00-00 00:00:00');
-            
     if($("#id").val()!="undefined" && $("#id").val()!=""){
         act="save";
         method="put";
         var question_content=[];
         var k=0;
         var i=0;
-        $("._id").each(function() {
-            if($(this).prop('checked') == true){
-                question_content[k] = {"question_id":$(this).val()};
+        $(".question_id").each(function() {
+            if($(this).val()!=''){
+                question_content[k] = {"id":$("._id").eq(i).val(),"survey_set_id":$("#id").val(),"question_id":$(this).val()};
                 k++;
             }
             i++;
         });
         
-        var data={"id":$("#id").val(),"survey_name":$("#survey_name").val(),"survey_desc":$("textarea#survey_desc").val(),"survey_level":$("#survey_level").val(),"start_date":$("#start_date").val(),"end_date":$("#end_date").val(),"delete_questions":question_content};
+        var data={"id":$("#id").val(),"survey_name":$("#survey_name").val(),"survey_desc":$("textarea#survey_desc").val(),"survey_level":$("#survey_level").val(),"start_date":$("#start_date").val(),"end_date":$("#end_date").val(),"question_set":question_content};
         requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/update?token=true";
      } else {
         act="add";
@@ -549,6 +548,12 @@ function saveData() {
         });
 };
 
+function deleteQuestion(id){
+    if(!confirm("Are you sure to delete this survey question?"))return;
+    $(".survey_question_id"+id).text("");
+    $(".survey_question_id"+id).remove();
+   
+}
 
 
 function closeDataView(obj){
