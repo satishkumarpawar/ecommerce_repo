@@ -297,7 +297,7 @@ class UserSurveySetRepository extends Repository
                     $SurveySetD= $this->UserSurveySetDetailRepository
                         ->where('survey_set_id',$request->id)
                         ->where('question_id',$detail["question_id"])
-                        ->get();
+                        ->get()->first();
                     if(isset($SurveySetD["id"])){
                         $SurveySetDetail[] = $SurveySetD;
                     } else {
@@ -308,7 +308,7 @@ class UserSurveySetRepository extends Repository
                         $SurveySetD= $this->UserSurveySetDetailRepository
                         ->where('survey_set_id',$request->id)
                         ->where('question_id',$detail["question_id"])
-                        ->get();
+                        ->get()->first();
                         if(isset($SurveySetD["id"])){
                             $SurveySetDetail[] = $SurveySetD;
                         }
@@ -350,7 +350,7 @@ class UserSurveySetRepository extends Repository
                     $SurveySetD= $this->UserSurveySetDetailRepository
                         ->where('survey_set_id',$detail["survey_set_id"])
                         ->where('question_id',$detail["question_id"])
-                        ->get();
+                        ->get()->first();
                     if(isset($SurveySetD["id"])){
                         $SurveySetDetail[] = $SurveySetD;
                     } else {
@@ -361,7 +361,7 @@ class UserSurveySetRepository extends Repository
                         $SurveySetD= $this->UserSurveySetDetailRepository
                         ->where('survey_set_id',$request->id)
                         ->where('question_id',$detail["question_id"])
-                        ->get();
+                        ->get()->first();
                         if(isset($SurveySetD["id"])){
                             $SurveySetDetail[] = $SurveySetD;
                         }
