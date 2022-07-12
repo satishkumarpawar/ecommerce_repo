@@ -145,7 +145,7 @@ var loadedpages = [];
 var answeroptioncount = 10;
 function getCategories(requestURL){
    var table_content='';
-   if(requestURL=='')requestURL = "{{env('APP_URL')}}/api/usersurvey/category/get-list?token=true&limit=1000";
+   if(requestURL=='')requestURL = "{{ url('/') }}/api/usersurvey/category/get-list?token=true&limit=1000";
    
     
 
@@ -179,7 +179,7 @@ function getCategories(requestURL){
 
 function getData(requestURL){
    var table_content='';
-   if(requestURL=='')requestURL = "{{env('APP_URL')}}/api/usersurvey/question/get-list?token=true&limit=1000";
+   if(requestURL=='')requestURL = "{{ url('/') }}/api/usersurvey/question/get-list?token=true&limit=1000";
    
     
 
@@ -284,7 +284,7 @@ $(document).ready(function() {
 function deleteData(id){
     if(!confirm("Are you sure to delete this question?"))return;
 
-   requestURL = "{{env('APP_URL')}}/api/usersurvey/question/delete?token=true&id="+id;
+   requestURL = "{{ url('/') }}/api/usersurvey/question/delete?token=true&id="+id;
    var dt = $('#table_content').DataTable();
         console.log("delete_question : "+requestURL);
 
@@ -435,7 +435,7 @@ function saveData() {
                 
         }
         var data={"id":$("#id").val(),"cate_id":$("#cate_id").val(),"question_text":$("#question_text").val(),"question_order":$("#question_order").val(),"status":$("#status").val(),"question_lock":$("#question_lock").val(),"answer_options":answer_content};
-        requestURL = "{{env('APP_URL')}}/api/usersurvey/question/update?token=true";
+        requestURL = "{{ url('/') }}/api/usersurvey/question/update?token=true";
      } else {
         act="add";
         method="post";
@@ -448,7 +448,7 @@ function saveData() {
             } 
         };
         var data={"cate_id":$("#cate_id").val(),"question_text":$("#question_text").val(),"question_order":$("#question_order").val(),"status":$("#status").val(),"question_lock":$("#question_lock").val(),"answer_options":answer_content};
-        requestURL = "{{env('APP_URL')}}/api/usersurvey/question/create?token=true";   
+        requestURL = "{{ url('/') }}/api/usersurvey/question/create?token=true";   
     }
           console.log(act+"_question : "+requestURL);
           console.log(act+"_question() data  : " + JSON.stringify(data));
@@ -537,7 +537,7 @@ function saveData() {
 
 function getSurveySets(requestURL){
    var table_content='';
-   if(requestURL=='')requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/get-list?token=true&short_info=true&limit=1000";
+   if(requestURL=='')requestURL = "{{ url('/') }}/api/usersurvey/surveyset/get-list?token=true&short_info=true&limit=1000";
   
         console.log("get_surveysets : "+requestURL);
 
@@ -578,7 +578,7 @@ function addQuestionTOSurvey(){
     if(!confirm("Are you sure to add these questions to surveyset this question?"))return;
 
 
-   requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/add-question?token=true";
+   requestURL = "{{ url('/') }}/api/usersurvey/surveyset/add-question?token=true";
    var dt = $('#table_content').DataTable();
         console.log("addQuestionTOSurvey : "+requestURL);
 

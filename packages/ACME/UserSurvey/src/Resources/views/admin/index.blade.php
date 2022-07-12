@@ -94,7 +94,7 @@ var totalpages = [];
 var loadedpages = [];
 function getData(requestURL){
    var table_content='';
-   if(requestURL=='')requestURL = "{{env('APP_URL')}}/api/usersurvey/get-list?token=true&limit=1000";
+   if(requestURL=='')requestURL = "{{ url('/') }}/api/usersurvey/get-list?token=true&limit=1000";
    
     
 
@@ -189,7 +189,7 @@ $(document).ready(function() {
 function deleteData(id){
     if(!confirm("Are you sure to delete this survey?"))return;
 
-   requestURL = "{{env('APP_URL')}}/api/usersurvey/delete?token=true&id="+id;
+   requestURL = "{{ url('/') }}/api/usersurvey/delete?token=true&id="+id;
    
    var dt = $('#table_content').DataTable();
         console.log("delete_survey : "+requestURL);
@@ -237,7 +237,7 @@ function deleteData(id){
         //$("#"+obj).show();
    
 
-        requestURL = "{{env('APP_URL')}}/api/usersurvey/get?token=true&id="+id;
+        requestURL = "{{ url('/') }}/api/usersurvey/get?token=true&id="+id;
    
         console.log("get_survey : "+requestURL);
 

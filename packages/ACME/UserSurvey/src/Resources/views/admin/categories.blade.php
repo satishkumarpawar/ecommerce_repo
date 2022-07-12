@@ -22,7 +22,7 @@
 <div class="content full-page dashboard">
         <div class="page-header">
             <div class="page-title">
-                <h1>Survey Category List</h1>
+                <h1>Survey Categories/ Topics List</h1>
             </div>
 
             <div class="page-action">
@@ -119,7 +119,7 @@ var totalpages = [];
 var loadedpages = [];
 function getData(requestURL){
    var table_content='';
-   if(requestURL=='')requestURL = "{{env('APP_URL')}}/api/usersurvey/category/get-list?token=true&limit=1000";
+   if(requestURL=='')requestURL = "{{ url('/') }}/api/usersurvey/category/get-list?token=true&limit=1000";
    
     
 
@@ -216,7 +216,7 @@ $(document).ready(function() {
 function deleteData(id){
     if(!confirm("Are you sure to delete this category?"))return;
 
-   requestURL = "{{env('APP_URL')}}/api/usersurvey/category/delete?token=true&id="+id;
+   requestURL = "{{ url('/') }}/api/usersurvey/category/delete?token=true&id="+id;
    var dt = $('#table_content').DataTable();
         console.log("delete_category : "+requestURL);
 
@@ -311,12 +311,12 @@ function saveData() {
         act="save";
         method="put";
         var data={"id":$("#id").val(),"cate_name":$("#cate_name").val(),"cate_desc":$("textarea#cate_desc").val(),"cate_order":$("#cate_order").val(),"status":$("#status").val()};
-        requestURL = "{{env('APP_URL')}}/api/usersurvey/category/update?token=true";
+        requestURL = "{{ url('/') }}/api/usersurvey/category/update?token=true";
      } else {
         act="add";
         method="post";
         var data={"cate_name":$("#cate_name").val(),"cate_desc":$("textarea#cate_desc").val(),"cate_order":$("#cate_order").val(),"status":$("#status").val()};
-        requestURL = "{{env('APP_URL')}}/api/usersurvey/category/create?token=true";   
+        requestURL = "{{ url('/') }}/api/usersurvey/category/create?token=true";   
     }
           console.log(act+"_category : "+requestURL);
         //console.log(act+"_category() data  : " + JSON.stringify(data));

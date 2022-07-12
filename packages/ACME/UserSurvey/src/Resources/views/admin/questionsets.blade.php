@@ -153,7 +153,7 @@ var totalpages = [];
 var loadedpages = [];
 function getData(requestURL){
    var table_content='';
-   if(requestURL=='')requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/get-list?token=true&limit=1000";
+   if(requestURL=='')requestURL = "{{ url('/') }}/api/usersurvey/surveyset/get-list?token=true&limit=1000";
    
     
 
@@ -256,7 +256,7 @@ $(document).ready(function() {
 function deleteData(id){
     if(!confirm("Are you sure to delete this surveyset?"))return;
 
-   requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/delete?token=true&id="+id;
+   requestURL = "{{ url('/') }}/api/usersurvey/surveyset/delete?token=true&id="+id;
    
    var dt = $('#table_content').DataTable();
         console.log("delete_surveyset : "+requestURL);
@@ -460,13 +460,13 @@ function saveData() {
         });
         
         var data={"id":$("#id").val(),"survey_name":$("#survey_name").val(),"survey_desc":$("textarea#survey_desc").val(),"survey_level":$("#survey_level").val(),"start_date":$("#start_date").val(),"end_date":$("#end_date").val(),"delete_questions":question_content};
-        requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/update?token=true";
+        requestURL = "{{ url('/') }}/api/usersurvey/surveyset/update?token=true";
      } else {
         act="add";
         method="post";
         var question_content=[];
         var data={"survey_name":$("#survey_name").val(),"survey_desc":$("textarea#survey_desc").val(),"survey_level":$("#survey_level").val(),"start_date":$("#start_date").val(),"end_date":$("#end_date").val(),"question_set":question_content};
-        requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/create?token=true";   
+        requestURL = "{{ url('/') }}/api/usersurvey/surveyset/create?token=true";   
     }
      
         console.log(act+"_surveyset : "+requestURL);
