@@ -22,7 +22,7 @@
 <div class="content full-page dashboard">
         <div class="page-header">
             <div class="page-title">
-                <h1>Survey Set List</h1>
+                <h1>Survey Question Set List</h1>
             </div>
 
             <div class="page-action">

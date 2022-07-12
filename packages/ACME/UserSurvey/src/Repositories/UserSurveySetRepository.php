@@ -128,6 +128,39 @@ class UserSurveySetRepository extends Repository
         return $results;
     }
 
+    public function getList($categoryId = null)
+    {
+        $params = request()->input();
+
+        
+        $perPage = isset($params['limit']) && ! empty($params['limit']) ? $params['limit'] : 10;
+       
+
+        $page = Paginator::resolveCurrentPage('page');
+
+        $repository = app(UserSurveySetSearchRepository::class)->scopeQuery(function ($query) use ($params, $categoryId) {
+            
+            $qb = $query->distinct()
+                ->select('user_survey_sets.id','user_survey_sets.survey_name');
+                
+               
+
+            /*if ($categoryId) {
+                $qb->whereIn('user_survey_sets.category_id', explode(',', $categoryId));
+            }*/
+
+              return $qb->groupBy('id');
+
+        });
+
+      
+            $items = $repository->get();
+           
+         
+
+        return $items;
+    }
+
     
     /*
     public function getSurveySetDetail($id = null)
@@ -315,7 +348,7 @@ class UserSurveySetRepository extends Repository
                 $SurveySetDetail=Array();
                 foreach($request->question_set as $k=>$detail){
                     $SurveySetD= $this->UserSurveySetDetailRepository
-                        ->where('survey_set_id',$request->id)
+                        ->where('survey_set_id',$detail["survey_set_id"])
                         ->where('question_id',$detail["question_id"])
                         ->get();
                     if(isset($SurveySetD["id"])){

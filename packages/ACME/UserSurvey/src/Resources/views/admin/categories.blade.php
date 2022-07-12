@@ -22,7 +22,7 @@
 <div class="content full-page dashboard">
         <div class="page-header">
             <div class="page-title">
-                <h1>UserSurvey Categories</h1>
+                <h1>Survey Category List</h1>
             </div>
 
             <div class="page-action">

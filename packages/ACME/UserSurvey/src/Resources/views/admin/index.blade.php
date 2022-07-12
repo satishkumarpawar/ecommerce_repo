@@ -22,7 +22,7 @@
 <div class="content full-page dashboard">
         <div class="page-header">
             <div class="page-title">
-                <h1>UserSurvey List</h1>
+                <h1>User Survey List</h1>
             </div>
 
             
@@ -39,7 +39,7 @@
             <tr>
                 <th>ID</th>
                 <th>User</th>
-                <th>Survey Set</th>
+                <th>Question Set</th>
                 <th>Date Created</th>
                 <th>Date Modified</th>
                 <th>Action</th>

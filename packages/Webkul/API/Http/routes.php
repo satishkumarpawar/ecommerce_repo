@@ -325,6 +325,7 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::get('surveyset/get-list', 'UserSurveyController@getSurveySetList');
             Route::get('surveyset/get', 'UserSurveyController@getSurveySet');
             Route::post('surveyset/create', 'UserSurveyController@createSurveySet');
+            Route::post('surveyset/add-question', 'UserSurveyController@addQuestonSurveySet');
             Route::put('surveyset/update', 'UserSurveyController@updateSurveySet');
             Route::delete('surveyset/delete', 'UserSurveyController@deleteSurveySet');
 

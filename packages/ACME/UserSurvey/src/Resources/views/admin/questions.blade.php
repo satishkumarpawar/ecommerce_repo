@@ -22,7 +22,7 @@
 <div class="content full-page dashboard">
         <div class="page-header">
             <div class="page-title">
-                <h1>UserSurvey Questions</h1>
+                <h1>Survey Question List</h1>
             </div>
 
             <div class="page-action">
@@ -42,7 +42,10 @@
                 <div class="container-fluid">
                     <table id="table_content" class="display" style="width:100%">
         <thead>
+            
+            
             <tr>
+                <th>Check</th>
                 <th>ID</th>
                 <th>Question Text</th>
                 <th>Category name</th>
@@ -56,9 +59,20 @@
         </thead>
         <tbody id="table_body">
             <tr>
-                <td colspan="9" style="text-align:center;">Loading...</td>
+                <td colspan="10" style="text-align:center;">Loading...</td>
             </tr>
         </tbody>
+    </table>
+    <table width="100%">
+    <tr style="height: 65px;" class="mass-action">
+                <th style="text-arign:right;" colspan="10">
+                    <div class="mass-action-wrapper" style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start; float:right;">
+                        <div class="control-group" style="width:300px;">
+                            <select id="survey_set_id" name="massaction-type" required="required" class="control" style="width:300px; margin-top:30px;"><option value="">Add selected questions to Surveyset</option></select>
+                        </div><button type="button"  onClick="javascript:addQuestionTOSurvey();" class="btn btn-sm btn-primary" style="margin-left: 10px;"> Submit </button>
+                    </div>
+                </th>
+            </tr>
     </table>
     
     
@@ -194,6 +208,7 @@ function getData(requestURL){
                             var data_row=data.data[i];
                             table_content +='<tr id="row'+data_row["id"]+'">';
                              
+                            table_content +='<td data-value="CHK"><span class="chkbox"><input class="chkid"  type="checkbox" value="'+data_row["id"]+'"> <label for="chkbox" class="checkbox-view"></label></span></td>'; 
                             table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
                             table_content +='<td data-value="Name">'+data_row["question_text"]+'</td>'; 
                             table_content +='<td data-value="Name">'+data_row["cate_name"]+'</td>'; 
@@ -231,6 +246,7 @@ function getData(requestURL){
                 null,
                 null,
                 null,
+                null,
                 null
             ],
             drawCallback: function(){
@@ -259,6 +275,7 @@ function getData(requestURL){
     
 $(document).ready(function() {
     getCategories('');
+    getSurveySets('');
     getData('');
    
 } );
@@ -464,7 +481,7 @@ function saveData() {
 
                             table_content="";
                             //table_content +='<tr id="row'+data_row["id"]+'">';
-                           
+                             table_content +='<td data-value="CHK"><span class="chkbox"><input class="chkid" type="checkbox" value="'+data_row["id"]+'"> <label for="chkbox" class="checkbox-view"></label></span></td>'; 
                              table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
                              table_content +='<td data-value="Name">'+data_row["question_text"]+'</td>'; 
                              table_content +='<td data-value="Name">'+cate_name+'</td>'; 
@@ -516,6 +533,101 @@ function saveData() {
         });
 };
 
+
+
+function getSurveySets(requestURL){
+   var table_content='';
+   if(requestURL=='')requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/get-list?token=true&short_info=true&limit=1000";
+  
+        console.log("get_surveysets : "+requestURL);
+
+        var checkCall = $.ajax({
+            url: requestURL,
+            dataType: 'json',
+            type: 'get',
+            contentType: 'application/json',
+            headers: {
+                'Accept':'application/json',
+                //'Authorization':'Bearer ' + '***...',
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            data: null,
+            processData: false,
+            beforeSend: function() { },
+            success: function( data, textStatus, jQxhr ){
+               ;
+                    console.log("get_surveysets() data  : " + JSON.stringify(data));
+                    var surveyset_options='<option value="">Add selected questions to Surveyset</option>';
+                    for(i=0;i<data.length;i++)surveyset_options +='<option value="'+data[i]["id"]+'">'+data[i]["survey_name"]+"</option>";
+        
+                    $("#survey_set_id").html(surveyset_options);
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( "Error Thrown get_surveysets : "+errorThrown );
+            }
+        });
+
+	 }
+
+
+function addQuestionTOSurvey(){
+    if($("#survey_set_id").val()==''){
+        alert("Please select survey topic");
+        return;
+    }
+    if(!confirm("Are you sure to add these questions to surveyset this question?"))return;
+
+
+   requestURL = "{{env('APP_URL')}}/api/usersurvey/surveyset/add-question?token=true";
+   var dt = $('#table_content').DataTable();
+        console.log("addQuestionTOSurvey : "+requestURL);
+
+        var question_content=[];
+        var k=0;
+        var i=0;
+        $(".chkid").each(function() {
+            if($(this).prop('checked') == true){
+                question_content[k] = {"question_id":$(this).val(),"survey_set_id":$("#survey_set_id").val()};
+                k++;
+            }
+            i++;
+        });
+
+        if(question_content.length==0){
+            alert("Please select questions to add in surveyset");
+            return;
+         }
+         
+        var data ={"question_set":question_content};
+        console.log("addQuestionTOSurvey() request data  : " + JSON.stringify(data));
+
+        var checkCall = $.ajax({
+            url: requestURL,
+            dataType: 'json',
+            type: 'post',
+            contentType: 'application/json',
+            headers: {
+                'Accept':'application/json',
+                //'Authorization':'Bearer ' + '***...',
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            data: JSON.stringify(data),
+            processData: false,
+            beforeSend: function() { },
+            success: function( data, textStatus, jQxhr ){
+                  console.log("addQuestionTOSurvey() data  : " + JSON.stringify(data));
+                   
+                         alert(data.message);
+                   
+                     
+                   
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( "Error Thrown addQuestionTOSurvey : "+errorThrown );
+            }
+        });
+
+	 }
 function closeDataView(obj){
     $("#"+obj).hide();
 }

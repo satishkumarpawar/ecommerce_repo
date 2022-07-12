@@ -160,7 +160,11 @@ class UserSurveyController extends Controller
         if (!is_null(request()->input('id'))) {
             return UserSurveySetResource::collection($this->UserSurveySetRepository->getAll(request()->input('id')));
         } else {
-           return UserSurveySetResource::collection($this->UserSurveySetRepository->getAll());
+            if (!is_null(request()->input('short_info'))) {
+                return $this->UserSurveySetRepository->getList();
+            } else {
+                return UserSurveySetResource::collection($this->UserSurveySetRepository->getAll());
+            }
         }
                
     }
@@ -194,7 +198,23 @@ class UserSurveyController extends Controller
         ]);
         
     }
+    public function addQuestonSurveySet()
+    {
+        
+       
+       /* $this->validate(request(), [
+            'question_id' => 'required',
+            'surey_set_id' => 'required'
+        ]);*/
 
+        $SurveySet=$this->UserSurveySetRepository->addQuestion(request());
+
+        return response()->json([
+            'message' => 'Selected questions are added to Survey Set successfully.',
+            'data'    => $SurveySet,
+        ]);
+        
+    }
     public function updateSurveySet()
     {
         
