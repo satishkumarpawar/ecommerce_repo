@@ -6,6 +6,20 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
 use Webkul\Customer\Http\Requests\CustomerForgotPasswordRequest;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
+use JWTAuth; #SKP
+use Illuminate\Support\Facades\Mail;
+use Webkul\Customer\Mail\VerificationMobile;
+
+use Illuminate\Support\Facades\Session;
+
+use \App\Otp;
+//use \App\MSG91;
+use Webkul\Customer\Models\Customer;
+
 class ForgotPasswordController extends Controller
 {
     use SendsPasswordResetEmails;
@@ -28,6 +42,118 @@ class ForgotPasswordController extends Controller
             : response()->json([
                 'error' => trans($response),
             ]);
+    }
+
+    public function sendOtp(Request $request){
+
+        $response = array();
+    
+        if ( isset($request->phone) && $request->phone =="" ) {
+            $response['error'] = 1;
+            $response['message'] = 'Invalid mobile number';
+        } else {
+    
+            $otp = rand(100000, 999999);
+    
+            Otp::where("phone",$request->phone)->delete();
+            Otp::create(["otp"=>$otp,"phone"=>$request->phone]);
+    
+           /*$MSG91 = new MSG91();
+    
+            $msg91Response = $MSG91->sendSMS($otp,$users['phone']);
+    
+            if($msg91Response['error']){
+                $response['error'] = 1;
+                $response['message'] = $msg91Response['message'];
+                $response['loggedIn'] = 1;
+            }else{*/
+    
+               // Session::put('OTP', $otp);
+                //sendemail
+                Mail::queue(new VerificationMobile(['email' =>$request->phone.'@yopmail.com' ,'otp' => $otp]));
+    
+                $response['error'] = 0;
+                $response['message'] = 'Your OTP is created.';
+               // $response['OTP'] = $otp;
+                
+            //}
+           
+        }
+        
+        return response()->json($response);
+        //echo json_encode($response);
+    }
+    
+    public function verifyOtp(Request $request){
+    
+        $this->validate(request(), [
+            'otp' => 'required',
+            'password' => 'required',
+         ]);
+
+        $response = array();
+    
+        //$userId = Auth::user()->id;  //Getting UserID.
+       
+        $expire_time = date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s")." -10 minutes"));
+            //$OTP = $request->session()->get('OTP');
+            $otpdata=Otp::select('otps.*')
+            ->distinct()
+            ->where('otp',$request->otp)
+            //->where('created_at', '>=', 'DATE_SUB(NOW(), INTERVAL 10 MINUTE)')
+            ->where('created_at', '>=', $expire_time)
+            ->orderby("id","desc")
+            ->limit(1)
+           ->get()
+           ->first();
+    
+           
+            $OTP=null;
+            $Phone=null;
+            if(isset($otpdata['otp'])){
+                $OTP=$otpdata['otp'];
+                $Phone=$otpdata['phone'];
+            }
+    
+            if($OTP == $request->otp){
+                /*Session::forget('OTP');
+                Session::forget('phone');
+              
+            */
+             Otp::where("otp",$request->otp)->delete();
+    
+             $data = [
+                'password'    => bcrypt($request->get('password')),
+            ];
+           
+                if($Phone!=null) {
+                        $customer = Customer::where("phone",$Phone)->update(["password"=>bcrypt($request->get('password'))]);
+
+                        return response()->json([
+                            'error'   => 0,
+                            'is_verified'   => 1,
+                            'message' => 'Reset password successfully.',  
+                            //"data"=>$otpdata    
+                        ]);
+                } else {
+                    return response()->json([
+                        'error'   => 1,
+                        'is_verified'   => 0,
+                        'message' => 'Phone does not match.',
+                        //"data"=>$otpdata 
+                    ]);
+                }
+                
+            }else{
+                return response()->json([
+                    'error'   => 1,
+                    'is_verified'   => 0,
+                    'message' => 'OTP does not match.',
+                    //"data"=>$otpdata 
+                ]);
+    
+            }
+        //echo json_encode($response);
     }
 
     /**

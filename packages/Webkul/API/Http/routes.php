@@ -147,6 +147,8 @@ Route::group(['prefix' => 'api'], function ($router) {
         Route::get('customer/refresh', 'CustomerController@refresh');#SKP
 
         Route::post('customer/forgot-password', 'ForgotPasswordController@store');
+        Route::post('customer/forgot-password-send-otp', 'ForgotPasswordController@sendOtp');
+        Route::post('customer/forgot-password-reset', 'ForgotPasswordController@verifyOtp');
 
         Route::get('customer/logout', 'SessionController@destroy');
 
