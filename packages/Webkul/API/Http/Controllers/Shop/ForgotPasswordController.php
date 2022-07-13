@@ -49,9 +49,28 @@ class ForgotPasswordController extends Controller
         $response = array();
     
         if ( isset($request->phone) && $request->phone =="" ) {
-            $response['error'] = 1;
-            $response['message'] = 'Invalid mobile number';
+            return response()->json([
+                'error'   => 1,
+                'message' => 'Phone number is not valid.',
+           ]);
+           
         } else {
+
+
+            $customer=Customer::select('customers.id')
+            ->distinct()
+            ->where('phone',$request->phone)
+            ->limit(1)
+           ->get()
+           ->first();
+
+           if(!isset($customer['id'])){
+                return response()->json([
+                    'error'   => 1,
+                    'message' => 'Phone number is not exist.',
+                    
+                ]);
+            }
     
             $otp = rand(100000, 999999);
     
@@ -71,16 +90,18 @@ class ForgotPasswordController extends Controller
                // Session::put('OTP', $otp);
                 //sendemail
                 Mail::queue(new VerificationMobile(['email' =>$request->phone.'@yopmail.com' ,'otp' => $otp]));
-    
-                $response['error'] = 0;
-                $response['message'] = 'Your OTP is created.';
+                return response()->json([
+                    'error'   => 0,
+                    'message' => 'Your OTP is created.'
+               ]);
+               
                // $response['OTP'] = $otp;
                 
             //}
            
         }
         
-        return response()->json($response);
+       // return response()->json($response);
         //echo json_encode($response);
     }
     
