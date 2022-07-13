@@ -87,8 +87,7 @@ class ForgotPasswordController extends Controller
     public function verifyOtp(Request $request){
     
         $this->validate(request(), [
-            'otp' => 'required',
-            'password' => 'required',
+            'otp' => 'required'
          ]);
 
         $response = array();
@@ -120,13 +119,11 @@ class ForgotPasswordController extends Controller
                 Session::forget('phone');
               
             */
-             Otp::where("otp",$request->otp)->delete();
-    
-             $data = [
-                'password'    => bcrypt($request->get('password')),
-            ];
-           
-                if($Phone!=null) {
+
+                if(isset($request->password) && $Phone!=null) {
+                        Otp::where("otp",$OTP)->delete();
+                        Otp::where("phone",$Phone)->delete();
+
                         $customer = Customer::where("phone",$Phone)->update(["password"=>bcrypt($request->get('password'))]);
 
                         return response()->json([
@@ -137,9 +134,9 @@ class ForgotPasswordController extends Controller
                         ]);
                 } else {
                     return response()->json([
-                        'error'   => 1,
-                        'is_verified'   => 0,
-                        'message' => 'Phone does not match.',
+                        'error'   => 0,
+                        'is_verified'   => 1,
+                        'message' => 'Your Number is Verified.',
                         //"data"=>$otpdata 
                     ]);
                 }
