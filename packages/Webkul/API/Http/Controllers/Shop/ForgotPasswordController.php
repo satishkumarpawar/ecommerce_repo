@@ -120,7 +120,7 @@ class ForgotPasswordController extends Controller
               
             */
 
-                if(isset($request->password) && $Phone!=null) {
+                if(isset($request->password) && $request->password!='' && $Phone!=null) {
                         Otp::where("otp",$OTP)->delete();
                         Otp::where("phone",$Phone)->delete();
 
