@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 
 use \App\Otp;
 //use \App\MSG91;
+use Webkul\Customer\Models\Customer;
 
 class CustomerController extends Controller
 {
@@ -79,11 +80,30 @@ class CustomerController extends Controller
 public function sendOtp(Request $request){
 
     $response = array();
-
+    
     if ( isset($request->phone) && $request->phone =="" ) {
-        $response['error'] = 1;
-        $response['message'] = 'Invalid mobile number';
+        return response()->json([
+            'error'   => 1,
+            'message' => 'Phone number is not valid.',
+       ]);
+       
     } else {
+
+
+        $customer=Customer::select('customers.id')
+        ->distinct()
+        ->where('phone',$request->phone)
+        ->limit(1)
+       ->get()
+       ->first();
+
+       if(isset($customer['id'])){
+            return response()->json([
+                'error'   => 1,
+                'message' => 'Phone number is already exist.',
+                
+            ]);
+        }
 
         $otp = rand(100000, 999999);
 
@@ -103,16 +123,18 @@ public function sendOtp(Request $request){
            // Session::put('OTP', $otp);
             //sendemail
             Mail::queue(new VerificationMobile(['email' =>$request->phone.'@yopmail.com' ,'otp' => $otp]));
-
-            $response['error'] = 0;
-            $response['message'] = 'Your OTP is created.';
+            return response()->json([
+                'error'   => 0,
+                'message' => 'Your OTP is created.'
+           ]);
+           
            // $response['OTP'] = $otp;
             
         //}
        
     }
     
-    return response()->json($response);
+   // return response()->json($response);
     //echo json_encode($response);
 }
 
