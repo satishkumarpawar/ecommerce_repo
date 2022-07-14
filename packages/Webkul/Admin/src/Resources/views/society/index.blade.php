@@ -1,7 +1,7 @@
 @extends('admin::layouts.master')
 
 @section('page_title')
-    Package UserSurvey
+    Package Society
 @stop
  
 
@@ -22,7 +22,7 @@
 <div class="content full-page dashboard">
         <div class="page-header">
             <div class="page-title">
-                <h1>Survey Categories/ Topics List</h1>
+                <h1>Society List</h1>
             </div>
 
             <div class="page-action">
@@ -44,17 +44,19 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Category name</th>
-                <th>Sort Order</th>
+                <th>Society Name</th>
+                <th>Sector</th>
+                <th>City</th>
+                <th>District</th>
+                <th>State</th>
+                <th>Postcode</th>
                 <th>Status</th>
-                <th>Date Created</th>
-                <th>Date Modified</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody id="table_body">
             <tr>
-                <td colspan="7" style="text-align:center;">Loading...</td>
+                <td colspan="9" style="text-align:center;">Loading...</td>
             </tr>
         </tbody>
     </table>
@@ -75,27 +77,43 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title" id="heading_text">Add Survey Category</h4>
+        <h4 class="modal-title" id="heading_text">Add Society</h4>
       </div>
       <div class="modal-body">
 
             <table id="viewTable" class="table table-striped" data-toggle="table">
             <input type="hidden" id="id" value=""> 
             <tr>
-                <td>Category Name:</td>
-                <td colspan="2"  style="font-weight:bold;"><input type="text" id="cate_name" value=""> </td>
+                <td>Society Name:</td>
+                <td colspan="2"  style="font-weight:bold;"><input type="text" id="name" value=""> </td>
                 </tr>
                 <tr>
-                <td>Sort:</td>
-                <td colspan="2" style="font-weight:bold;"><input type="text" id="cate_order" value=""></td>
+                <td>Sector:</td>
+                <td colspan="2" style="font-weight:bold;"><input type="text" id="sector" value=""></td>
+                </tr>
+                <tr>
+                <td>City:</td>
+                <td colspan="2" style="font-weight:bold;"><input type="text" id="city" value=""></td>
+                </tr>
+                <tr>
+                <td>District:</td>
+                <td colspan="2" style="font-weight:bold;"><input type="text" id="district" value=""></td>
+                </tr>
+                <tr>
+                <td>State:</td>
+                <td colspan="2" style="font-weight:bold;"><input type="text" id="state" value=""></td>
+                </tr>
+                <tr>
+                <td>Postcode:</td>
+                <td colspan="2" style="font-weight:bold;"><input type="text" id="postcode" value=""></td>
                 </tr>
                 <tr>
                 <td>Status:</td>
                 <td colspan="2" style="font-weight:bold;"><select id="status"><option value="1">Active</option><option value="0">Inactive</option></select></td>
                 </tr>
                 <tr>
-                <td>Category Description:</td>
-                <td colspan="2" style="font-weight:bold;"><textarea id="cate_desc" cols="50" rows="5"></textarea></td>
+                <td>Society Description:</td>
+                <td colspan="2" style="font-weight:bold;"><textarea id="description" cols="50" rows="5"></textarea></td>
                 </tr>
            </table>
          
@@ -119,13 +137,13 @@ var totalpages = [];
 var loadedpages = [];
 function getData(requestURL){
    var table_content='';
-   if(requestURL=='')requestURL = "{{ url('/') }}/api/usersurvey/category/get-list?token=true&limit=1000";
+   if(requestURL=='')requestURL = "{{ url('/') }}/api/society/get-list?token=true&limit=1000";
    
     
 
 	        
    
-        console.log("get_survey_categories : "+requestURL);
+        console.log("get_societies : "+requestURL);
 
         var checkCall = $.ajax({
             url: requestURL,
@@ -142,26 +160,28 @@ function getData(requestURL){
             beforeSend: function() { },
             success: function( data, textStatus, jQxhr ){
                 alldata=data;
-                    console.log("get_survey_categories() data  : " + JSON.stringify(data));
+                    console.log("get_societies() data  : " + JSON.stringify(data));
                     if(textStatus == 'success') {
                         for(let i=0;i<data.data.length;i++){
                             var data_row=data.data[i];
                             table_content +='<tr id="row'+data_row["id"]+'">';
                              
                             table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
-                            table_content +='<td data-value="Name">'+data_row["cate_name"]+'</td>'; 
-                            table_content +='<td data-value="group">'+data_row["cate_order"]+'</td>';
-                            table_content +='<td data-value="group">'+(data_row["status"]?"Active":"Inactive")+'</td>';
-                            table_content +='<td data-value="datec">'+new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>';
-                            table_content +='<td data-value="datem">'+new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>'; 
-                    
+                            table_content +='<td data-value="Name">'+data_row["name"]+'</td>'; 
+                            table_content +='<td data-value="group">'+data_row["sector"]+'</td>';
+                            table_content +='<td data-value="group">'+data_row["city"]+'</td>';
+                            table_content +='<td data-value="group">'+data_row["district"]+'</td>';
+                            table_content +='<td data-value="group">'+data_row["state"]+'</td>';
+                            table_content +='<td data-value="group">'+data_row["postcode"]+'</td>';
+                            table_content +='<td data-value="group">'+(data_row["status"]==1?"Active":"Inactive")+'</td>';
+                            
                             table_content +='<td data-value="Actions" class="actions" style="white-space: nowrap; width: 100px;">';
                             table_content +='<div class="action">';
-                            table_content +='<a href="javascript:editData('+data_row["id"]+',\'myModalTable\')" title="Edit Cateogory">';
+                            table_content +='<a href="javascript:editData('+data_row["id"]+',\'myModalTable\')" title="Edit Society">';
                             table_content +='<span class="icon pencil-lg-icon"></span>';
                             table_content +='</a>'; 
                             
-                            table_content +='<a  href="javascript:deleteData('+data_row["id"]+');" title="Delete Category">';
+                            table_content +='<a  href="javascript:deleteData('+data_row["id"]+');" title="Delete Society">';
                             table_content +='<span class="icon trash-icon"></span>';
                             table_content +='</a>';
                             table_content +='</div>';
@@ -175,6 +195,8 @@ function getData(requestURL){
                             responsive: true,
                             order: [[3, 'desc']],
                             'aoColumns': [
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -199,7 +221,7 @@ function getData(requestURL){
                    
             },
             error: function( jqXhr, textStatus, errorThrown ){
-                    console.log( "Error Thrown get_survey_categories : "+errorThrown );
+                    console.log( "Error Thrown get_societies : "+errorThrown );
             }
         });
 
@@ -214,11 +236,11 @@ $(document).ready(function() {
 
 
 function deleteData(id){
-    if(!confirm("Are you sure to delete this category?"))return;
+    if(!confirm("Are you sure to delete this society?"))return;
 
-   requestURL = "{{ url('/') }}/api/usersurvey/category/delete?token=true&id="+id;
+   requestURL = "{{ url('/') }}/api/society/delete?token=true&id="+id;
    var dt = $('#table_content').DataTable();
-        console.log("delete_category : "+requestURL);
+        console.log("delete_society : "+requestURL);
 
         var checkCall = $.ajax({
             url: requestURL,
@@ -240,10 +262,10 @@ function deleteData(id){
                 });
                 d=null;
                 delete alldata.data[index];
-                    console.log("delete_category() data  : " + JSON.stringify(data));
+                    console.log("delete_society() data  : " + JSON.stringify(data));
                     if(data.message == true) {
                         dt.row("#row"+id).remove().draw();
-                        alert("This category record has deleted successfully.");
+                        alert("This society record has deleted successfully.");
                     
                     } else {
                          alert(data.message);
@@ -252,7 +274,7 @@ function deleteData(id){
                    
             },
             error: function( jqXhr, textStatus, errorThrown ){
-                    console.log( "Error Thrown delete_category : "+errorThrown );
+                    console.log( "Error Thrown delete_society : "+errorThrown );
             }
         });
 
@@ -262,15 +284,19 @@ function deleteData(id){
     
      function addData(obj){
                 
-        console.log("get_category() Add ");
+        console.log("get_society() Add ");
         // if(data.length>0) {
         
-        $("#heading_text").val("Add Survey Category");
+        $("#heading_text").val("Add Society");
         $("#id").val("");
-        $("#cate_name").val("");
-        $("#cate_order").val("");
+        $("#name").val("");
+        $("#sector").val("");
+        $("#city").val("");
+        $("#district").val("");
+        $("#state").val("");
+        $("#postcode").val("");
         $("#status").val(1);
-        $("textarea#cate_desc").val("");
+        $("textarea#description").val("");
             
         $("#viewData").click();
 
@@ -284,15 +310,19 @@ function deleteData(id){
         });
         var data = data[index];
 
-            console.log("get_category() data  : " + JSON.stringify(data));
+            console.log("get_society() data  : " + JSON.stringify(data));
             // if(data.length>0) {
             
-            $("#heading_text").val("Edit Survey Category");
+            $("#heading_text").val("Edit Society");
             $("#id").val(data["id"]);
-            $("#cate_name").val(data["cate_name"]);
-            $("#cate_order").val(data["cate_order"]);
+            $("#name").val(data["name"]);
+            $("#sector").val(data["sector"]);
+            $("#city").val(data["city"]);
+            $("#district").val(data["district"]);
+            $("#state").val(data["state"]);
+            $("#postcode").val(data["postcode"]);
             $("#status").val(data["status"]);
-            $("textarea#cate_desc").val(data["cate_desc"]);
+            $("textarea#description").val(data["description"]);
                 
             $("#viewData").click();
 
@@ -301,8 +331,8 @@ function deleteData(id){
 	 }
 
 function saveData() {
-    if($("#cate_name").val().trim()==''){
-        alert("Category name is must required");
+    if($("#name").val().trim()==''){
+        alert("Society name is must required");
         return;
     }
     var act="save";
@@ -310,16 +340,16 @@ function saveData() {
     if($("#id").val()!="undefined" && $("#id").val()!=""){
         act="save";
         method="put";
-        var data={"id":$("#id").val(),"cate_name":$("#cate_name").val(),"cate_desc":$("textarea#cate_desc").val(),"cate_order":$("#cate_order").val(),"status":$("#status").val()};
-        requestURL = "{{ url('/') }}/api/usersurvey/category/update?token=true";
+        var data={"id":$("#id").val(),"name":$("#name").val(),"description":$("textarea#description").val(),"sector":$("#sector").val(),"city":$("#city").val(),"district":$("#district").val(),"state":$("#state").val(),"postcode":$("#postcode").val(),"status":$("#status").val()};
+        requestURL = "{{ url('/') }}/api/society/update?token=true";
      } else {
         act="add";
         method="post";
-        var data={"cate_name":$("#cate_name").val(),"cate_desc":$("textarea#cate_desc").val(),"cate_order":$("#cate_order").val(),"status":$("#status").val()};
-        requestURL = "{{ url('/') }}/api/usersurvey/category/create?token=true";   
+        var data={"name":$("#name").val(),"description":$("textarea#description").val(),"sector":$("#sector").val(),"city":$("#city").val(),"district":$("#district").val(),"state":$("#state").val(),"postcode":$("#postcode").val(),"status":$("#status").val()};
+        requestURL = "{{ url('/') }}/api/society/create?token=true";   
     }
-          console.log(act+"_category : "+requestURL);
-        //console.log(act+"_category() data  : " + JSON.stringify(data));
+          console.log(act+"_society : "+requestURL);
+          console.log(act+"_society() data  : " + JSON.stringify(data));
                     
         var dt = $('#table_content').DataTable();
 
@@ -338,38 +368,29 @@ function saveData() {
             beforeSend: function() { },
             success: function( data, textStatus, jQxhr ){
                 
-                   console.log(act+"_category() data  : " + JSON.stringify(data));
+                   console.log(act+"_society() data  : " + JSON.stringify(data));
                     if(data.data!="undefined") {
                           
                         var data_row=data.data;
-                            /*var action_content ="";
-                            action_content +='<div class="action">';
-                            action_content +='<a href="javascript:editData('+data_row["id"]+',\'myModalTable\')" title="Edit Cateogory">';
-                            action_content +='<span class="icon pencil-lg-icon"></span>';
-                            action_content +='</a>'; 
-                            
-                            action_content +='<a  href="javascript:deleteData('+data_row["id"]+');" title="Delete Category">';
-                            action_content +='<span class="icon trash-icon"></span>';
-                            action_content +='</a>';
-                            action_content +='</div>';
-                            */
                             table_content="";
                             //table_content +='<tr id="row'+data_row["id"]+'">';
                            
                              table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
-                             table_content +='<td data-value="Name">'+data_row["cate_name"]+'</td>'; 
-                             table_content +='<td data-value="group">'+data_row["cate_order"]+'</td>';
-                             table_content +='<td data-value="group">'+(data_row["status"]?"Active":"Inactive")+'</td>';
-                             table_content +='<td data-value="datec">'+new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>';
-                             table_content +='<td data-value="datem">'+new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>'; 
-                     
+                             table_content +='<td data-value="Name">'+data_row["name"]+'</td>'; 
+                             table_content +='<td data-value="group">'+data_row["sector"]+'</td>';
+                             table_content +='<td data-value="group">'+data_row["city"]+'</td>';
+                             table_content +='<td data-value="group">'+data_row["district"]+'</td>';
+                             table_content +='<td data-value="group">'+data_row["state"]+'</td>';
+                             table_content +='<td data-value="group">'+data_row["postcode"]+'</td>';
+                             table_content +='<td data-value="group">'+(data_row["status"]==1?"Active":"Inactive")+'</td>';
+                             
                              table_content +='<td data-value="Actions" class="actions" style="white-space: nowrap; width: 100px;">';
                              table_content +='<div class="action">';
-                             table_content +='<a href="javascript:editData('+data_row["id"]+',\'myModalTable\')" title="Edit Cateogory">';
+                             table_content +='<a href="javascript:editData('+data_row["id"]+',\'myModalTable\')" title="Edit Society">';
                              table_content +='<span class="icon pencil-lg-icon"></span>';
                              table_content +='</a>'; 
                              
-                             table_content +='<a  href="javascript:deleteData('+data_row["id"]+');" title="Delete Category">';
+                             table_content +='<a  href="javascript:deleteData('+data_row["id"]+');" title="Delete Society">';
                              table_content +='<span class="icon trash-icon"></span>';
                              table_content +='</a>';
                              table_content +='</div>';
@@ -377,7 +398,6 @@ function saveData() {
                              //table_content +='</tr>';
 
                         if(act=="add"){
-                           // dt.row("#row"+data_row["id"]).add([data_row["id"], data_row["cate_name"],data_row["cate_order"],data_row["status"],new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," "),new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," "),action_content]).draw(false);
                            // $("#table_content").append(table_content);
                            $("#table_content").prepend('<tr id="row'+data_row["id"]+'">'+table_content+'</tr>');
                            alldata.data[alldata.data.length]=data_row;
@@ -387,7 +407,6 @@ function saveData() {
                               return d.id == $("#id").val();
                             });
                             d=null;
-                            //dt.row("#row"+data_row["id"]).update([data_row["id"], data_row["cate_name"],data_row["cate_order"],data_row["status"],new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," "),new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," "),action_content]).draw(false);
                             $("#row"+data_row["id"]).html(table_content);
                            
                             alldata.data[index]=data_row;
@@ -403,7 +422,7 @@ function saveData() {
                     $(".close").click();
             },
             error: function( jqXhr, textStatus, errorThrown ){
-                    console.log( "Error Thrown "+act+"_category : "+errorThrown );
+                    console.log( "Error Thrown "+act+"_society : "+errorThrown );
             }
         });
 };

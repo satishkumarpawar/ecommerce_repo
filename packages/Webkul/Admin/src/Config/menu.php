@@ -110,6 +110,12 @@ return [
         'route'      => 'admin.locales.index',
         'sort'       => 6,
         'icon-class' => 'settings-icon',
+    ],[
+        'key'        => 'settings.society',
+        'name'       => 'Societies',
+        'route'      => 'admin.society.index',
+        'sort'       => 1,
+        'icon-class' => '', /*SKP*/
     ], [
         'key'        => 'settings.locales',
         'name'       => 'admin::app.layouts.locales',

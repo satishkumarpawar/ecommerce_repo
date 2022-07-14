@@ -333,7 +333,7 @@ function deleteData(id){
         console.log("get_question() Add ");
         // if(data.length>0) {
         
-        $("#heading_text").val("Add Surve question");
+        $("#heading_text").val("Add Survey question");
         $("#id").val("");
         $("#question_text").val("");
         var category_options='';

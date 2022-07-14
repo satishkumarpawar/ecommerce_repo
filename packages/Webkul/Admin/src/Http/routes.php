@@ -493,6 +493,11 @@ Route::group(['middleware' => ['web', 'admin_locale']], function () {
 
 
             // Locale Routes
+            #SKP
+            Route::get('/society', 'Webkul\Core\Http\Controllers\Admin\SocietyController@index')->defaults('_config', [
+                'view' => 'admin::society.index',
+            ])->name('admin.society.index');
+
             Route::get('/locales', 'Webkul\Core\Http\Controllers\LocaleController@index')->defaults('_config', [
                 'view' => 'admin::settings.locales.index',
             ])->name('admin.locales.index');

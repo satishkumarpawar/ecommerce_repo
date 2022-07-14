@@ -113,7 +113,8 @@ class CustomerController extends Controller
             'first_name'    => 'string|required',
             'last_name'     => 'string|required',
             'gender'        => 'required',
-            'email'         => 'required|unique:customers,email',
+            //'email'         => 'required|unique:customers,email', #SKP
+            'phone'         => 'required|unique:customers,phone',
             'date_of_birth' => 'date|before:today',
         ]);
 
@@ -173,7 +174,8 @@ class CustomerController extends Controller
             'first_name'    => 'string|required',
             'last_name'     => 'string|required',
             'gender'        => 'required',
-            'email'         => 'required|unique:customers,email,' . $id,
+            //'email'         => 'required|unique:customers,email,' . $id, #SKP
+            'phone'         => 'required|unique:customers,phone,' . $id,
             'date_of_birth' => 'date|before:today',
         ]);
 

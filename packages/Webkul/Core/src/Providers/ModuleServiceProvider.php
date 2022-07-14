@@ -16,5 +16,6 @@ class ModuleServiceProvider extends CoreModuleServiceProvider
         \Webkul\Core\Models\Locale::class,
         \Webkul\Core\Models\Slider::class,
         \Webkul\Core\Models\SubscribersList::class,
+        \Webkul\Core\Models\Society::class, #SKP
     ];
 }

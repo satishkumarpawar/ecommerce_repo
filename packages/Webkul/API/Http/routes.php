@@ -344,6 +344,16 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::delete('question/delete', 'UserSurveyController@deleteQuestion');
 
         });
+
+        Route::group(['prefix' => 'society'], function ($router) {
+            Route::get('/', 'SocietyController@index');
+            Route::get('get-list', 'SocietyController@getList');
+            Route::get('get', 'SocietyController@get');
+            Route::post('create', 'SocietyController@create');
+            Route::put('update', 'SocietyController@update');
+            Route::delete('delete', 'SocietyController@delete');
+            Route::get('search', 'SocietyController@search');
+        });
     //SKP End
     });
 });
