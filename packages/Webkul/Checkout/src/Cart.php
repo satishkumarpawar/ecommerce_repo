@@ -783,10 +783,7 @@ class Cart
         $cart = $this->getCart();
 
         $data = $cart->toArray();
-        #SKP
-        $data['delivery_instructions'] = $cart->delivery_instructions->toArray();
-        $data['prefered_delivery_time'] = $cart->prefered_delivery_time->toArray();
-
+    
         $data['billing_address'] = $cart->billing_address->toArray();
 
         if ($cart->haveStockableItems()) {
