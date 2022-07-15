@@ -239,10 +239,12 @@ class CheckoutController extends Controller
     {
        
         $delivery_instructions = request()->get('delivery_instructions');
+        $prefered_delivery_time = request()->get('prefered_delivery_time');
        
         try {
             if (strlen($delivery_instructions)>0) {
-                Cart::saveDiliveryInstructions(["delivery_instructions"=>$delivery_instructions]);
+                if (strlen($prefered_delivery_time)>0) Cart::saveDiliveryInstructions(["delivery_instructions"=>$delivery_instructions, "prefered_delivery_time"=>$prefered_delivery_time]);
+                else Cart::saveDiliveryInstructions(["delivery_instructions"=>$delivery_instructions]);
 
                 if (Cart::getCart()->delivery_instructions == $delivery_instructions) {
                     return response()->json([
