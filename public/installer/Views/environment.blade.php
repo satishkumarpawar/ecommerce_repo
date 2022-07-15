@@ -11,7 +11,7 @@
                         <div id="app-settings">
                             <div class="form-group" id="app_name">
                                 <label for="application_name" class="required">Application Name</label>
-                                <input type= "text" name= "app_name" id="application_name" class="form-control" value="Bagisto_" data-validation="required length"
+                                <input type= "text" name= "app_name" id="application_name" class="form-control" value="eCommerce_" data-validation="required length"
                                 data-validation-length="max20">
                             </div>
 

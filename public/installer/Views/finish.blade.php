@@ -8,7 +8,7 @@
             <div class="card card-default">
                 <div class="card-body">
                     <div class="alert alert-success">
-                        <b>Bagisto</b> is successfully installed on your system.<br>
+                        <b>eCommerce</b> is successfully installed on your system.<br>
                     </div>
                 </div>                
             </div>
@@ -16,8 +16,8 @@
             <div class="clearfix">&nbsp;</div>
             <div class="" role="toolbar" aria-label="buttons">
                 <button class="btn btn-primary" onclick="finish()">Launch the admin interface</button>
-                <a href="https://bagisto.com/en/extensions/" class="btn btn-secondary" target="_blank">Bagisto Extensions</a>
-                <a href="https://forums.bagisto.com/" class="btn btn-secondary" target="_blank">Bagisto Forums</a>
+                <a href="https://bagisto.com/en/extensions/" class="btn btn-secondary" target="_blank">eCommerce Extensions</a>
+                <a href="https://forums.bagisto.com/" class="btn btn-secondary" target="_blank">eCommerce Forums</a>
             </div> 
         </div>
     </div>

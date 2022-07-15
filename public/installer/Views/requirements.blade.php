@@ -23,7 +23,7 @@
                             <br>
                             <?php if(!($phpVersion['supported'] == 1)): ?>
                                 <small style="color: red;">
-                                    Bagisto has detected that your PHP version (<?php echo $phpVersion['current']; ?>) is not supported.<br>
+                                    eCommerce has detected that your PHP version (<?php echo $phpVersion['current']; ?>) is not supported.<br>
                                     Contact your provider if you are not the server administrator.
                                 </small>
                             <?php endif; ?>

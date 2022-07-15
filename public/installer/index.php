@@ -13,7 +13,7 @@ $jsURL = $actual_link . '/' . 'js/script.js';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Bagisto Installer</title>
+    <title>eCommerce Installer</title>
 
     <link rel="icon" sizes="16x16" href="Images/favicon.ico">
 
@@ -128,7 +128,7 @@ $jsURL = $actual_link . '/' . 'js/script.js';
     ?>
 
     <div style="margin-bottom: 5px; margin-top: 30px; text-align: center;">
-        <a href="https://bagisto.com/" target="_blank">Bagisto</a> a community project by <a href="https://webkul.com/" target="_blank">Webkul</a>
+    <a href="#" target="_blank">eCommerce</a> a community project by <a href="https://webkul.com/" target="_blank">Webkul</a>
     </div>
 
     <script src="<?php echo $jsURL; ?>"></script>

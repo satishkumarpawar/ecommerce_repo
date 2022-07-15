@@ -134,7 +134,7 @@ class Requirement {
             $data['composer_install'] = 0;
         } else {
             $data['composer_install'] = 1;
-            $data['composer'] = 'Bagisto has detected that the required composer dependencies are not installed.<br />Go to the root directory of Bagisto and run "composer install".';
+            $data['composer'] = 'eCommerce has detected that the required composer dependencies are not installed.<br />Go to the root directory of eCommerce and run "composer install".';
         }
 
         return $data;

@@ -22,7 +22,7 @@
 <div class="content full-page dashboard">
         <div class="page-header">
             <div class="page-title">
-                <h1>User Survey List</h1>
+                <h1>User Survey List </h1>
             </div>
 
             

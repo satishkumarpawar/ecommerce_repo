@@ -4,7 +4,7 @@
 
         <div class="container welcome" id="welcome">
             <div class="initial-display">
-                <p>Welcome to Bagisto</p>
+                <p>Welcome to eCommerce</p>
 
                 <div class="content">
                     <div class="content-container" style="padding: 20px">
