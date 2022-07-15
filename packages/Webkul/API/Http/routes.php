@@ -294,10 +294,13 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::post('check-minimum-order', 'CheckoutController@checkMinimumOrder');
 
             Route::post('save-order', 'CheckoutController@saveOrder');
+ //SKP Start
+            Route::get('delivery-instruction', 'CheckoutController@deliveryInstruction'); 
 
-            Route::get('delivery-instruction', 'CheckoutController@deliveryInstruction'); #SKP
+            Route::post('apply-delivery-instruction', 'CheckoutController@applyDeliveryInstructions'); 
+            Route::post('apply-delivery-time', 'CheckoutController@applyDeliveryTime'); 
         });
-        //SKP Start
+       
        /* Route::post('/sendOtp', [
             'middleware' => 'checkSession',
             'uses'=>'CustomerController@sendOtp'

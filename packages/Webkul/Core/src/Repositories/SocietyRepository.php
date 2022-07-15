@@ -116,6 +116,7 @@ class SocietyRepository extends Repository
                 
                 $qb = $query->distinct()
                     ->select('societies.name')
+                    ->addSelect('societies.id')
                     ->addSelect('societies.sector')
                     ->addSelect('societies.city')
                     ->addSelect('societies.district')

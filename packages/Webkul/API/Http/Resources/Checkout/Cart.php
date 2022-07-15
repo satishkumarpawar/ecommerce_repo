@@ -74,6 +74,8 @@ class Cart extends JsonResource
             'formated_base_taxes'                => json_encode($formatedBaseTaxes, JSON_FORCE_OBJECT),
             'formated_discounted_sub_total'      => core()->formatPrice($this->sub_total - $this->discount_amount, $this->cart_currency_code),
             'formated_base_discounted_sub_total' => core()->formatPrice($this->base_sub_total - $this->base_discount_amount, $this->cart_currency_code),
+            'delivery_instructions'      => $this->delivery_instructions,
+            'prefered_delivery_time' => $this->prefered_delivery_time,
         ];
     }
 
