@@ -230,7 +230,7 @@ class CheckoutController extends Controller
         return response()->json([
             'data' => [
                 'delivery_instructions' => [["id"=>"LEAVE_ON_DOOR","instruction"=>"Leave on door"],["id"=>"DELIVERY_ON_DOOR","instruction"=>"Delivery on door"],["id"=>"LEAVE_ON_SECURITY","instruction"=>"Leave on security"]],
-                'prefered_delivery_time'  => [["timing"=>"6:00 - 9:00 AM"],["timing"=>"9:00 - 12:00 AM"],["timing"=>"12:00 - 03:00 PM"],["timing"=>"03:00 - 06:00 PM"],["timing"=>"06:00 - 09:00 PM"]],
+                'preferred_delivery_time'  => [["timing"=>"6:00 - 9:00 AM"],["timing"=>"9:00 - 12:00 AM"],["timing"=>"12:00 - 03:00 PM"],["timing"=>"03:00 - 06:00 PM"],["timing"=>"06:00 - 09:00 PM"]],
             ]
         ]);
     }
@@ -239,11 +239,11 @@ class CheckoutController extends Controller
     {
        
         $delivery_instructions = request()->get('delivery_instructions');
-        $prefered_delivery_time = request()->get('prefered_delivery_time');
+        $preferred_delivery_time = request()->get('preferred_delivery_time');
        
         try {
             if (strlen($delivery_instructions)>0) {
-                if (strlen($prefered_delivery_time)>0) Cart::saveDiliveryInstructions(["delivery_instructions"=>$delivery_instructions, "prefered_delivery_time"=>$prefered_delivery_time]);
+                if (strlen($preferred_delivery_time)>0) Cart::saveDiliveryInstructions(["delivery_instructions"=>$delivery_instructions, "preferred_delivery_time"=>$preferred_delivery_time]);
                 else Cart::saveDiliveryInstructions(["delivery_instructions"=>$delivery_instructions]);
 
                 if (Cart::getCart()->delivery_instructions == $delivery_instructions) {
@@ -271,30 +271,30 @@ class CheckoutController extends Controller
     }
     public function applyDeliveryTime()
     {
-        $prefered_delivery_time = request()->get('prefered_delivery_time');
+        $preferred_delivery_time = request()->get('preferred_delivery_time');
 
         try {
-            if (strlen($prefered_delivery_time)>0) {
-                Cart::saveDiliveryInstructions(["prefered_delivery_time"=>$prefered_delivery_time]);
+            if (strlen($preferred_delivery_time)>0) {
+                Cart::saveDiliveryInstructions(["preferred_delivery_time"=>$preferred_delivery_time]);
 
-                if (Cart::getCart()->prefered_delivery_time == $prefered_delivery_time) {
+                if (Cart::getCart()->preferred_delivery_time == $preferred_delivery_time) {
                     return response()->json([
                         'success' => true,
-                        'message' => "Prefered delivery time set successfully",
+                        'message' => "preferred delivery time set successfully",
                     ]);
                 }
             }
 
             return response()->json([
                 'success' => false,
-                'message' => "Prefered delivery time is not valid",
+                'message' => "preferred delivery time is not valid",
             ]);
         } catch (\Exception $e) {
             report($e);
 
             return response()->json([
                 'success' => false,
-                'message' => "Prefered delivery time is not set due to invalid",
+                'message' => "preferred delivery time is not set due to invalid",
             ]);
         }
 

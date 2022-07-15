@@ -413,8 +413,8 @@ class Cart
         if(isset($data["delivery_instructions"]))
         $cart->delivery_instructions=$data["delivery_instructions"];
 
-        if(isset($data["prefered_delivery_time"]))
-        $cart->prefered_delivery_time=$data["prefered_delivery_time"];
+        if(isset($data["preferred_delivery_time"]))
+        $cart->preferred_delivery_time=$data["preferred_delivery_time"];
 
         $cart->save();
 
@@ -704,7 +704,7 @@ class Cart
             'channel'               => core()->getCurrentChannel(),
             #SKP
             'delivery_instructions'               => $data['delivery_instructions'], 
-            'prefered_delivery_time'               => $data['prefered_delivery_time'],
+            'preferred_delivery_time'               => $data['preferred_delivery_time'],
         ];
 
         if ($this->getCart()->haveStockableItems()) {

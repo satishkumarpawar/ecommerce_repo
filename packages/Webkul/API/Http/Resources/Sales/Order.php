@@ -107,7 +107,7 @@ class Order extends JsonResource
             'updated_at'                         => $this->updated_at,
             'created_at'                         => $this->created_at,
             'delivery_instructions'              => $this->delivery_instructions,
-            'prefered_delivery_time'             => $this->prefered_delivery_time,
+            'preferred_delivery_time'             => $this->preferred_delivery_time,
         ];
     }
 }
