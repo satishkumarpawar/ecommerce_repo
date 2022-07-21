@@ -40,13 +40,18 @@ class WalletController extends Controller
     public function __construct()
     {
         $this->guard = request()->has('token') ? 'api' : 'customer';
+        #SKP Start
+        //need to modify
+        if (!is_null(request()->input('customer_id'))) 
+            $this->customer_id=request()->input('customer_id');
+        else {
+            auth()->setDefaultDriver($this->guard);
+            $this->middleware('auth:' . $this->guard);
 
-        auth()->setDefaultDriver($this->guard);
-        $this->middleware('auth:' . $this->guard);
-
-        $customer = auth($this->guard)->user();
-        if(isset($customer->id))$this->customer_id=$customer->id;
-        else $this->customer_id=request()->input('customer_id');
+            $customer = auth($this->guard)->user();
+            if(isset($customer->id))$this->customer_id=$customer->id;
+            else $this->customer_id=request()->input('customer_id');
+        }
 
         if (!is_null($this->customer_id)) {
             $this->user = Customer::where('id',$this->customer_id)->first(); 

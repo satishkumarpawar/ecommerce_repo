@@ -13,7 +13,7 @@ class CreateWalletsTable extends Migration
     public function up(): void
     {
         Schema::create($this->table(), function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->morphs('holder');
             $table->string('name');
             $table->string('slug')->index();

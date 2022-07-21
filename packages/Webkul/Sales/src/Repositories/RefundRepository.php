@@ -191,7 +191,8 @@ class RefundRepository extends Repository
             $this->orderRepository->updateOrderStatus($order);
 
             #SKP Start
-            WalletController:refund($order->id,$order->customer_id,$order->grand_total);//$order->grand_total_refunded
+            $wallet= new WalletController();
+            $wallet->refund($order->id,$order->customer_id,$order->grand_total);//$order->grand_total_refunded
 
 
             Event::dispatch('sales.refund.save.after', $refund);
