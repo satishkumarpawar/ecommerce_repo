@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Webkul\Sales\Contracts\Refund;
 use Webkul\Core\Eloquent\Repository;
 
+use Webkul\API\Http\Controllers\Shop\WalletController;
+
 class RefundRepository extends Repository
 {
     /**
@@ -187,6 +189,10 @@ class RefundRepository extends Repository
             $this->orderRepository->collectTotals($order);
 
             $this->orderRepository->updateOrderStatus($order);
+
+            #SKP Start
+            WalletController:refund($order->id,$order->customer_id,$order->grand_total);//$order->grand_total_refunded
+
 
             Event::dispatch('sales.refund.save.after', $refund);
         } catch (\Exception $e) {

@@ -5,8 +5,6 @@ namespace Webkul\Admin\DataGrids;
 use Illuminate\Support\Facades\DB;
 use Webkul\Ui\DataGrid\DataGrid;
 
-use Webkul\Customer\Models\Customer;
-
 class CustomerDataGrid extends DataGrid
 {
     /**
@@ -77,14 +75,14 @@ class CustomerDataGrid extends DataGrid
             'filterable' => true,
         ]);
 
-       /* $this->addColumn([
+        $this->addColumn([
             'index'      => 'email',
             'label'      => trans('admin::app.datagrid.email'),
             'type'       => 'string',
             'searchable' => true,
             'sortable'   => true,
             'filterable' => true,
-        ]);*/
+        ]);
 
         $this->addColumn([
             'index'      => 'group',
@@ -111,7 +109,7 @@ class CustomerDataGrid extends DataGrid
             },
         ]);
 
-       /* $this->addColumn([
+        $this->addColumn([
             'index'      => 'gender',
             'label'      => trans('admin::app.datagrid.gender'),
             'type'       => 'string',
@@ -123,24 +121,6 @@ class CustomerDataGrid extends DataGrid
                     return '-';
                 } else {
                     return $row->gender;
-                }
-            },
-        ]);
-*/
-
-        $this->addColumn([
-            'index'      => 'balance',
-            'label'      => 'Wallet Balance(₹)',
-            'type'       => 'price',
-            'searchable' => false,
-            'sortable'   => false,
-            'filterable' => false,
-            'closure'    => function ($row) {
-                $user = Customer::where('id',$row->customer_id)->first(); 
-                if (!isset($user->balance)) {
-                    return '-';
-                } else {
-                    return "₹".$user->balance;
                 }
             },
         ]);
@@ -185,14 +165,6 @@ class CustomerDataGrid extends DataGrid
      */
     public function prepareActions()
     {
-        $this->addAction([
-            'method' => 'GET',
-            'route'  => 'admin.customer.wallet',
-            //'icon'   => 'icon wallet-icon',
-            'icon'   => 'icon pencil-lg-icon',
-            'title'  => 'Wallet',
-        ]);
-
         $this->addAction([
             'method' => 'GET',
             'route'  => 'admin.customer.edit',

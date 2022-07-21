@@ -50,12 +50,18 @@ Route::group(['middleware' => ['web', 'admin_locale']], function () {
             ])->name('admin.dashboard.index');
 
             // Customer Management Routes
+             #SKP
+             Route::post('customers/setapilogout', 'Webkul\Admin\Http\Controllers\Customer\CustomerController@setapilogout')->name('admin.customer.setapilogout'); #SKP
+
+             Route::get('customers/wallet/{id}', 'Webkul\Admin\Http\Controllers\Customer\CustomerController@wallet')->defaults('_config', [
+                'view' => 'admin::customers.wallet',
+            ])->name('admin.customer.wallet');
+
             Route::get('customers', 'Webkul\Admin\Http\Controllers\Customer\CustomerController@index')->defaults('_config', [
                 'view' => 'admin::customers.index',
             ])->name('admin.customer.index');
 
-            Route::post('customers/setapilogout', 'Webkul\Admin\Http\Controllers\Customer\CustomerController@setapilogout')->name('admin.customer.setapilogout'); #SKP
-
+           
             Route::get('customers/create', 'Webkul\Admin\Http\Controllers\Customer\CustomerController@create')->defaults('_config', [
                 'view' => 'admin::customers.create',
             ])->name('admin.customer.create');

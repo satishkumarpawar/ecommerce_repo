@@ -108,6 +108,7 @@ class CustomerController extends Controller
             'password'              => 'confirmed|min:6|required_with:oldpassword',
             'oldpassword'           => 'required_with:password',
             'password_confirmation' => 'required_with:password',
+            'phone'                 => 'required|unique:customers,phone,' . $id,
         ]);
 
         $data = collect(request()->input())->except('_token')->toArray();

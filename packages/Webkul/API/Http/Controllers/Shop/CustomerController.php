@@ -228,6 +228,23 @@ public function create(){
 
     $customer = $this->customerRepository->create($data);
 
+    #SKP start
+    if(isset($customer->id)){
+        $user = Customer::where('id',$customer->id)->first(); 
+        //if($user->hasWallet('default')==false){
+            $wallet = $user->createWallet([
+                'name' => 'Default Wallet',
+                'slug' => 'default',
+            ]);
+        //} 
+        //if($user->hasWallet('cash-back')==false){
+            $wallet = $user->createWallet([
+                'name' => 'Cash Back Wallet',
+                'slug' => 'cash-back',
+            ]);
+        //} 
+    }
+
     Event::dispatch('customer.registration.after', $customer);
 
    $jwtToken = null;

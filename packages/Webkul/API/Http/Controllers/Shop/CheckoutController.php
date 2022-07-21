@@ -16,6 +16,19 @@ use Webkul\API\Http\Resources\Sales\Order as OrderResource;
 use Webkul\API\Http\Resources\Checkout\Cart as CartResource;
 use Webkul\API\Http\Resources\Checkout\CartShippingRate as CartShippingRateResource;
 
+use Webkul\API\Http\Controllers\Shop\WalletController;
+use Bavix\Wallet\Models\Transaction;
+
+use Webkul\Customer\Models\Customer;
+
+use Bavix\Wallet\Objects\Cart as WalletCart;
+
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
+
 class CheckoutController extends Controller
 {
     /**
@@ -153,10 +166,12 @@ class CheckoutController extends Controller
         if (Cart::hasError() || ! $payment || ! Cart::savePaymentMethod($payment)) {
             abort(400);
         }
-
+        #SKP Start
+        $wallet= new WalletController();
         return response()->json([
             'data' => [
                 'cart' => new CartResource(Cart::getCart()),
+                'wallet' => $wallet->getWalletBalance(),  
             ]
         ]);
     }
@@ -186,7 +201,7 @@ class CheckoutController extends Controller
      *
      * @return \Illuminate\Http\Response
     */
-    public function saveOrder()
+    /*public function saveOrder()
     {
         if (Cart::hasError()) {
             abort(400);
@@ -213,6 +228,44 @@ class CheckoutController extends Controller
             'success' => true,
             'order'   => new OrderResource($order),
         ]);
+    }
+*/
+
+public function saveOrder()
+    {
+        if (Cart::hasError()) {
+            abort(400);
+        }
+
+
+        $data = request()->all();
+        
+        Cart::collectTotals();
+
+        $this->validateOrder();
+
+        $cart = Cart::getCart();
+       
+       /* if ($redirectUrl = Payment::getRedirectUrl($cart)) {
+            return response()->json([
+                    'success'      => true,
+                    'redirect_url' => $redirectUrl,
+                ]);
+        }*/
+
+        $order = $this->orderRepository->create(Cart::prepareDataForOrder())->first();
+
+       
+ #SKP Start
+ $wallet= new WalletController();
+ $wallet->payment($order,request()->All());
+ // Cart::deActivateCart();
+ 
+        return response()->json([
+            'success' => true,
+            'order'   => new OrderResource($order),
+        ]);
+        
     }
 
     /**

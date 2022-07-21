@@ -12,9 +12,25 @@ use Webkul\Product\Models\ProductReviewProxy;
 use Webkul\Customer\Notifications\CustomerResetPassword;
 use Webkul\Customer\Contracts\Customer as CustomerContract;
 
-class Customer extends Authenticatable implements CustomerContract, JWTSubject
+#SKP
+use Bavix\Wallet\Interfaces\Confirmable;
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Traits\CanConfirm;
+use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Traits\HasWallets;
+
+use Bavix\Wallet\Interfaces\MinimalTaxable;
+
+use Bavix\Wallet\Traits\CanPay;
+
+use Bavix\Wallet\Interfaces\Customer as Customers;
+
+
+class Customer extends Authenticatable implements CustomerContract, JWTSubject ,Wallet, Confirmable, Customers//, MinimalTaxable
 {
     use Notifiable;
+
+    use HasWallet, HasWallets, CanConfirm, CanPay;
 
     protected $table = 'customers';
 

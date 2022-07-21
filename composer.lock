@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5edd399c6f75d6adc8cbfd01e78f9138",
+    "content-hash": "8d6c199971037404e9fb6bff3b630d90",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -816,6 +816,92 @@
                 }
             ],
             "time": "2020-12-27T12:05:53+00:00"
+        },
+        {
+            "name": "bavix/laravel-wallet",
+            "version": "7.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bavix/laravel-wallet.git",
+                "reference": "094ef2534dd6c77046f80f8ea82d6a0b03d62b59"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bavix/laravel-wallet/zipball/094ef2534dd6c77046f80f8ea82d6a0b03d62b59",
+                "reference": "094ef2534dd6c77046f80f8ea82d6a0b03d62b59",
+                "shasum": ""
+            },
+            "require": {
+                "brick/math": "~0.8",
+                "doctrine/dbal": "^2.8|^3.0",
+                "ext-json": "*",
+                "ext-pdo": "*",
+                "illuminate/contracts": "^6.0|^7.0|^8.0",
+                "illuminate/database": "^6.0|^7.0|^8.0",
+                "illuminate/events": "^6.0|^7.0|^8.0",
+                "php": "^7.4|^8.0",
+                "ramsey/uuid": "^3.0|^4.0"
+            },
+            "require-dev": {
+                "brianium/paratest": "^6.4",
+                "cknow/laravel-money": "^6.1",
+                "ergebnis/phpstan-rules": "^1.0",
+                "infection/infection": "~0.25",
+                "laravel/cashier": "^13.6",
+                "nunomaduro/collision": "^5.10",
+                "orchestra/testbench": "^6.23",
+                "phpstan/phpstan": "^1.2",
+                "phpunit/phpunit": "^9.5",
+                "psalm/plugin-laravel": "^1.5",
+                "rector/rector": "^0.12",
+                "symplify/easy-coding-standard": "^10.0",
+                "vimeo/psalm": "^4.15"
+            },
+            "suggest": {
+                "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
+                "bavix/laravel-wallet-warmup": "Addition to the laravel-wallet library for refresh balance wallets"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bavix\\Wallet\\WalletServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bavix\\Wallet\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Babichev Maxim",
+                    "email": "info@babichev.net"
+                }
+            ],
+            "description": "Easy work with virtual wallet.",
+            "homepage": "https://bavix.github.io/laravel-wallet/",
+            "keywords": [
+                "bavix",
+                "credits",
+                "currency",
+                "laravel",
+                "laravel-package",
+                "laravel-wallet",
+                "payments",
+                "virtual",
+                "wallet"
+            ],
+            "support": {
+                "issues": "https://github.com/bavix/laravel-wallet/issues",
+                "source": "https://github.com/bavix/laravel-wallet/tree/7.3.3"
+            },
+            "time": "2022-02-25T21:43:30+00:00"
         },
         {
             "name": "brick/math",
@@ -8990,6 +9076,51 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "wontonee/razorpay",
+            "version": "3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wontone18/razorpay-payment-gateway-bagisto-laravel.git",
+                "reference": "9c83d31ed53faae9d923eeb8d1e4db9fe5f906f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wontone18/razorpay-payment-gateway-bagisto-laravel/zipball/9c83d31ed53faae9d923eeb8d1e4db9fe5f906f5",
+                "reference": "9c83d31ed53faae9d923eeb8d1e4db9fe5f906f5",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wontonee\\Razorpay\\Providers\\RazorpayServiceProvider"
+                    ],
+                    "aliases": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wontonee\\Razorpay\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Saju G",
+                    "email": "saju.g@wontonetech.com"
+                }
+            ],
+            "description": "Razorpay payment gateway for bagisto laravel open source ecommerce platform.",
+            "support": {
+                "issues": "https://github.com/wontone18/razorpay-payment-gateway-bagisto-laravel/issues",
+                "source": "https://github.com/wontone18/razorpay-payment-gateway-bagisto-laravel/tree/3.0"
+            },
+            "time": "2021-09-03T07:51:39+00:00"
         }
     ],
     "packages-dev": [

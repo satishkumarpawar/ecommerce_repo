@@ -284,6 +284,9 @@ return [
         Webkul\Marketing\Providers\MarketingServiceProvider::class,
         ACME\UserSurvey\Providers\UserSurveyServiceProvider::class,  #SKP
         //Webkul\UserSurvey\Providers\UserSurveyServiceProvider::class, #SKP
+        // Razorpay provider
+        Wontonee\Razorpay\Providers\RazorpayServiceProvider::class,
+
         
     ],
 

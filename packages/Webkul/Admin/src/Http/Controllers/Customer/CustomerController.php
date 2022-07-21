@@ -347,4 +347,13 @@ class CustomerController extends Controller
         $customer = $this->customerRepository->find(request('id'));
        // $this->customerRepository->deleteWhere(['id' => $customer->id]);
     }
+
+
+    public function wallet($id)
+    {
+        return view($this->_config['view'],["customer_id"=>$id]);
+    }
+
+
+    
 }

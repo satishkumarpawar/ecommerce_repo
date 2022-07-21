@@ -376,6 +376,10 @@
                 </span>
 
                 <span class="icon-wrapper">
+                    <i class="icon wallet-icon"></i>
+                </span>
+
+                <span class="icon-wrapper">
                     <i class="icon remove-icon"></i>
                 </span>
 

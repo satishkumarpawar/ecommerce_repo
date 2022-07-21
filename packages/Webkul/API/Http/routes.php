@@ -357,6 +357,17 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::delete('delete', 'SocietyController@delete');
             Route::get('search', 'SocietyController@search');
         });
+        Route::group(['prefix' => 'wallet'], function ($router) {
+            Route::get('/', 'WalletController@index');
+            Route::get('get-balance', 'WalletController@getBalance');
+            Route::get('get-list', 'WalletController@getList');
+            Route::get('get', 'WalletController@get');
+            Route::post('create', 'WalletController@create');
+            Route::post('recharge', 'WalletController@recharge');
+            Route::put('update', 'WalletController@update');
+            Route::delete('delete', 'WalletController@delete');
+           
+        });
     //SKP End
     });
 });

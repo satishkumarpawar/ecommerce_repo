@@ -51,7 +51,7 @@ class SessionController extends Controller
         $request->validated();
         
 
-        if (! auth()->guard('customer')->attempt($request->only(['email', 'password']))) {
+        if (! auth()->guard('customer')->attempt($request->only(['phone', 'password']))) {
             session()->flash('error', trans('shop::app.customer.login-form.invalid-creds'));
 
             return redirect()->back();
@@ -70,7 +70,7 @@ class SessionController extends Controller
 
             Cookie::queue(Cookie::make('enable-resend', 'true', 1));
 
-            Cookie::queue(Cookie::make('email-for-resend', $request->get('email'), 1));
+            Cookie::queue(Cookie::make('phone-for-resend', $request->get('phone'), 1));
 
             auth()->guard('customer')->logout();
 
@@ -81,7 +81,7 @@ class SessionController extends Controller
         /**
          * Event passed to prepare cart after login.
          */
-        Event::dispatch('customer.after.login', $request->get('email'));
+        Event::dispatch('customer.after.login', $request->get('phone'));
 
         return redirect()->intended(route($this->_config['redirect']));
     }
