@@ -259,7 +259,7 @@ public function saveOrder()
  #SKP Start
  $wallet= new WalletController();
  $wallet->payment($order,request()->All());
- // Cart::deActivateCart();
+ Cart::deActivateCart();
  
         return response()->json([
             'success' => true,
