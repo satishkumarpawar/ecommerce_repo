@@ -253,17 +253,17 @@ public function saveOrder()
                 ]);
         }*/
 
-        $order = $this->orderRepository->create(Cart::prepareDataForOrder())->first();
-
+        $order = $this->orderRepository->create(Cart::prepareDataForOrder());
+        $order=new OrderResource($order);
        
  #SKP Start
  $wallet= new WalletController();
- $wallet->payment($order,request()->All());
- Cart::deActivateCart();
+ $s=$wallet->payment($order,request()->All());
+ //Cart::deActivateCart();
  
         return response()->json([
             'success' => true,
-            'order'   => new OrderResource($order),
+            'order'   => $order,
         ]);
         
     }
