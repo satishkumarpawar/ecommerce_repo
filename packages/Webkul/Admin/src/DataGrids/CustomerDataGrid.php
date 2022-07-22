@@ -188,8 +188,8 @@ class CustomerDataGrid extends DataGrid
         $this->addAction([
             'method' => 'GET',
             'route'  => 'admin.customer.wallet',
-            //'icon'   => 'icon wallet-icon',
-            'icon'   => 'icon pencil-lg-icon',
+            'icon'   => 'icon wallet-icon',
+            //'icon'   => 'icon pencil-lg-icon',
             'title'  => 'Wallet',
         ]);
 
