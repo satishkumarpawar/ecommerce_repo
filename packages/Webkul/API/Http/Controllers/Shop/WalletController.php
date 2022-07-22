@@ -42,9 +42,10 @@ class WalletController extends Controller
         $this->guard = request()->has('token') ? 'api' : 'customer';
         #SKP Start
         //need to modify
-        if (!is_null(request()->input('customer_id'))) 
+        if (!is_null(request()->input('customer_id'))) {
             $this->customer_id=request()->input('customer_id');
-        else {
+            $this->middleware('admin');
+        } else {
             auth()->setDefaultDriver($this->guard);
             $this->middleware('auth:' . $this->guard);
 
