@@ -16,6 +16,10 @@ use Webkul\API\Http\Resources\Sales\Order as OrderResource;
 use Webkul\API\Http\Resources\Checkout\Cart as CartResource;
 use Webkul\API\Http\Resources\Checkout\CartShippingRate as CartShippingRateResource;
 
+#SKP Start
+use Webkul\Sales\Repositories\InvoiceRepository;
+use Webkul\Sales\Repositories\OrderTransactionRepository;
+
 use Webkul\API\Http\Controllers\Shop\WalletController;
 use Bavix\Wallet\Models\Transaction;
 
@@ -52,6 +56,9 @@ class CheckoutController extends Controller
      */
     protected $cartItemRepository;
 
+    protected $orderTransactionRepository;
+    protected $invoiceRepository;
+
     /**
      * Controller instance
      *
@@ -62,7 +69,9 @@ class CheckoutController extends Controller
     public function __construct(
         CartRepository $cartRepository,
         CartItemRepository $cartItemRepository,
-        OrderRepository $orderRepository
+        OrderRepository $orderRepository,
+        OrderTransactionRepository $orderTransactionRepository,
+        InvoiceRepository $invoiceRepository
     )
     {
         $this->guard = request()->has('token') ? 'api' : 'customer';
@@ -78,6 +87,9 @@ class CheckoutController extends Controller
         $this->cartItemRepository = $cartItemRepository;
 
         $this->orderRepository = $orderRepository;
+        #SKP Start
+        $this->orderTransactionRepository = $orderTransactionRepository;
+        $this->invoiceRepository = $invoiceRepository;
     }
 
     /**
@@ -256,10 +268,8 @@ public function saveOrder()
         $order = $this->orderRepository->create(Cart::prepareDataForOrder());
         $order=new OrderResource($order);
        
- #SKP Start
- $wallet= new WalletController();
- $s=$wallet->payment($order,request()->All());
- //Cart::deActivateCart();
+ 
+        Cart::deActivateCart();
  
         return response()->json([
             'success' => true,
@@ -278,6 +288,60 @@ public function saveOrder()
         app(OnepageController::class)->validateOrder();
     }
 
+    
+    public function verifyOrderPayment()
+    {
+
+        #SKP Start
+        $data = request()->all();
+        $order = $this->orderRepository->findOrFail(request()->order_id);
+        $order=new OrderResource($order);
+       
+        $wallet= new WalletController();
+        $status=$wallet->payment($order,$data);
+
+       // if($status){
+            $this->orderRepository->updateOrderStatus($order);
+            
+            $order = $this->orderRepository->findOrFail(request()->order_id);
+            $order=new OrderResource($order);
+            
+
+           /* $haveProductToInvoice = false;
+
+            foreach ($data['invoice']['items'] as $itemId => $qty) {
+                if ($qty) {
+                    $haveProductToInvoice = true;
+                    break;
+                }
+            }
+
+            $this->invoiceRepository->create(array_merge($data, ['order_id' => request()->order_id]));
+            $this->saveTransaction($order);
+            */
+        //}
+
+        return response()->json([
+            'success' => true,
+            'order'   => $order,
+        ]);
+    }
+
+
+    public function saveTransaction($invoice) {
+        $data = request()->all();
+
+        $transactionData['transaction_id'] = $data['txn_id'];
+            $transactionData['status']         = $data['payment_status'];
+            $transactionData['type']           = $data['payment_type'];
+            $transactionData['payment_method'] = $invoice->order->payment->method;
+            $transactionData['order_id']       = $invoice->order->id;
+            $transactionData['invoice_id']     = $invoice->id;
+            $transactionData['data']           = json_encode ($data);
+
+            $this->orderTransactionRepository->create($transactionData);
+       
+    }
     public function deliveryInstruction()
     {
         return response()->json([
@@ -355,6 +419,7 @@ public function saveOrder()
     }    
 
 
+    
 
 
 }
