@@ -40,15 +40,9 @@
         @yield('css')
         
         {!! view_render_event('bagisto.admin.layout.head') !!}
-            <!-- SKP Strt Need for top menu and datatable-->
-            @if (strpos(Request::url(),'wallet')!==false || strpos(Request::url(),'survey')!==false || strpos(Request::url(),'society')!==false)
-           
-            @else
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-            @endif
-           </head>
+
+
+    </head>
 
     <body @if (core()->getCurrentLocale() && core()->getCurrentLocale()->direction == 'rtl') class="rtl" @endif style="scroll-behavior: smooth;">
         {!! view_render_event('bagisto.admin.layout.body.before') !!}
@@ -59,7 +53,7 @@
 
             {!! view_render_event('bagisto.admin.layout.nav-top.before') !!}
 
-            {{-- @include ('admin::layouts.nav-top') SKP--}}
+            @include ('admin::layouts.nav-top')
 
             {!! view_render_event('bagisto.admin.layout.nav-top.after') !!}
 
@@ -70,7 +64,7 @@
 
             {!! view_render_event('bagisto.admin.layout.nav-left.after') !!}
 
-            
+
             <div class="content-container"  style="padding-left: 0px;">
 
                 {!! view_render_event('bagisto.admin.layout.content.before') !!}
@@ -178,106 +172,15 @@
         {!! view_render_event('bagisto.admin.layout.body.after') !!}
 
         <div class="modal-overlay"></div>
-<style>
-
-
-
-@media (max-width: 1250px) {
-    .navbar-header {
-        float: none;
+        <style>
+    .navbar-default {
+   
     }
-    .navbar-toggle {
-        display: block;
-    }
-    .navbar-collapse {
-        border-top: 1px solid transparent;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
-    }
-    .navbar-collapse.collapse {
-        display: none!important;
-    }
-    .navbar-nav {
-        float: none!important;
-        margin: 7.5px -15px;
-    }
-    .navbar-nav>li {
-        float: none;
-    }
-    .navbar-nav>li>a {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .navbar-text {
-        float: none;
-        margin: 15px 0;
-    }
-    /* since 3.1.0 */
-    .navbar-collapse.collapse.in { 
-        display: block!important;
-    }
-    .collapsing {
-        overflow: hidden!important;
-    }
-}
-
-     .content-container .content .page-header {
-               top:0px;
-               padding-top:0px;
-            }
-            .content-container .content .page-content {
-               margin-top:0px;
-            }
-            .content-container .content {
-                margin-top:0px;
-            }
-            .content-container .content.full-page {
-                padding-top: 0px; 
-            }
-            .content-container .content-wrapper {
-                padding-top:0px;
-                margin-top:0px;
-            }
-    @media (min-width: 1200px){
-    .navbar .container {
-       width: 100%;
-    }
-    @media (max-width: 1000px){
-    .navbar .container {
-        width: 750px;
-    }
-    }
-    @media (min-width: 767px) {
-    .caret-right {
-        width: 0; 
-        height: 0; 
-        border-top: 4px solid rgba(0, 0, 0, 0);
-        border-bottom: 4px solid rgba(0, 0, 0, 0);
-        border-left: 4px solid #777777;
-
-    }
+    .navbar-fixed-top {
+       
+        border-width: 0 0 1px;
     }
    
 </style>
-<script>
-    $(document).ready(function() {
-    $('.navbar a.dropdown-toggle').on('click', function(e) {
-        var elmnt = $(this).parent().parent();
-        if (!elmnt.hasClass('nav')) {
-            var li = $(this).parent();
-            var heightParent = parseInt(elmnt.css('height').replace('px', '')) / 2;
-            var widthParent = parseInt(elmnt.css('width').replace('px', '')) - 10;
-            
-            if(!li.hasClass('open')) li.addClass('open')
-            else li.removeClass('open');
-            $(this).next().css('top', heightParent + 'px');
-            $(this).next().css('left', widthParent + 'px');
-            
-            return false;
-        }
-    });
-});
-</script>
-
-</body>
+    </body>
 </html>
-    
