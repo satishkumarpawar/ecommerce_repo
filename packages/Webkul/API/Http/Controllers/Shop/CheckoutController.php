@@ -269,7 +269,7 @@ public function saveOrder()
         $order=new OrderResource($order);
        
  
-        Cart::deActivateCart();
+        //Cart::deActivateCart();
  
         return response()->json([
             'success' => true,
@@ -320,6 +320,8 @@ public function saveOrder()
             $this->saveTransaction($order);
             */
         //}
+
+	Cart::deActivateCart();
 
         return response()->json([
             'success' => true,
