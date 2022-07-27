@@ -18,6 +18,7 @@ class CmsPage extends TranslatableModel implements CmsPageContract
         'meta_keywords',
         'html_content',
         'url_key',
+        'category_id',
     ];
 
     protected $with = ['translations'];

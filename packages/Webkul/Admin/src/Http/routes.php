@@ -865,6 +865,11 @@ Route::group(['middleware' => ['web', 'admin_locale']], function () {
             });
 
             Route::prefix('cms')->group(function () {
+                #SKP
+                Route::get('/category', 'Webkul\CMS\Http\Controllers\Admin\CategoryController@index')->defaults('_config', [
+                    'view' => 'admin::cms.category',
+                ])->name('admin.cms.category');
+
                 Route::get('/', 'Webkul\CMS\Http\Controllers\Admin\PageController@index')->defaults('_config', [
                     'view' => 'admin::cms.index',
                 ])->name('admin.cms.index');

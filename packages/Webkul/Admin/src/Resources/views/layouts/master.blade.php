@@ -41,7 +41,7 @@
         
         {!! view_render_event('bagisto.admin.layout.head') !!}
             <!-- SKP Strt Need for top menu and datatable-->
-            @if (strpos(Request::url(),'wallet')!==false || strpos(Request::url(),'survey')!==false || strpos(Request::url(),'society')!==false)
+            @if (strpos(Request::url(),'wallet')!==false || strpos(Request::url(),'survey')!==false || strpos(Request::url(),'society')!==false || strpos(Request::url(),'cms/category')!==false)
            
             @else
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">

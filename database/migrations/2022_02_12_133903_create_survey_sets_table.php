@@ -15,7 +15,7 @@ class CreateUserSurveySetsTable extends Migration
     {
         Schema::create('user_survey_sets', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('survey_name');
+            $table->string('survey_name',100);
             $table->text('survey_desc')->nullable();
             $table->integer('survey_level')->unsigned()->default(0);
             $table->datetime("start_date")->default("0000-00-00 00:00:00");

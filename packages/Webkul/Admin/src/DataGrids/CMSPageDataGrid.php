@@ -14,10 +14,13 @@ class CMSPageDataGrid extends DataGrid
     public function prepareQueryBuilder()
     {
         $queryBuilder = DB::table('cms_pages')
-            ->select('cms_pages.id', 'cms_page_translations.page_title', 'cms_page_translations.url_key')
+            ->select('cms_pages.id', 'cate_name','cms_page_translations.page_title', 'cms_page_translations.url_key')
             ->leftJoin('cms_page_translations', function($leftJoin) {
                 $leftJoin->on('cms_pages.id', '=', 'cms_page_translations.cms_page_id')
                          ->where('cms_page_translations.locale', app()->getLocale());
+            })
+            ->leftJoin('cms_pages_categories', function($leftJoin) { #SKP Start
+                $leftJoin->on('cms_page_translations.category_id', '=', 'cms_pages_categories.id');
             });
 
         $this->addFilter('id', 'cms_pages.id');
@@ -45,9 +48,20 @@ class CMSPageDataGrid extends DataGrid
             'filterable' => true,
         ]);
 
+        
+
         $this->addColumn([
             'index'      => 'url_key',
             'label'      => trans('admin::app.datagrid.url-key'),
+            'type'       => 'string',
+            'searchable' => true,
+            'sortable'   => true,
+            'filterable' => true,
+        ]);
+
+        $this->addColumn([
+            'index'      => 'cate_name',
+            'label'      => 'Category',
             'type'       => 'string',
             'searchable' => true,
             'sortable'   => true,

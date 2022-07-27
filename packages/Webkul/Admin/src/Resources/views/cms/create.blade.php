@@ -33,6 +33,10 @@
 
                     <accordian :title="'{{ __('admin::app.cms.pages.general') }}'" :active="true">
                         <div slot="body">
+                        <div class="control-group" :class="[errors.has('category_id') ? 'has-error' : '']">
+                                <label for="category_id" >Page Category</label>
+                                <select name="category_id"  id="cate_id"></select>
+                            </div>
                             <div class="control-group" :class="[errors.has('page_title') ? 'has-error' : '']">
                                 <label for="page_title" class="required">{{ __('admin::app.cms.pages.page-title') }}</label>
 
@@ -72,6 +76,8 @@
 
                     <accordian :title="'{{ __('admin::app.cms.pages.seo') }}'" :active="true">
                         <div slot="body">
+
+
                             <div class="control-group">
                                 <label for="meta_title">{{ __('admin::app.cms.pages.meta_title') }}</label>
 
@@ -107,6 +113,46 @@
         </form>
     </div>
 @stop
+<script>
+var categoriesdata = [];
+function getCategories(requestURL){
+   var table_content='';
+   if(requestURL=='')requestURL = "{{ url('/') }}/api/pages/category/get-list?token=true&limit=1000";
+   
+        console.log("get_pages_categories : "+requestURL);
+
+        var checkCall = $.ajax({
+            url: requestURL,
+            dataType: 'json',
+            type: 'get',
+            contentType: 'application/json',
+            headers: {
+                'Accept':'application/json',
+                //'Authorization':'Bearer ' + '***...',
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            data: null,
+            processData: false,
+            beforeSend: function() { },
+            success: function( data, textStatus, jQxhr ){
+                categoriesdata=data.data;
+                var category_options='<option value="0">None</option>';
+                for(i=0;i<categoriesdata.length;i++)category_options +='<option value="'+categoriesdata[i]["id"]+'">'+categoriesdata[i]["cate_name"]+"</option>";
+                //console.log( "category_options "+category_options );
+                $("#cate_id").html(category_options);
+       
+                    console.log("get_pages_categories() data  : " + JSON.stringify(data));
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( "Error Thrown get_pages_categories : "+errorThrown );
+            }
+        });
+
+	 }
+
+   
+    </script>
+
 
 @push('scripts')
     @include('admin::layouts.tinymce')
@@ -125,5 +171,9 @@
                 csrfToken: '{{ csrf_token() }}',
             });
         });
+
+        $(document).ready(function() {
+        getCategories('');
+    } );
     </script>
 @endpush

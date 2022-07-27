@@ -349,6 +349,21 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::delete('question/delete', 'UserSurveyController@deleteQuestion');
 
         });
+        Route::group(['prefix' => 'pages'], function ($router) {
+            Route::get('/', 'CmsPageController@index');
+            Route::get('get-list', 'CmsPageController@getList');
+            Route::get('get', 'CmsPageController@get');
+            Route::post('create', 'CmsPageController@create');
+            Route::put('update', 'CmsPageController@update');
+            Route::delete('delete', 'CmsPageController@delete');
+
+            Route::get('category/get-list', 'CmsPageController@getCategoryList');
+            Route::get('category/get', 'CmsPageController@getCategory');
+            Route::post('category/create', 'CmsPageController@createCategory');
+            Route::put('category/update', 'CmsPageController@updateCategory');
+            Route::delete('category/delete', 'CmsPageController@deleteCategory');
+
+        });
 
         Route::group(['prefix' => 'society'], function ($router) {
             Route::get('/', 'SocietyController@index');

@@ -17,5 +17,6 @@ class ModuleServiceProvider extends CoreModuleServiceProvider
         \Webkul\Core\Models\Slider::class,
         \Webkul\Core\Models\SubscribersList::class,
         \Webkul\Core\Models\Society::class, #SKP
+        \Webkul\CMS\Models\CmsPagesCategory::class, #SKP
     ];
 }
