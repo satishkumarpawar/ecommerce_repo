@@ -91,9 +91,9 @@ public function get()
 {
     
     if (!is_null(request()->input('id'))) {
-        return CmsPageResource::collection($this->CmsRepository->get(request()->input('id')));
+        return CmsPageResource::collection($this->CmsRepository->get(request()->input('id')))->first();
     } else {
-       return CmsPageResource::collection($this->CmsRepository->get());
+       return CmsPageResource::collection($this->CmsRepository->get())->first();
     }
     
 }

@@ -146,7 +146,7 @@ class CmsRepository extends Repository
         
         $result = $qb->get();
 
-        if (count($result)==0) {
+        if (is_null($result)) {
             $result = [];
         }  
             
