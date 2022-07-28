@@ -135,7 +135,7 @@ class ProductController extends Controller
         $this->validate(request(), [
             'url'            => 'required|url',
         ]);
-        if(strpos(request()->url,$_SERVER['HOST_NAME'])!==true){
+        if(strpos(request()->url,$_SERVER['HTTP_HOST'])!==true){
             abort(404);
         }
         return view($this->_config['view'])->with('file_url',request()->url );
