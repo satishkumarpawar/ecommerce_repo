@@ -135,6 +135,9 @@ class ProductController extends Controller
         $this->validate(request(), [
             'url'            => 'required|url',
         ]);
+        if(strpos(request()->url,App::make('url')->to('/'))!==true){
+            abort(404);
+        }
         return view($this->_config['view'])->with('file_url',request()->url );
     }
 }
