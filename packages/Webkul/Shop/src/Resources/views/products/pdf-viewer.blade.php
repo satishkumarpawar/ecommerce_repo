@@ -36,7 +36,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         var LIB_PATH="{{ asset('pdfjs/') }}/";
         var PDF_URL="{{$file_url}}";
     </script>
-    <script src="{{ asset('pdfjs/build/pdfjs') }}"></script>
+    <script src="{{ asset('pdfjs/build/pdf.js') }}"></script>
     <script src="{{ asset('pdfjs/web/viewer.js') }}"></script>
     
    
