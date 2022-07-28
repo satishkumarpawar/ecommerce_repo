@@ -128,6 +128,11 @@ Route::group(['middleware' => ['web', 'locale', 'theme', 'currency']], function 
         'view' => 'shop.products.index'
     ])->name('shop.product.file.download');
 
+    Route::get('/product/view-pdf', 'Webkul\Shop\Http\Controllers\ProductController@viewPdf')->defaults('_config', [
+        'view' => 'shop::products.pdf-viewer'
+    ])->name('products.viewpdf');
+
+
     /**
      * These are the routes which are used during checkout for checking the customer.
      * So, placed outside the cart merger middleware.

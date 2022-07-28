@@ -129,4 +129,12 @@ class ProductController extends Controller
             abort(404);
         }
     }
+
+    public function viewPdf()
+    {
+        $this->validate(request(), [
+            'url'            => 'required|url',
+        ]);
+        return view($this->_config['view'])->with('file_url',request()->url );
+    }
 }
