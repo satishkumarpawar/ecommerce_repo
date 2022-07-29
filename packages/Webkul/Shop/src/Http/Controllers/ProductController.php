@@ -138,6 +138,18 @@ class ProductController extends Controller
         if(strpos(request()->url,$_SERVER['HTTP_HOST'])!==true){
             //abort(404);
         }
-        return view($this->_config['view'])->with('file_url',request()->url );
+        //Detect special conditions devices
+        $iPod    = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
+        $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
+        $Android = stripos($_SERVER['HTTP_USER_AGENT'],"Android");
+        $webOS   = stripos($_SERVER['HTTP_USER_AGENT'],"webOS");
+
+        //do something with this information
+        if( $iPod || $iPhone ){
+            return view($this->_config['view'])->with('file_url',request()->url )->with('ios',true );
+        } else {
+            return view($this->_config['view'])->with('file_url',request()->url )->with('ios',false );
+        }
+        
     }
 }

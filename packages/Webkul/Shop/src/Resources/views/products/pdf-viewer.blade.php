@@ -27,17 +27,30 @@ See https://github.com/adobe-type-tools/cmap-resources
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" content="notranslate">
     <title>PDF viewer</title>
+    @if ($ios)
+        <link rel="stylesheet" href="{{ asset('pdfviewjs-ios/web/viewer.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('pdfviewjs/web/viewer.css') }}">
+        <!-- This snippet is used in production (included from viewer.html) -->
+        <link rel="resource" type="application/l10n" href="locale/locale.properties">
+        <script>
+            var LIB_PATH="{{ asset('pdfviewjs-ios/') }}/";
+            var PDF_URL="{{$file_url}}";
+        </script>
+        <script src="{{ asset('pdfviewjs-ios/build/pdf.js') }}"></script>
+        <script src="{{ asset('pdfviewjs-ios/web/viewer.js') }}"></script>
+    @else
+        <link rel="stylesheet" href="{{ asset('pdfviewjs/web/viewer.css') }}">
 
-    <!-- This snippet is used in production (included from viewer.html) -->
-    <link rel="resource" type="application/l10n" href="locale/locale.properties">
-    <script>
-        var LIB_PATH="{{ asset('pdfviewjs/') }}/";
-        var PDF_URL="{{$file_url}}";
-    </script>
-    <script src="{{ asset('pdfviewjs/build/pdf.js') }}"></script>
-    <script src="{{ asset('pdfviewjs/web/viewer.js') }}"></script>
+        <!-- This snippet is used in production (included from viewer.html) -->
+        <link rel="resource" type="application/l10n" href="locale/locale.properties">
+        <script>
+            var LIB_PATH="{{ asset('pdfviewjs/') }}/";
+            var PDF_URL="{{$file_url}}";
+        </script>
+        <script src="{{ asset('pdfviewjs/build/pdf.js') }}"></script>
+        <script src="{{ asset('pdfviewjs/web/viewer.js') }}"></script>
+    @endif
+    
     
    
    
