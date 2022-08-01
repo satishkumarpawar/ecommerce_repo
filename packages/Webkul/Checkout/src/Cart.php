@@ -333,6 +333,51 @@ class Cart
         return true;
     }
 
+    public function updateItems_api($data)
+    {
+        foreach ($data['qty'] as $itemId => $quantity) {
+            $item = $this->cartItemRepository->findOneByField('id', $itemId);
+
+            if (! $item) {
+                continue;
+            }
+
+            if ($item->product && $item->product->status === 0) {
+                return __('shop::app.checkout.cart.item.inactive');
+            }
+
+            if ($quantity <= 0) {
+                $this->removeItem($itemId);
+
+                return __('shop::app.checkout.cart.quantity.illegal');
+            }
+
+            $item->quantity = $quantity;
+
+            if (! $this->isItemHaveQuantity($item)) {
+                return __('shop::app.checkout.cart.quantity.inventory_warning');
+            }
+
+           
+            
+            Event::dispatch('checkout.cart.update.before', $item);
+
+            $this->cartItemRepository->update([
+                'quantity'          => $quantity,
+                'total'             => core()->convertPrice($item->price * $quantity),
+                'base_total'        => $item->price * $quantity,
+                'total_weight'      => $item->weight * $quantity,
+                'base_total_weight' => $item->weight * $quantity,
+            ], $itemId);
+
+            Event::dispatch('checkout.cart.update.after', $item);
+        }
+
+        $this->collectTotals();
+
+        return 'true';
+    }
+
     /**
      * Remove the item from the cart.
      *

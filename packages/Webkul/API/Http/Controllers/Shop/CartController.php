@@ -202,7 +202,13 @@ class CartController extends Controller
 
             Event::dispatch('checkout.cart.item.update.before', $data["cart_item_id"]);
 
-            Cart::updateItems(['qty' => Array($data["cart_item_id"]=>$data["quantity"])]);
+            $status=Cart::updateItems_api(['qty' => Array($data["cart_item_id"]=>$data["quantity"])]);
+            
+            if($status!='true'){
+                return response()->json([
+                    'message' => $status,
+                ], 200);
+            } 
 
             Event::dispatch('checkout.cart.item.update.after', $item);
         }
