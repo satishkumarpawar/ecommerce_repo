@@ -8,7 +8,7 @@ return [
         'active'           => true,
         'is_calculate_tax' => true,
         'default_rate'     => '10',
-        'type'             => 'per_unit',
+        'type'             => 'per_order', #SKP Start per_unit
         'class'            => 'Webkul\Shipping\Carriers\FlatRate',
     ],
 

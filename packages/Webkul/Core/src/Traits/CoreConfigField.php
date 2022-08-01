@@ -90,10 +90,19 @@ trait CoreConfigField
 
             $fieldOptions = $options;
         }
-
-        return ! isset($field['options'])
+        #SKP Start
+        if(!isset($field['options'])){
+            return '';
+        } else {
+            if($fieldOptions!=null){
+                return  $fieldOptions;
+            } else {
+                return $field['options'];
+            }
+        }
+        /*return ! isset($field['options'])
             ? ''
-            : $fieldOptions;
+            : $fieldOptions;*/
     }
 
     /**

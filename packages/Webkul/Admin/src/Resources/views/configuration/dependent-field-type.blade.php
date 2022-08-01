@@ -108,14 +108,14 @@
                     if (dependentElement && dependentElement.value == dependValue) {
                         self.isVisible = true;
                     } else {
-                        self.isVisible = false;
+                        self.isVisible = true;
                     }
 
                     if (self.result) {
                         if (dependentElement.value == self.value) {
                             self.isVisible = true;
                         } else {
-                            self.isVisible = false;
+                            self.isVisible = true;
                         }
                     }
                 });

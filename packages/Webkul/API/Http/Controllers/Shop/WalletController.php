@@ -442,7 +442,10 @@ class WalletController extends Controller
         //return $order;
         $order_id=$order->id;
         $order_total=floatval($order->grand_total);
+        $data["walletpay_amount"]=0;
+        $data["cashback_walletpay_amount"]=0;
         if (!is_null($this->customer_id)) {
+           
             $wallet_pay_order_total=$order_total;
             $WalletBalance=$this->getWalletBalance();
             if(intval($data["razorpay_amount"])>0)$wallet_pay_order_total -=$data["razorpay_amount"];
@@ -469,7 +472,9 @@ class WalletController extends Controller
                                 $t->order_id=$order_id;
                                 $t->action_type='payment';
                                 $t->cash_back_id=$balance->id;
-                                $cashback_Wallet->confirm($t);     
+                                $data["cashback_walletpay_amount"] +=$balance->balance;
+                                $cashback_Wallet->confirm($t);    
+
                             }
                             $wallet_pay_order_total -=$balance->balance;
                             $wallet_cashback_allowed -=$balance->balance;
@@ -480,6 +485,7 @@ class WalletController extends Controller
                                 $t->order_id=$order_id;
                                 $t->action_type='payment';
                                 $t->cash_back_id=$balance->id;
+                                $data["cashback_walletpay_amount"] +=$balance->balance;
                                 $cashback_Wallet->confirm($t);    
                             }
                             $wallet_pay_order_total -=$wallet_cashback_allowed;
@@ -535,23 +541,35 @@ class WalletController extends Controller
                 
             }
 
+            $wallet=$this->user->getWallet('default');
+                
             if($data["default_wallet_pay"]==true || $data["default_wallet_pay"]=="true"){
                 if($wallet_pay_order_total>0){
-                    $t=$this->user->withdraw($wallet_pay_order_total, ['title:'=>'Order No:'.$order_id,'description' => 'Order No:'.$order_id],false); 
+                    $t=$wallet->withdraw($wallet_pay_order_total, ['title:'=>'Order No:'.$order_id,'description' => 'Order No:'.$order_id],false); 
                     $t->order_id=$order_id;
                     $t->action_type='payment';
-                    $this->user->confirm($t);       
-                    $this->user->wallet->refreshBalance();
+                    $wallet->confirm($t);  
+                    $data["walletpay_amount"] +=$wallet_pay_order_total;     
+                    $wallet->refreshBalance();
                 }
             }
 
         
-            
+            if($data["walletpay_amount"]==0)unset($data["walletpay_amount"]);
+            if($data["cashback_walletpay_amount"]==0)unset($data["cashback_walletpay_amount"]);
+            if(intval($data["razorpay_amount"])>0)$data["payment_type"]='Online';
+            else $data["payment_type"]='Wallet';
+            if(!isset($data["razorpay_transaction_id"]) || $data["razorpay_transaction_id"]=='' || $data["razorpay_transaction_id"]==null)$data["razorpay_transaction_id"]='O: '.$order_id.', w: '.$wallet->id;
+            if(isset($data["default_wallet_pay"])) unset($data["default_wallet_pay"]);
+            if(isset($data["cash_back_wallet_pay"])) unset($data["cash_back_wallet_pay"]);
 
-            return true;
+
+            return $data;
+
+            //return true;
        }
             
-       return false;
+       return [];
     }
 
     public function delete()

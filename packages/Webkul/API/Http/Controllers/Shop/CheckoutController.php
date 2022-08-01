@@ -78,7 +78,7 @@ class CheckoutController extends Controller
 
         auth()->setDefaultDriver($this->guard);
 
-        // $this->middleware('auth:' . $this->guard);
+        $this->middleware('auth:' . $this->guard);
 
         $this->_config = request('_config');
 
@@ -295,31 +295,21 @@ public function saveOrder()
         #SKP Start
         $data = request()->all();
         $order = $this->orderRepository->findOrFail(request()->order_id);
-        $order=new OrderResource($order);
+        $order1=new OrderResource($order);
        
         $wallet= new WalletController();
-        $status=$wallet->payment($order,$data);
+        $data=$wallet->payment($order1,$data);
 
-       // if($status){
-            $this->orderRepository->updateOrderStatus($order);
+        if(count($data)>0){
             
+            $invoice=$this->invoiceRepository->createInvoice($order,'paid','processing');
+            $data['invoice_id']=$invoice->id;
             $order = $this->orderRepository->findOrFail(request()->order_id);
             $order=new OrderResource($order);
+           
+            $this->saveTransaction($order,$data);
             
-
-           /* $haveProductToInvoice = false;
-
-            foreach ($data['invoice']['items'] as $itemId => $qty) {
-                if ($qty) {
-                    $haveProductToInvoice = true;
-                    break;
-                }
-            }
-
-            $this->invoiceRepository->create(array_merge($data, ['order_id' => request()->order_id]));
-            $this->saveTransaction($order);
-            */
-        //}
+        }
 
 	Cart::deActivateCart();
 
@@ -330,20 +320,22 @@ public function saveOrder()
     }
 
 
-    public function saveTransaction($invoice) {
-        $data = request()->all();
-
-        $transactionData['transaction_id'] = $data['txn_id'];
-            $transactionData['status']         = $data['payment_status'];
+    public function saveTransaction($order,$data) {
+       
+        $transactionData['transaction_id'] = $data['razorpay_transaction_id'];
+            $transactionData['status']         = 'paid';
             $transactionData['type']           = $data['payment_type'];
-            $transactionData['payment_method'] = $invoice->order->payment->method;
-            $transactionData['order_id']       = $invoice->order->id;
-            $transactionData['invoice_id']     = $invoice->id;
+            $transactionData['payment_method'] = $order->payment->method;
+            $transactionData['order_id']       = $order->id;
+            $transactionData['invoice_id']     = $data['invoice_id'];
             $transactionData['data']           = json_encode ($data);
 
             $this->orderTransactionRepository->create($transactionData);
        
     }
+
+   
+    
     public function deliveryInstruction()
     {
         return response()->json([
