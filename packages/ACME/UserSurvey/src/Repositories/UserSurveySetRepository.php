@@ -255,6 +255,9 @@ class UserSurveySetRepository extends Repository
             'survey_name'        =>  $request->survey_name,
             'survey_desc'      => $request->survey_desc,
             'survey_level'  =>  $request->survey_level,
+            'cash_back'  =>  $request->cash_back,
+            'notification_id'  =>  $request->notification_id,
+            'status'  =>  $request->status,
             'start_date'     => $request->start_date,
             'end_date'      => $request->end_date
         ]);
@@ -286,6 +289,9 @@ class UserSurveySetRepository extends Repository
             'survey_name'        =>  $request->survey_name,
             'survey_desc'      => $request->survey_desc,
             'survey_level'  =>  $request->survey_level,
+            'cash_back'  =>  $request->cash_back,
+            'notification_id'  =>  $request->notification_id,
+            'status'  =>  $request->status,
             'start_date'     => $request->start_date,
             'end_date'      => $request->end_date
         ],$request->id);

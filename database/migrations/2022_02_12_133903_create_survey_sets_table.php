@@ -18,6 +18,9 @@ class CreateUserSurveySetsTable extends Migration
             $table->string('survey_name',100);
             $table->text('survey_desc')->nullable();
             $table->integer('survey_level')->unsigned()->default(0);
+            $table->integer('cash_back')->unsigned()->default(0);
+            $table->integer('notification_id')->unsigned()->default(0);
+            $table->integer('status',1)->unsigned()->default(1);
             $table->datetime("start_date")->default("0000-00-00 00:00:00");
             $table->datetime("end_date")->default("0000-00-00 00:00:00");
             $table->timestamps();

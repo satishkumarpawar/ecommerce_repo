@@ -11,6 +11,9 @@ class UserSurveySet extends Model implements UserSurveySetContract
     'survey_name',
     'survey_desc',
     'survey_level',
+    'cash_back',
+    'notification_id',
+    'status',
     'start_date',
     'end_date'
     ];

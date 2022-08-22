@@ -44,9 +44,9 @@
             <tr>
                 <th>ID</th>
                 <th>Survey Name</th>
-                <th>Survey Level</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+                <th>Cash Back</th>
+                <th>Notification Setting</th>
+                <th>Status</th>
                 <th>Date Created</th>
                 <th>Date Modified</th>
                 <th>Action</th>
@@ -113,6 +113,18 @@
                 <tr>
                 <td>Level:</td>
                 <td colspan="2" style="font-weight:bold;"><input type="text" id="survey_level" value=""></td>
+                </tr>
+                <tr>
+                <td>Cash Back:</td>
+                <td colspan="2" style="font-weight:bold;"><input type="text" id="cash_back" value=""></td>
+                </tr>
+                <tr>
+                <td>Notification Setting:</td>
+                <td colspan="2" style="font-weight:bold;"><input type="text" id="notification_id" value=""></td>
+                </tr>
+                <tr>
+                <td>Status:</td>
+                <td colspan="2" style="font-weight:bold;"><select id="status"><option value="1">Active</option><option value="0">Inactive</option></select></td>
                 </tr>
                 <tr>
                 <td>Start Date:</td>
@@ -184,9 +196,9 @@ function getData(requestURL){
                              
                             table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
                             table_content +='<td data-value="Name">'+data_row["survey_name"]+'</td>'; 
-                            table_content +='<td data-value="group">'+data_row["survey_level"]+'</td>';
-                            table_content +='<td data-value="datec">'+(data_row["start_date"]!='0000-00-00 00:00:00'?new Date(data_row["start_date"]).toISOString().slice(0, 19).replace("T"," "):"")+'</td>';
-                            table_content +='<td data-value="datem">'+(data_row["end_date"]!='0000-00-00 00:00:00'?new Date(data_row["end_date"]).toISOString().slice(0, 19).replace("T"," "):"")+'</td>'; 
+                            table_content +='<td data-value="group">'+data_row["cash_back"]+'</td>';
+                            table_content +='<td data-value="group">'+data_row["notification_id"]+'</td>';
+                            table_content +='<td data-value="group">'+(data_row["status"]?"Active":"Inactive")+'</td>';
                             table_content +='<td data-value="datec">'+new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>';
                             table_content +='<td data-value="datem">'+new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>'; 
                     
@@ -319,6 +331,18 @@ function deleteData(id){
                             table_content +='<td colspan="2" style="font-weight:bold;">'+data["survey_level"]+'</td>';
                             table_content +='</tr>';
                             table_content +='<tr>';
+                            table_content +='<td>Cash Back(₹):</td>';
+                            table_content +='<td colspan="2" style="font-weight:bold;">'+data["cash_back"]+'</td>';
+                            table_content +='</tr>';
+                            table_content +='<tr>';
+                            table_content +='<td>Notification Setting:</td>';
+                            table_content +='<td colspan="2" style="font-weight:bold;">'+data["notification_id"]+'</td>';
+                            table_content +='</tr>';
+                            table_content +='<tr>';
+                            table_content +='<td>Status:</td>';
+                            table_content +='<td colspan="2" style="font-weight:bold;">'+(data["status"]?"Active":"Inactive")+'</td>';
+                            table_content +='</tr>';
+                            table_content +='<tr>';
                             table_content +='<td>Start Date:</td>';
                             table_content +='<td colspan="2" style="font-weight:bold;">'+(data["start_date"]!='0000-00-00 00:00:00'?new Date(data["start_date"]).toISOString().slice(0, 19).replace("T"," "):'')+'</td>';
                             table_content +='</tr>';
@@ -370,10 +394,15 @@ function deleteData(id){
         $("#id").val("");
         $("#survey_name").val("");
         $("#survey_level").val("");
+        $("#cash_back").val("");
+        $("#notification_id").val(0);
+        $("#status").val(1);
         $("#start_date").val("");
         $("#end_date").val("");
         $("textarea#survey_desc").val("");
-        $("#qid").val("");
+        $("#qid").html("");
+        
+        
             
         $("#saveData").click();
 
@@ -395,6 +424,9 @@ function deleteData(id){
             $("#survey_name").val(data["survey_name"]);
             $("#survey_desc").val(data["survey_desc"]);
             $("#survey_level").val(data["survey_level"]);
+            $("#cash_back").val(data["cash_back"]);
+            $("#notification_id").val(data["notification_id"]);
+            $("#status").val(data["status"]);
             $("#start_date").val((data["start_date"]!='0000-00-00 00:00:00'?new Date(data["start_date"]).toISOString().slice(0, 19).replace("T"," "):''));
             $("#end_date").val((data["end_date"]!='0000-00-00 00:00:00'?new Date(data["end_date"]).toISOString().slice(0, 19).replace("T"," "):''));
             $("textarea#survey_desc").val(data["survey_desc"]);
@@ -459,13 +491,13 @@ function saveData() {
             i++;
         });
         
-        var data={"id":$("#id").val(),"survey_name":$("#survey_name").val(),"survey_desc":$("textarea#survey_desc").val(),"survey_level":$("#survey_level").val(),"start_date":$("#start_date").val(),"end_date":$("#end_date").val(),"delete_questions":question_content};
+        var data={"id":$("#id").val(),"survey_name":$("#survey_name").val(),"survey_desc":$("textarea#survey_desc").val(),"survey_level":$("#survey_level").val(),"cash_back":$("#cash_back").val(),"notification_id":$("#notification_id").val(),"status":$("#status").val(),"start_date":$("#start_date").val(),"end_date":$("#end_date").val(),"delete_questions":question_content};
         requestURL = "{{ url('/') }}/api/usersurvey/surveyset/update?token=true";
      } else {
         act="add";
         method="post";
         var question_content=[];
-        var data={"survey_name":$("#survey_name").val(),"survey_desc":$("textarea#survey_desc").val(),"survey_level":$("#survey_level").val(),"start_date":$("#start_date").val(),"end_date":$("#end_date").val(),"question_set":question_content};
+        var data={"survey_name":$("#survey_name").val(),"survey_desc":$("textarea#survey_desc").val(),"survey_level":$("#survey_level").val(),"cash_back":$("#cash_back").val(),"notification_id":$("#notification_id").val(),"status":$("#status").val(),"start_date":$("#start_date").val(),"end_date":$("#end_date").val(),"question_set":question_content};
         requestURL = "{{ url('/') }}/api/usersurvey/surveyset/create?token=true";   
     }
      
@@ -496,9 +528,9 @@ function saveData() {
                             table_content="";
                             table_content +='<td data-value="ID">'+data_row["id"]+'</td>'; 
                             table_content +='<td data-value="Name">'+data_row["survey_name"]+'</td>'; 
-                            table_content +='<td data-value="group">'+data_row["survey_level"]+'</td>';
-                            table_content +='<td data-value="datec">'+(data_row["start_date"]!='0000-00-00 00:00:00'?new Date(data_row["start_date"]).toISOString().slice(0, 19).replace("T"," "):"")+'</td>';
-                            table_content +='<td data-value="datem">'+(data_row["end_date"]!='0000-00-00 00:00:00'?new Date(data_row["end_date"]).toISOString().slice(0, 19).replace("T"," "):"")+'</td>'; 
+                            table_content +='<td data-value="group">'+data_row["cash_back"]+'</td>';
+                            table_content +='<td data-value="group">'+data_row["notification_id"]+'</td>';
+                            table_content +='<td data-value="group">'+(data_row["status"]?"Active":"Inactive")+'</td>';
                             table_content +='<td data-value="datec">'+new Date(data_row["created_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>';
                             table_content +='<td data-value="datem">'+new Date(data_row["updated_at"]).toISOString().slice(0, 19).replace("T"," ")+'</td>'; 
                     

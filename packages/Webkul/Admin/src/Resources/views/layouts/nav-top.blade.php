@@ -88,3 +88,12 @@
         </div>
     </div>
 </div>
+<style>
+    .navbar-brand>img {
+    display: block;
+    height: auto;
+    width: 100%;
+    max-width: 50px;
+    max-height: 50px;
+}
+</style>
