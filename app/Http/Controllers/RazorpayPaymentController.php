@@ -48,7 +48,7 @@ class RazorpayPaymentController extends Controller
 
         $cart = Cart::getCart();
         $billingAddress = $cart->billing_address;
-        include base_path('vendor') . '/Wontonee/Razorpay/src/razorpay-php/Razorpay.php';
+        //include base_path('vendor') . '/Wontonee/Razorpay/src/razorpay-php/Razorpay.php';
 
         $shipping_rate = $cart->selected_shipping_rate ? $cart->selected_shipping_rate->price : 0; // shipping rate
         $discount_amount = $cart->discount_amount; // discount amount
@@ -107,7 +107,7 @@ class RazorpayPaymentController extends Controller
      */
     public function verify(Request $request)
     {
-        include base_path('vendor') . '/Wontonee/Razorpay/src/razorpay-php/Razorpay.php';
+        //include base_path('vendor') . '/Wontonee/Razorpay/src/razorpay-php/Razorpay.php';
         $success = true;
         $error = "Payment Failed";
 
@@ -162,7 +162,8 @@ class RazorpayPaymentController extends Controller
 
     public static function createOrder($data=Array())
     {
-        include base_path('vendor') . '/Wontonee/Razorpay/src/razorpay-php/Razorpay.php';
+        //include base_path('vendor') . '/Wontonee/Razorpay/src/razorpay-php/Razorpay.php';
+        //include  '../../../vendor/Wontonee/Razorpay/src/razorpay-php/Razorpay.php';
 
         //$api = new Api('rzp_test_vDZYKiKc1fusUS', 'CdfKgfnf9QQpa6nQyfy3wa17');
         $api = new Api(core()->getConfigData('sales.paymentmethods.razorpay.key_id'), core()->getConfigData('sales.paymentmethods.razorpay.secret'));
