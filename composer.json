@@ -77,8 +77,8 @@
     },
     "autoload": {
         "files": [
-            "vendor/Wontonee/Razorpay/src/razorpay-php/Razorpay.php"
-        ],
+            "vendor/wontonee/razorpay/src/razorpay-php/Razorpay.php"
+        ], 
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
