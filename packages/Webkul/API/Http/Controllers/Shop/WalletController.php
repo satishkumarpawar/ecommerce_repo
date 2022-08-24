@@ -18,6 +18,12 @@ use Bavix\Wallet\Models\Transaction;
 
 use Webkul\Customer\Models\Customer;
 
+use Wontonee\Razorpay\Http\Controllers\RazorpayPaymentController;
+
+//use Razorpay\Api\Api;
+//use Razorpay\Api\Errors\SignatureVerificationError;
+
+
 class WalletController extends Controller
 {
     use DispatchesJobs, ValidatesRequests;
@@ -275,6 +281,24 @@ class WalletController extends Controller
             }
         }
   
+        
+    }
+
+    public function getRazorPayOrderID(){
+       $data = request()->all();
+        
+ 		      //$api = new Api('rzp_test_5Bqs3Vq0tHFEEm','yc3rA790jWwPcOXXSy04v7wS');//lavkush ki key
+             // $api = new Api(core()->getConfigData('sales.paymentmethods.razorpay.key_id'), core()->getConfigData('sales.paymentmethods.razorpay.secret'));
+
+             // $api = new Api(env('RAZOR_KEY'), env('RAZOR_SECRET'));
+             //include 'E:\Laravel\bagisto\vendor\wontonee\razorpay\src\razorpay-php\Razorpay.php';
+             $rzpay_order=RazorpayPaymentController::createOrder($data);
+		      
+	
+        return response()->json([
+            'success' => true,
+            'data'   => $rzpay_order,
+        ]);
         
     }
 

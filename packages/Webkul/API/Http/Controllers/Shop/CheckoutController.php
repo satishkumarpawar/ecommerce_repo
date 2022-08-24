@@ -267,7 +267,7 @@ public function saveOrder()
 
         $order = $this->orderRepository->create(Cart::prepareDataForOrder());
         $order=new OrderResource($order);
-       
+      	      
  
         //Cart::deActivateCart();
  
@@ -277,6 +277,9 @@ public function saveOrder()
         ]);
         
     }
+
+    
+
 
     /**
      * Validate order before creation

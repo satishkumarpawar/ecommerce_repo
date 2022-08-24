@@ -381,6 +381,7 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::get('get', 'WalletController@get');
             Route::post('create', 'WalletController@create');
             Route::post('recharge', 'WalletController@recharge');
+            Route::post('get-rzpay-orderid', 'WalletController@getRazorPayOrderID');
             Route::put('update', 'WalletController@update');
             Route::delete('delete', 'WalletController@delete');
            
