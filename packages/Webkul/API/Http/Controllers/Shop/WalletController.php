@@ -18,10 +18,11 @@ use Bavix\Wallet\Models\Transaction;
 
 use Webkul\Customer\Models\Customer;
 
-use Wontonee\Razorpay\Http\Controllers\RazorpayPaymentController;
+//use Wontonee\Razorpay\Http\Controllers\RazorpayPaymentController;
 
 //use Razorpay\Api\Api;
 //use Razorpay\Api\Errors\SignatureVerificationError;
+use App\Http\Controllers\RazorpayPaymentController;
 
 
 class WalletController extends Controller
