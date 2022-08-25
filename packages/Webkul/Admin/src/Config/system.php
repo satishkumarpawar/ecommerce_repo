@@ -31,6 +31,38 @@ return [
             ],
         ],
     ], [
+        'key'    => 'general.general.delivery_instruction',
+        'name'   => 'admin::app.admin.system.custom-delivery_instruction',
+        'sort'   => 1,
+        'fields' => [
+            [
+                'name'          => 'custom_delivery_instructions',
+                'title'         => 'admin::app.admin.system.custom-delivery_instructions',
+                'type'          => 'textarea',
+                'channel_based' => true,
+                'locale_based'  => false,
+            ], [
+                'name'          => 'custom_preferred_delivery_time',
+                'title'         => 'admin::app.admin.system.custom-preferred_delivery_time',
+                'type'          => 'textarea',
+                'channel_based' => true,
+                'locale_based'  => false,
+            ]
+        ],
+    ], [
+        'key'    => 'general.general.wallet_recharge_offer',
+        'name'   => 'admin::app.admin.system.custom-wallet_recharge_offer',
+        'sort'   => 1,
+        'fields' => [
+            [
+                'name'          => 'custom_wallet_recharge_offers',
+                'title'         => 'admin::app.admin.system.custom-wallet_recharge_offers',
+                'type'          => 'textarea',
+                'channel_based' => true,
+                'locale_based'  => false,
+            ]
+        ],
+    ], [
         'key'  => 'general.content',
         'name' => 'admin::app.admin.system.content',
         'sort' => 2,

@@ -1549,7 +1549,13 @@ return [
             'set-order-status'   => 'Set the order status after creating the invoice to',
             'generate-invoice-applicable' => 'Applicable if automatic generate invoice is enabled',
             'key-id'                      => 'Key Id',
-            'key-secret'                      => 'Key Secret'
+            'key-secret'                      => 'Key Secret', #SKP
+            'custom-delivery_instruction'                      => 'Custom Delivery Instructions', 
+            'custom-delivery_instructions'                      => 'Delivery Instructions (Options are separated by line feed)', 
+            'custom-preferred_delivery_time'                      => 'Preferred Delivery time (Options are separated by line feed)',
+            'custom-wallet_recharge_offer'                      => 'Custom Wallet Recharge Offers',
+            'custom-wallet_recharge_offers'                      => 'Wallet Recharge Offer Rules (Options are separated by comma and rules are separated by line feed. Format: amount,discount,description)',
+           
         ]
     ]
 ];

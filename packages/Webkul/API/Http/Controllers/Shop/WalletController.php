@@ -338,7 +338,7 @@ class WalletController extends Controller
                 ]);
             } else {
 
-                if (!is_null(request()->input('order_id'))) $description="Order No:".request()->input('order_id')."<br>".request()->input('description');
+                if (!is_null(request()->input('order_id')) && intval(request()->input('order_id'))>0) $description="Order No:".request()->input('order_id')."<br>".request()->input('description');
                 else $description=request()->input('description');
                 
                 if(request()->input('type')=='deposit')
@@ -349,9 +349,26 @@ class WalletController extends Controller
                 if(request()->input('confirmed')=='true'){
                     if (!is_null(request()->input('action_type')))
                         $transaction->action_type=request()->input('action_type');
-                        if (!is_null(request()->input('order_id'))) $transaction->order_id=request()->input('order_id');
+                        if (!is_null(request()->input('order_id')) && intval(request()->input('order_id'))>0) $transaction->order_id=request()->input('order_id');
                     
                     $this->user->confirm($transaction); // bool(true)
+                    //Offer Bonus
+                    if(request()->input('type')=='deposit' && (is_null(request()->input('order_id')) || intval(request()->input('order_id'))==0)){
+                        $bonus_arr=$this->getRechargeBonusCalculate(request()->input('amount'));
+                        $percentage="";
+                        if(is_array($bonus_arr)){
+                            $bonus=$bonus_arr["amount"];
+                            $percentage=$bonus_arr["percentage"];
+                        } else $bonus=$bonus_arr;
+                
+                        if($bonus>0){
+                            $transaction1 = $this->user->deposit($bonus,  ['description' => "Bonus ".$percentage." on <br>".$description], false); // not confirm
+                            $transaction1->action_type="recharge_bonus";
+                            if (!is_null(request()->input('order_id'))) $transaction1->order_id=request()->input('order_id');
+                    
+                            $this->user->confirm($transaction1); 
+                        }
+                    }
                 }
 
                 $this->user->wallet->refreshBalance();
@@ -703,7 +720,83 @@ class WalletController extends Controller
     }
 
 
+    public function getWalletRechargeOffers($return_arr=false)
+    {
+        $custom_wallet_recharge_offers=Array();
+        $custom_wallet_recharge_offers_str =  core()->getConfigData('general.general.wallet_recharge_offer.custom_wallet_recharge_offers') ?? '';
+        if($custom_wallet_recharge_offers_str!='') {
+            $custom_wallet_recharge_offers_arr=explode("\n",$custom_wallet_recharge_offers_str); 
+            if(count($custom_wallet_recharge_offers_arr)>0){
+                foreach($custom_wallet_recharge_offers_arr as $key=>$val){
+                    $val_arr=explode(",",$val); 
+                    if(count($val_arr)>=3){
+                            if(isset($val_arr[0])){
+                               if(intval(trim($val_arr[0])>0)) {
+                                $custom_wallet_recharge_offers[$key]["amount"]=intval(trim($val_arr[0]));
+                                    if(isset($val_arr[1])){
+                                        if(strpos($val_arr[1],'%')!==false) {
+                                            $custom_wallet_recharge_offers[$key]["bonus"]=intval(str_replace("%","",trim($val_arr[1])));
+                                            $custom_wallet_recharge_offers[$key]["bonus_type"]="percentage";
+                                        } else {
+                                            $custom_wallet_recharge_offers[$key]["bonus"]=intval(trim($val_arr[1]));
+                                            $custom_wallet_recharge_offers[$key]["bonus_type"]="fixed";
+                                        }
+                                    }
+                                    if(isset($val_arr[2])){
+                                       $custom_wallet_recharge_offers[$key]["description"]=trim($val_arr[2]); 
+                                    }
+                               }
+                               
+                            }
+                        
+                    }
 
+                    
+                }
+            }
+        }
+        
+        if($return_arr){
+            return $custom_wallet_recharge_offers;
+        } else {
+            return response()->json([
+                'data' => [
+                    'wallet_recharge_offers' => $custom_wallet_recharge_offers,
+                ]
+            ]);
+        }
+        
+    }
+
+    
+
+    public function getRechargeBonusCalculate($amount=0){
+        $RechargeOffersRule=Array();
+        $RechargeOffers=$this->getWalletRechargeOffers(true);
+        if(count($RechargeOffers)>0){
+            $offer_amount = array();
+            foreach($RechargeOffers as $key => $row){
+                $offer_amount[$key] = $row['amount'];
+            }
+            array_multisort($offer_amount, SORT_DESC, $RechargeOffers);
+
+            foreach($RechargeOffers as $key => $row){
+                $RechargeOffersRule=$row;
+                if($amount>$row['amount']){
+                    break;
+                }
+            }
+
+            if(count($RechargeOffersRule)>0){
+                if($RechargeOffersRule["bonus_type"]=='fixed') return $RechargeOffersRule["bonus"];
+                else  return ["amount"=>($amount*$RechargeOffersRule["bonus"]/100),"percentage"=>$RechargeOffersRule["bonus"]."%"];
+            }
+
+        } else {
+            return 0;
+        }
+
+    }
 
     public function delete()
     {

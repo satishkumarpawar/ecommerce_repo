@@ -341,10 +341,37 @@ public function saveOrder()
     
     public function deliveryInstruction()
     {
-        return response()->json([
+        $custom_delivery_instructions=Array();
+        $custom_delivery_instructions_str =  core()->getConfigData('general.general.delivery_instruction.custom_delivery_instructions') ?? '';
+        if($custom_delivery_instructions_str!='') {
+            $custom_delivery_instructions_arr=explode("\n",$custom_delivery_instructions_str); 
+            if(count($custom_delivery_instructions_arr)>0){
+                foreach($custom_delivery_instructions_arr as $key=>$val){
+                    $custom_delivery_instructions[$key]=["id"=>str_replace(" ","_",strtoupper(trim($val))),"instruction"=>trim($val)];
+                }
+            }
+        }
+        $custom_preferred_delivery_time=Array();
+        $custom_preferred_delivery_time_str =  core()->getConfigData('general.general.delivery_instruction.custom_preferred_delivery_time') ?? '';
+        if($custom_preferred_delivery_time_str!='') {
+            $custom_preferred_delivery_time_arr=explode("\n",$custom_preferred_delivery_time_str); 
+            if(count($custom_preferred_delivery_time_arr)>0){
+                foreach($custom_preferred_delivery_time_arr as $key=>$val){
+                    $custom_preferred_delivery_time[$key]=["timing"=>trim($val)];
+                }
+            }
+        }
+       /* return response()->json([
             'data' => [
                 'delivery_instructions' => [["id"=>"LEAVE_ON_DOOR","instruction"=>"Leave on door"],["id"=>"DELIVERY_ON_DOOR","instruction"=>"Delivery on door"],["id"=>"LEAVE_ON_SECURITY","instruction"=>"Leave on security"]],
                 'preferred_delivery_time'  => [["timing"=>"6:00 - 9:00 AM"],["timing"=>"9:00 - 12:00 AM"],["timing"=>"12:00 - 03:00 PM"],["timing"=>"03:00 - 06:00 PM"],["timing"=>"06:00 - 09:00 PM"]],
+            ]
+        ]);*/
+
+        return response()->json([
+            'data' => [
+                'delivery_instructions' => $custom_delivery_instructions,
+                'preferred_delivery_time'  => $custom_preferred_delivery_time,
             ]
         ]);
     }
