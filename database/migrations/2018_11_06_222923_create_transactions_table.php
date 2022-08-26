@@ -19,7 +19,7 @@ class CreateTransactionsTable extends Migration
             $table
                 ->enum(
                     'action_type',
-                    ['action_by_admin', 'recharge', 'payment', 'refund', 'cash_back']
+                    ['action_by_admin', 'recharge', 'payment', 'refund', 'cash_back', 'recharge_bonus']
                 )
                 ->default('action_by_admin');
             $table->unsignedBigInteger('order_id', 20, 0);

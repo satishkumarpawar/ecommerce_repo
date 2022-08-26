@@ -63,6 +63,19 @@ return [
             ]
         ],
     ], [
+        'key'    => 'general.general.cash_back_wallet_balance_allowed',
+        'name'   => 'admin::app.admin.system.custom-cash_back_wallet_balance_allowed_title',
+        'sort'   => 1,
+        'fields' => [
+            [
+                'name'          => 'custom_cash_back_wallet_balance_allowed',
+                'title'         => 'admin::app.admin.system.custom-cash_back_wallet_balance_allowed',
+                'type'          => 'text',
+                'channel_based' => true,
+                'locale_based'  => false,
+            ]
+        ],
+    ], [
         'key'  => 'general.content',
         'name' => 'admin::app.admin.system.content',
         'sort' => 2,

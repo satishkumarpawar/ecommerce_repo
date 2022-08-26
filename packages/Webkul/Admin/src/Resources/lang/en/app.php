@@ -1555,6 +1555,8 @@ return [
             'custom-preferred_delivery_time'                      => 'Preferred Delivery time (Options are separated by line feed)',
             'custom-wallet_recharge_offer'                      => 'Custom Wallet Recharge Offers',
             'custom-wallet_recharge_offers'                      => 'Wallet Recharge Offer Rules (Options are separated by comma and rules are separated by line feed. Format: amount,discount,description)',
+            'custom-cash_back_wallet_balance_allowed_title'                      => 'Custom amount allowed from cash back wallet',
+            'custom-cash_back_wallet_balance_allowed'                      => 'Amount allowed (%)',
            
         ]
     ]

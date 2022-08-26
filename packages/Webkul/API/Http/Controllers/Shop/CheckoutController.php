@@ -266,10 +266,26 @@ public function saveOrder()
         }*/
 
         $order = $this->orderRepository->create(Cart::prepareDataForOrder());
-        $order=new OrderResource($order);
+        $order1=new OrderResource($order);
       	      
  
-        //Cart::deActivateCart();
+
+        $wallet= new WalletController();
+        $data=$wallet->payment($order1,$data);
+
+        if(count($data)>0){
+            
+            $invoice=$this->invoiceRepository->createInvoice($order,'paid','processing');
+            $data['invoice_id']=$invoice->id;
+            $order = $this->orderRepository->findOrFail($order1->id);
+            $order=new OrderResource($order);
+           
+            $this->saveTransaction($order,$data);
+            
+        }
+
+
+        Cart::deActivateCart();
  
         return response()->json([
             'success' => true,

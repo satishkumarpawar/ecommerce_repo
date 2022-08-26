@@ -48,7 +48,7 @@ class RazorpayPaymentController extends Controller
 
         $cart = Cart::getCart();
         $billingAddress = $cart->billing_address;
-        //include_once base_path('vendor') . '/wontonee/razorpay/src/razorpay-php/Razorpay.php';
+        include_once base_path('vendor') . '/wontonee/razorpay/src/razorpay-php/Razorpay.php';
 
         $shipping_rate = $cart->selected_shipping_rate ? $cart->selected_shipping_rate->price : 0; // shipping rate
         $discount_amount = $cart->discount_amount; // discount amount
@@ -107,7 +107,7 @@ class RazorpayPaymentController extends Controller
      */
     public function verify(Request $request)
     {
-        //include_once base_path('vendor') . '/wontonee/razorpay/src/razorpay-php/Razorpay.php';
+        include_once base_path('vendor') . '/wontonee/razorpay/src/razorpay-php/Razorpay.php';
         $success = true;
         $error = "Payment Failed";
 
@@ -172,6 +172,7 @@ class RazorpayPaymentController extends Controller
         // We create an razorpay order using orders api
         // Docs: https://docs.razorpay.com/docs/orders
         //
+        if(isset($data['cart_id']))$data['order_id']=$data['cart_id'];
         if(!isset($data['order_id']))$data['order_id']=0;
         $orderData = [
             'receipt'         => $data['order_id'],
@@ -184,9 +185,9 @@ class RazorpayPaymentController extends Controller
 
         $razorpayOrderId = $razorpayOrder['id'];
 
-        // $_SESSION['razorpay_order_id'] = $razorpayOrderId;
+        $_SESSION['razorpay_order_id'] = $razorpayOrderId;
 
-        //$request->session()->put('razorpay_order_id', $razorpayOrderId);
+        $request->session()->put('razorpay_order_id', $razorpayOrderId);
 
         $data1 = [
             "key"               => core()->getConfigData('sales.paymentmethods.razorpay.key_id'),

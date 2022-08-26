@@ -337,9 +337,11 @@ class WalletController extends Controller
                     'data' => ["holder_name"=>$this->user->first_name.' '.$this->user->last_name,"wallet"=>$Wallet,"transactions"=>$transaction],
                 ]);
             } else {
-
-                if (!is_null(request()->input('order_id')) && intval(request()->input('order_id'))>0) $description="Order No:".request()->input('order_id')."<br>".request()->input('description');
-                else $description=request()->input('description');
+                $description="";
+                if (!is_null(request()->input('description')))$description=request()->input('description');
+                if (!is_null(request()->input('razorpay_transaction_id'))) $description="Razorpay Transaction#: ".request()->input('razorpay_transaction_id')."<br>".$description;
+                if (!is_null(request()->input('order_id')) && intval(request()->input('order_id'))>0) $description="Order No:".request()->input('order_id')."<br>".$description;
+                
                 
                 if(request()->input('type')=='deposit')
                 $transaction = $this->user->deposit(request()->input('amount'),  ['description' => $description], false); // not confirm
@@ -350,10 +352,11 @@ class WalletController extends Controller
                     if (!is_null(request()->input('action_type')))
                         $transaction->action_type=request()->input('action_type');
                         if (!is_null(request()->input('order_id')) && intval(request()->input('order_id'))>0) $transaction->order_id=request()->input('order_id');
+                        if (!is_null(request()->input('razorpay_transaction_id'))) $transaction->razorpay_transaction_id=request()->input('razorpay_transaction_id');
                     
                     $this->user->confirm($transaction); // bool(true)
                     //Offer Bonus
-                    if(request()->input('type')=='deposit' && (is_null(request()->input('order_id')) || intval(request()->input('order_id'))==0)){
+                    if(request()->input('type')=='deposit' && (is_null(request()->input('order_id')) || intval(request()->input('order_id'))==0) && (is_null(request()->input('cart_id')) || intval(request()->input('cart_id'))==0)){
                         $bonus_arr=$this->getRechargeBonusCalculate(request()->input('amount'));
                         $percentage="";
                         if(is_array($bonus_arr)){
@@ -365,6 +368,7 @@ class WalletController extends Controller
                             $transaction1 = $this->user->deposit($bonus,  ['description' => "Bonus ".$percentage." on <br>".$description], false); // not confirm
                             $transaction1->action_type="recharge_bonus";
                             if (!is_null(request()->input('order_id'))) $transaction1->order_id=request()->input('order_id');
+                            if (!is_null(request()->input('razorpay_transaction_id'))) $transaction->razorpay_transaction_id=request()->input('razorpay_transaction_id');
                     
                             $this->user->confirm($transaction1); 
                         }
@@ -639,7 +643,9 @@ class WalletController extends Controller
                 
                 if(count($WalletBalance["cash_back_wallet_balance_allowed"])>0){
                     $cashback_Wallet=$this->user->getWallet('cash-back');
-                    $wallet_cashback_allowed=$order_total*50/100;
+                    $custom_cash_back_wallet_balance_allowed =  core()->getConfigData('general.general.cash_back_wallet_balance_allowed.custom_cash_back_wallet_balance_allowed') ?? '0';
+                    $custom_cash_back_wallet_balance_allowed = intval($custom_cash_back_wallet_balance_allowed);
+                    $wallet_cashback_allowed=$order_total*$custom_cash_back_wallet_balance_allowed/100;
                     if($wallet_pay_order_total<$wallet_cashback_allowed)$wallet_cashback_allowed=$wallet_pay_order_total;
                    
                     foreach($WalletBalance["cash_back_wallet_balance_allowed"] as $balance){
@@ -689,7 +695,20 @@ class WalletController extends Controller
             }
 
             $wallet=$this->user->getWallet('default');
-                
+             //update previous recharge
+             if(isset($data['razorpay_transaction_id'])){
+                $transactions = $wallet->transactions->find($data['razorpay_transaction_id']);
+                if(is_array($transactions)){
+                    foreach($transactions as $t){
+                        $t->order_id=$order_id;
+                        $description="Order No:".$order_id."<br>".$t->meta["description"];
+                        $t->meta=['description' => $description];
+                        $wallet->confirm($t); // bool(true)
+                    
+                    }
+                }
+            }
+            if(!isset($data["default_wallet_pay"]))$data["default_wallet_pay"]=true;    
             if($data["default_wallet_pay"]==true || $data["default_wallet_pay"]=="true"){
                 if($wallet_pay_order_total>0){
                     $t=$wallet->withdraw($wallet_pay_order_total, ['title:'=>'Order No:'.$order_id,'description' => 'Order No:'.$order_id],false); 
