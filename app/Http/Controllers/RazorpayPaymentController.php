@@ -185,9 +185,9 @@ class RazorpayPaymentController extends Controller
 
         $razorpayOrderId = $razorpayOrder['id'];
 
-        $_SESSION['razorpay_order_id'] = $razorpayOrderId;
+        //$_SESSION['razorpay_order_id'] = $razorpayOrderId;
 
-        $request->session()->put('razorpay_order_id', $razorpayOrderId);
+        //$request->session()->put('razorpay_order_id', $razorpayOrderId);
 
         $data1 = [
             "key"               => core()->getConfigData('sales.paymentmethods.razorpay.key_id'),
