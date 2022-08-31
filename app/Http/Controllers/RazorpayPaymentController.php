@@ -194,7 +194,7 @@ class RazorpayPaymentController extends Controller
             "key"               => core()->getConfigData('sales.paymentmethods.razorpay.key_id'),
             "amount"            => $orderData['amount'],
             "name"              => $data['name'],
-            "description"       => ($order_id==0?"RazorPay payment for recharge wallet":"RazorPay payment collection for the order - " . $data->order_id),
+            "description"       => ($order_id==0?"RazorPay payment for recharge wallet":"RazorPay payment collection for the order - " . $order_id),
             "merchant_order_id" => $order_id,
             "order_id"          => $razorpayOrderId,
         ];
