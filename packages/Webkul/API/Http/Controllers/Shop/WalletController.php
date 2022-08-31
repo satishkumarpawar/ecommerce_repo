@@ -296,10 +296,11 @@ class WalletController extends Controller
              $rzpay_order=RazorpayPaymentController::createOrder($data);
 		      
 	
-        return response()->json([
+        /*return response()->json([
             'success' => true,
             'data'   => $rzpay_order,
-        ]);
+        ]);*/
+        return response()->json($rzpay_order);
         
     }
 
