@@ -176,7 +176,7 @@ class RazorpayPaymentController extends Controller
         if(isset($data['cart_id']))$order_id=$data['cart_id'];
        
         $orderData = [
-            'receipt'         => $data['order_id'],
+            'receipt'         => $order_id,
             'amount'          => $data['razorpay_amount']* 100,
             'currency'        => 'INR',
             'payment_capture' => 1 // auto capture
