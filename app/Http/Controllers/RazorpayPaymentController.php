@@ -172,8 +172,9 @@ class RazorpayPaymentController extends Controller
         // We create an razorpay order using orders api
         // Docs: https://docs.razorpay.com/docs/orders
         //
-        if(isset($data['cart_id']))$data['order_id']=$data['cart_id'];
-        if(!isset($data['order_id']))$data['order_id']=0;
+        $order_id=0;
+        if(isset($data['cart_id']))$order_id=$data['cart_id'];
+       
         $orderData = [
             'receipt'         => $data['order_id'],
             'amount'          => $data['razorpay_amount']* 100,
@@ -185,7 +186,7 @@ class RazorpayPaymentController extends Controller
 
         $razorpayOrderId = $razorpayOrder['id'];
 
-        //$_SESSION['razorpay_order_id'] = $razorpayOrderId;
+        $_SESSION['razorpay_order_id'] = $razorpayOrderId;
 
         //$request->session()->put('razorpay_order_id', $razorpayOrderId);
 
@@ -193,8 +194,8 @@ class RazorpayPaymentController extends Controller
             "key"               => core()->getConfigData('sales.paymentmethods.razorpay.key_id'),
             "amount"            => $orderData['amount'],
             "name"              => $data['name'],
-            "description"       => ($data['order_id']==0?"RazorPay payment for recharge wallet":"RazorPay payment collection for the order - " . $data->order_id),
-            "merchant_order_id" => $data['order_id'],
+            "description"       => ($order_id==0?"RazorPay payment for recharge wallet":"RazorPay payment collection for the order - " . $data->order_id),
+            "merchant_order_id" => $order_id,
             "order_id"          => $razorpayOrderId,
         ];
 
