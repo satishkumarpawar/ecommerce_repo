@@ -16,21 +16,6 @@ class CreateTransactionsTable extends Migration
             $table->morphs('payable');
             $table->unsignedBigInteger('wallet_id');
             $table->enum('type', ['deposit', 'withdraw'])->index();
-            $table
-                ->enum(
-                    'action_type',
-                    ['action_by_admin', 'recharge', 'payment', 'refund', 'cash_back', 'recharge_bonus']
-                )
-                ->default('action_by_admin');
-            $table->unsignedBigInteger('order_id', 20, 0);
-            $table->unsignedBigInteger('cash_back_id', 20, 0);
-            $table->decimal('allow_uses_cash_back', 16, 0);
-            $table
-            ->enum(
-                'allow_uses_cash_back_type',
-                ['fixed_amount', 'percentage']
-            )
-            ->default('fixed_amount');
             $table->decimal('amount', 64, 0);
             $table->boolean('confirmed');
             $table->json('meta')->nullable();

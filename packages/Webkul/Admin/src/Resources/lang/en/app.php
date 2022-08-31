@@ -84,6 +84,8 @@ return [
         'cms'                => 'CMS',
         'transactions'       => 'Transactions',
         'newsletter-subscriptions' => 'Newsletter Subscriptions',
+        'notification' => 'Notifications', #SKP
+        'notification-setting' => 'Notification Settings', #SKP
     ],
 
     'acl' => [

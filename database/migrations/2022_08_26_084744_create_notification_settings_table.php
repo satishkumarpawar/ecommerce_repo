@@ -17,7 +17,7 @@ class CreateNotificationSettingsTable extends Migration
             $table->id();
             $table->string('notification_titile',100);
             $table->string('notification_message',255);
-            $table->unsignedInteger('notification_type')->default(0);
+            $table->unsignedInteger('customer_group_id')->default(0);
             $table->unsignedInteger('notification_type')->default(0);
             $table->unsignedInteger('notification_times')->default(1);
             $table->unsignedInteger('notification_interval')->default(1);
@@ -25,8 +25,8 @@ class CreateNotificationSettingsTable extends Migration
             $table->timestamps();
          
 
-           /* Schema::table($this->transactionTable(), function (Blueprint $table) {
-                $table->foreign('wallet_id')
+           /* Schema::table($this->notificationsTable(), function (Blueprint $table) {
+                $table->foreign('notification_id')
                     ->references('id')
                     ->on($this->table())
                     ->onDelete('cascade')

@@ -243,6 +243,18 @@ return [
         'sort'       => 3,
         'icon-class' => '',
     ], [
+        'key'        => 'marketing.notification',
+        'name'       => 'admin::app.layouts.notification',
+        'route'      => 'admin.notification.index',
+        'sort'       => 2,
+        'icon-class' => '',
+    ], [
+        'key'        => 'marketing.notification.notification-setting',
+        'name'       => 'admin::app.layouts.notification-setting',
+        'route'      => 'admin.notification.index',
+        'sort'       => 1,
+        'icon-class' => '',
+    ], [
         'key'        => 'cms',
         'name'       => 'admin::app.layouts.cms',
         'route'      => 'admin.cms.index',

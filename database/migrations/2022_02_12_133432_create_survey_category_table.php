@@ -15,7 +15,7 @@ class CreateUserSurveyCategoriesTable extends Migration
     {
         Schema::create('user_survey_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cate_name',100);
+            $table->text('cate_name');
             $table->text('cate_desc')->nullable();
             $table->integer('cate_order')->default(0);
             $table->boolean('status')->default(0);

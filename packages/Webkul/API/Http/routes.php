@@ -374,6 +374,18 @@ Route::group(['prefix' => 'api'], function ($router) {
             Route::delete('delete', 'SocietyController@delete');
             Route::get('search', 'SocietyController@search');
         });
+        
+        Route::group(['prefix' => 'notification-setting'], function ($router) {
+            Route::get('/', 'NotificationController@index');
+            Route::get('get-list', 'NotificationController@getList');
+            Route::get('get', 'NotificationController@get');
+            Route::post('create', 'NotificationController@create');
+            Route::put('update', 'NotificationController@update');
+            Route::delete('delete', 'NotificationController@delete');
+           
+        });
+
+   
         Route::group(['prefix' => 'wallet'], function ($router) {
             Route::get('/', 'WalletController@index');
             Route::get('get-balance', 'WalletController@getBalance');
