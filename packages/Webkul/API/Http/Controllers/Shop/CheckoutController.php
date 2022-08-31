@@ -287,10 +287,11 @@ public function saveOrder()
 
         Cart::deActivateCart();
  
-        return response()->json([
+        /*return response()->json([
             'success' => true,
             'order'   => $order,
-        ]);
+        ]);*/
+        return response()->json($order);
         
     }
 
