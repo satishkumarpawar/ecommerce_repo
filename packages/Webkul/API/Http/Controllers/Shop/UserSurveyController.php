@@ -22,6 +22,14 @@ use Webkul\API\Http\Resources\UserSurvey\UserSurveyAnswer as UserSurveyAnswerRes
 
 use JWTAuth; #SKP
 
+use Webkul\API\Http\Controllers\Shop\WalletController;
+use Bavix\Wallet\Models\Transaction;
+
+use Webkul\Customer\Models\Customer;
+
+use Bavix\Wallet\Objects\Cart as WalletCart;
+
+
 class UserSurveyController extends Controller
 {
     /**
@@ -30,7 +38,7 @@ class UserSurveyController extends Controller
      * @var array
      */
     protected $guard;
-
+    protected $customer_id;
     /**
      * Contains route related configuration
      *
@@ -51,8 +59,21 @@ class UserSurveyController extends Controller
     )
     {
         $this->guard = request()->has('token') ? 'api' : 'customer';
+        #SKP Start
+        //need to modify
+        $customer = auth($this->guard)->user();
+            
+        if(isset($customer)) {
+            auth()->setDefaultDriver($this->guard);
+            $this->middleware('auth:' . $this->guard);
 
-        auth()->setDefaultDriver($this->guard);
+            if(isset($customer->id))$this->customer_id=$customer->id;
+            else $this->customer_id=request()->input('customer_id');
+        } else {
+            $this->middleware('admin');
+        }
+
+
 
         //$this->middleware('auth:' . $this->guard);
 
@@ -101,14 +122,24 @@ class UserSurveyController extends Controller
     {
        
          $request["request"]=request();
-         $customer = auth($this->guard)->user();
-         $request["user_id"]=($customer?$customer->id:null);
+         $request["user_id"]=($this->customer_id?$this->customer_id:null);
         
         $this->validate(request(), [
             'survey_set_id' => 'required',
         ]);
        
         $Survey=$this->UserSurveyRepository->create($request);
+        $survey_set=$this->getSurveySet(request()->survey_set_id);
+        if($survey_set->cash_back>0){
+            $cash_back_amount=$survey_set->cash_back;
+            //$wallet= new WalletController();
+            $customer = auth($this->guard)->user();
+            $cashback_Wallet = $customer->getWallet('cash-back');
+            $transaction1 = $cashback_Wallet->deposit($cash_back_amount,  ['description' => "Cash back on survey #".$Survey->id], false); // not confirm
+            $transaction1->action_type="cash_back";
+            
+            $cashback_Wallet->confirm($transaction1); 
+        }
 
         return response()->json([
             'message' => 'Survey created successfully.',
@@ -170,11 +201,13 @@ class UserSurveyController extends Controller
     }
 
        
-    public function getSurveySet()
+    public function getSurveySet($id=null)
     {
         
         if (!is_null(request()->input('id'))) {
             $data= UserSurveySetResource::collection($this->UserSurveySetRepository->get(request()->input('id')));
+        } elseif (!is_null($id)) {
+            $data= UserSurveySetResource::collection($this->UserSurveySetRepository->get($id));
         } else {
             $data= UserSurveySetResource::collection($this->UserSurveySetRepository->get());
         }

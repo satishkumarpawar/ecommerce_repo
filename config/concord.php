@@ -39,5 +39,6 @@ return [
         \Webkul\User\Providers\ModuleServiceProvider::class,
         \Webkul\Velocity\Providers\ModuleServiceProvider::class,
         \Webkul\Notification\Providers\ModuleServiceProvider::class, #SKP
+        \ACME\UserSurvey\Providers\ModuleServiceProvider::class,  #SKP
     ]
 ];

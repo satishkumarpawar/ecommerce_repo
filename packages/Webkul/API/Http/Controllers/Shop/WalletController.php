@@ -801,8 +801,8 @@ class WalletController extends Controller
             array_multisort($offer_amount, SORT_DESC, $RechargeOffers);
 
             foreach($RechargeOffers as $key => $row){
-                $RechargeOffersRule=$row;
-                if($amount>$row['amount']){
+                if($amount>=$row['amount']){
+                    $RechargeOffersRule=$row;
                     break;
                 }
             }
@@ -810,6 +810,8 @@ class WalletController extends Controller
             if(count($RechargeOffersRule)>0){
                 if($RechargeOffersRule["bonus_type"]=='fixed') return $RechargeOffersRule["bonus"];
                 else  return ["amount"=>($amount*$RechargeOffersRule["bonus"]/100),"percentage"=>$RechargeOffersRule["bonus"]."%"];
+            } else {
+                return 0;
             }
 
         } else {
